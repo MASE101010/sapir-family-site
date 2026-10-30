@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>הבלוג היומי | משפחת ספיר</title>
+  <meta name="description" content="בלוג יומי של משפחת ספיר: טיפים להורים, רעיונות לילדים, משחקים, יצירה וחיי משפחה. פוסט חדש בכל יום.">
+  <link rel="icon" href="assets/img/logo-small.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="blog">
+<main id="main">
+  <section class="container page-head">
+    <h1 class="holo-title">הבלוג היומי</h1>
+    <p class="lead">כל יום פוסט אחד: טיפ קצר להורים או משהו כיפי לילדים. בלי הרצאות, רק דברים שבאמת עבדו לנו בבית.</p>
+    <div class="tabs" role="group" aria-label="סינון פוסטים">
+      <button class="tab" data-f="all" aria-selected="true">הכול</button>
+      <button class="tab" data-f="parents" aria-selected="false">להורים</button>
+      <button class="tab" data-f="kids" aria-selected="false">לילדים</button>
+    </div>
+  </section>
+
+  <section class="container with-side">
+    <div>
+      <div id="featured"></div>
+      <div class="grid grid-2" id="posts"></div>
+      <div class="empty" id="empty" hidden>אין עדיין פוסטים בקטגוריה הזאת</div>
+    </div>
+    <aside class="side-sticky">
+      <div class="card" style="padding:22px">
+        <h3 style="font-family:var(--font-body);font-weight:800;font-size:1.2rem">איך הבלוג עובד?</h3>
+        <p class="muted" style="font-size:.95rem">בכל בוקר עולה פוסט חדש. בימי ראשון, שלישי וחמישי להורים, בשאר הימים לילדים. יש נושא שתרצו שנכתוב עליו? <a href="contact.html">כתבו לנו</a>.</p>
+      </div>
+      <div class="ad-slot ad-rect" data-ad-slot="blog-side"><div>פרסומת<small>(מקום שמור לדוגמה)</small></div></div>
+    </aside>
+  </section>
+</main>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+(async () => {
+  let posts = [];
+  try { posts = await window.loadPosts(); } catch (e) {}
+  const grid = document.getElementById("posts"), empty = document.getElementById("empty");
+  const feat = document.getElementById("featured");
+  const render = f => {
+    const all = posts.filter(p => f === "all" || p.audience === f);
+    const top = all[0], list = all.slice(1);
+    feat.innerHTML = top ? `<a class="featured-post" href="post.html?id=${encodeURIComponent(top.id)}"><span class="tag">הפוסט של היום</span><div class="cover ${top.audience === "kids" ? "cover-kids" : "cover-parents"}"><span>${top.emoji || "✨"}</span></div><div class="body"><div class="meta muted" style="font-size:.9rem">${top.audience === "kids" ? '<span class="badge badge-kids">לילדים</span>' : '<span class="badge badge-parents">להורים</span>'} ${window.fmtDate(top.date)}</div><h2>${top.title}</h2><p class="muted" style="margin:0">${top.excerpt}</p><span class="btn btn-ink btn-sm" style="align-self:flex-start">לקריאה</span></div></a>` : "";
+    grid.innerHTML = list.map(window.postCard).join("");
+    empty.hidden = list.length > 0;
+  };
+  render("all");
+  document.querySelectorAll(".tab").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", x === b));
+    render(b.dataset.f);
+  }));
+})();
+</script>
+</body>
+</html>

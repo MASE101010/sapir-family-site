@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>המשחקים שלנו | משפחת ספיר</title>
+  <meta name="description" content="המשחקים שמשפחת ספיר בנתה: מיני פייטר, המירוץ לפסגה, המירוץ לממלכה, נחש את המילה ופלישת הוירוסים. בחינם בגוגל פליי ובדפדפן.">
+  <link rel="icon" href="assets/img/logo-small.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .game-row { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 0; }
+    .game-row .game-tile { aspect-ratio: auto; min-height: 260px; }
+    .game-row .card-body { padding: 30px 32px; gap: 14px; }
+    .game-row h3 { font-size: 2rem; }
+    .game-row ul { margin: 0; padding-inline-start: 1.2em; color: var(--ink-soft); }
+    @media (max-width: 760px) { .game-row { grid-template-columns: 1fr; } .game-row .game-tile { min-height: 200px; } }
+    .games-list { display: grid; gap: 24px; }
+  </style>
+</head>
+<body data-page="games">
+<main id="main">
+  <section class="container page-head">
+    <h1 class="holo-title">המשחקים שלנו</h1>
+    <p class="lead">חמישה משחקים שבנינו בעצמנו, עם כל בני המשפחה ותולי בפנים. משחקים ישר מהדפדפן, בלי להתקין כלום, וגם בגוגל פליי.</p>
+  </section>
+
+  <section class="container" style="margin-bottom:34px">
+    <a class="card featured-post" href="play.html?game=mini-fighter" style="margin:0"><span class="tag">המשחק המוביל</span>
+      <div class="cover tile-fighter"><span>👊</span></div>
+      <div class="body"><span class="badge badge-live" style="align-self:flex-start">זמין עכשיו בגוגל פליי ובדפדפן</span><h2>מיני פייטר</h2><p class="muted" style="margin:0">יותר מעשרים לוחמים, עשר זירות, מולטיפלייר אונליין עם קוד חדר, ומצב סיפור "הדרך לפסגה". המשחק הכי גדול שבנינו.</p><span class="btn btn-ink btn-sm" style="align-self:flex-start">לשחק עכשיו</span></div>
+    </a>
+  </section>
+
+  <section class="container">
+    <div class="games-list" id="games"></div>
+    <div class="ad-slot ad-leaderboard" data-ad-slot="games-bottom"><div>פרסומת<small>(מקום שמור לדוגמה, ייכנס אחרי ההשקה)</small></div></div>
+  </section>
+
+  <section class="container">
+    <div class="cta-band" style="margin-top:50px">
+      <div>
+        <h2>יש לכם רעיון למשחק?</h2>
+        <p class="lead" style="color:rgba(255,255,255,.8)">אנחנו בונים את המשחקים הבאים עכשיו. כתבו לנו מה הייתם רוצים לשחק, והכי טוב, תגידו לנו בתגובות ביוטיוב.</p>
+        <div class="hero-actions"><a class="btn btn-ink" href="contact.html">שלחו לנו רעיון</a></div>
+      </div>
+      <div class="kv">
+        <div><span class="num">5</span><span class="lbl">משחקים</span></div>
+        <div><span class="num">20+</span><span class="lbl">דמויות</span></div>
+        <div><span class="num">0₪</span><span class="lbl">להתחיל לשחק</span></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+(() => {
+  const S = window.SAPIR, I = window.SAPIR_ICONS;
+  const gameIcons = {
+    fist: '<svg viewBox="0 0 64 64" fill="#fff"><path d="M18 30V16a4 4 0 0 1 8 0v8h2V12a4 4 0 0 1 8 0v12h2V14a4 4 0 0 1 8 0v10h2v-4a4 4 0 0 1 8 0v16c0 10-8 18-18 18h-4c-7 0-12-4-14-10l-6-10a4 4 0 0 1 7-4z"/></svg>',
+    "arrow-up": '<svg viewBox="0 0 64 64" fill="#fff"><path d="M32 6 10 30h14v28h16V30h14z"/></svg>',
+    run: '<svg viewBox="0 0 64 64" fill="#fff"><circle cx="40" cy="10" r="6"/><path d="M34 20l-12 6-6 12 6 2 4-8 6-3-2 12-10 12 6 4 10-12 4-8 8 6 4 14 6-2-4-16-10-9 3-7 8 5 3-5-12-9z"/></svg>',
+    abc: '<svg viewBox="0 0 64 64" fill="#fff"><rect x="6" y="14" width="16" height="16" rx="3"/><rect x="24" y="14" width="16" height="16" rx="3" opacity=".8"/><rect x="42" y="14" width="16" height="16" rx="3" opacity=".6"/><rect x="6" y="34" width="16" height="16" rx="3" opacity=".6"/><rect x="24" y="34" width="16" height="16" rx="3"/><rect x="42" y="34" width="16" height="16" rx="3" opacity=".8"/></svg>',
+    rocket: '<svg viewBox="0 0 64 64" fill="#fff"><path d="M32 4c8 6 12 16 12 28l6 8-8 2-2 6-8-4-8 4-2-6-8-2 6-8C20 20 24 10 32 4zm0 14a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM26 54l6 8 6-8z"/></svg>'
+  };
+  const details = {
+    "mini-fighter": ["מצב סיפור \"הדרך לפסגה\", משחק חופשי וקרב אחד על אחד", "מולטיפלייר אונליין עם חברים דרך קוד חדר", "יותר מעשרים לוחמים: המשפחה, תולי וחבריו, והוירוס", "לגילאי 13 ומעלה"],
+    "race-top": ["חמש דמויות מעולם תולי", "שליטה בנגיעה אחת, מתאים גם לקטנים", "טבלת שיאים משפחתית"],
+    "race-kingdom": ["ריצה אינסופית בממלכה האבודה", "אוספים מטבעות ופותחים דמויות", "הוירוס רודף, תולי בורח"],
+    "nahesh": ["מילה אחת בכל פעם, רצף אינסופי", "רמזים בצפייה בפרסומת קצרה", "עובד גם במחשב"],
+    "virus": ["100 שלבים דרך כל מערכת השמש", "חלליות של תולי, מיכאל, שירן, אלין, אלרועי ואלאור", "בוסים, נשקים מיוחדים וכוח נדיר אחד לעשרה שלבים"]
+  };
+  document.getElementById("games").innerHTML = S.games.map(g => `
+    <article class="card game-row" id="${g.id}">
+      <div class="game-tile ${g.tile}" ${g.image ? `style="background-image:url(${g.image});background-size:cover;background-position:center"` : ""}><span class="kind">${g.kind}</span><div>${g.image ? "" : gameIcons[g.icon]}<div class="name">${g.name}</div></div></div>
+      <div class="card-body">
+        <div>${g.status === "live" ? '<span class="badge badge-live">זמין עכשיו</span>' : '<span class="badge badge-soon">בקרוב</span>'}</div>
+        <h3>${g.name}</h3>
+        <p>${g.blurb}</p>
+        <ul>${(details[g.id] || []).map(d => `<li>${d}</li>`).join("")}</ul>
+        <div class="card-foot">
+          ${g.playReady ? `<a class="btn btn-holo btn-sm" href="play.html?game=${g.id}">${I.play} לשחק עכשיו בדפדפן</a>` : `<a class="btn btn-ghost btn-sm" href="play.html?game=${g.id}">${I.play} גרסת דפדפן בקרוב</a>`}
+          ${g.play ? `<a class="btn btn-ink btn-sm" href="${g.play}" target="_blank" rel="noopener">${I.store} להורדה בגוגל פליי</a>` : ""}
+        </div>
+      </div>
+    </article>`).join("");
+})();
+</script>
+</body>
+</html>

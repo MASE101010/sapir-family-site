@@ -1,0 +1,33 @@
+name: פוסט יומי לבלוג
+
+on:
+  schedule:
+    # כל יום ב-04:00 UTC (06:00 או 07:00 שעון ישראל). Cloudflare פורס אוטומטית אחרי ה-commit.
+    - cron: "0 4 * * *"
+  workflow_dispatch:   # אפשר גם להריץ ידנית מהלשונית Actions
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install anthropic
+      - name: ייצור הפוסט
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          AUTO_PUBLISH: "true"     # false = הפוסט נשמר כטיוטה עד אישור ידני
+          BUFFER_DAYS: "3"         # כמה ימים קדימה לשמור פוסטים מוכנים
+        run: python3 scripts/generate_post.py
+      - name: שמירה ל-GitHub
+        run: |
+          git config user.name "sapir-blog-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/posts.json
+          git diff --cached --quiet || git commit -m "בלוג: פוסט חדש $(date -u +%Y-%m-%d)"
+          git push

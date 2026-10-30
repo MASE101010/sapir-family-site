@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>תולי האריה וחבריו הנהדרים | משפחת ספיר</title>
+  <meta name="description" content="תולי האריה: הסדרה המצוירת, השירים, סדרת האנגלית, המשחקים, הבובות וההופעות החיות. הכוכב של הילדים ממשפחת ספיר.">
+  <link rel="icon" href="assets/img/logo-small.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .tuli-hero {
+      margin-top: 18px; border-radius: var(--radius-xl); padding: clamp(36px, 6vw, 72px) clamp(24px, 5vw, 64px);
+      background: radial-gradient(800px 400px at 100% 0%, rgba(255,225,77,.45) 0%, transparent 55%), radial-gradient(700px 400px at 0% 100%, rgba(77,245,195,.35) 0%, transparent 55%), rgba(14,17,64,.5); box-shadow: 0 0 90px -30px rgba(255,225,77,.6);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: center; border: 1px solid rgba(255,225,77,.4);
+    }
+    .tuli-hero .big { font-family: var(--font-display); font-size: clamp(4rem, 12vw, 9rem); line-height: 0.9; text-align: center; color: var(--lemon); text-shadow: 0 0 40px rgba(255,225,77,.6), 0 10px 30px rgba(0,0,0,.6); animation: float 5s ease-in-out infinite; }
+    .tuli-hero .big span { display: block; font-size: 0.42em; margin-top: 0.3em; }
+    @media (max-width: 900px) { .tuli-hero { grid-template-columns: 1fr; } }
+    .char { text-align: center; padding: 28px 20px; }
+    .char .face { color: #0b0d2e; box-shadow: 0 0 30px -6px currentColor; width: 110px; height: 110px; border-radius: 50%; margin: 0 auto 14px; display: grid; place-items: center; font-size: 3.4rem; }
+    .char h3 { margin-bottom: 4px; }
+    .char .power { display: inline-block; font-weight: 800; padding: 4px 14px; border-radius: 999px; background: var(--glass-2); border: 1px solid var(--line); font-size: 0.95rem; margin-bottom: 8px; }
+    .series { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    @media (max-width: 900px) { .series { grid-template-columns: 1fr; } }
+    .series .card-body { padding: 26px; }
+    .series .num { font-family: var(--font-display); font-size: 2.6rem; line-height: 1; color: var(--lemon); text-shadow: 0 0 20px rgba(255,225,77,.5); }
+  </style>
+</head>
+<body data-page="tuli">
+<main id="main">
+  <section class="container">
+    <div class="tuli-hero tuli-hero-art">
+      <div class="tuli-hero-text">
+        <img class="tuli-logo" src="assets/img/tuli/logo.png" alt="תולי האריה" width="621" height="425">
+        <p class="lead">תולי הוא אריה קטן עם לב גדול ושאגה עוד יותר גדולה. ביחד עם פוקס השועל והופ הארנבת הוא שומר על עיר החלומות, פותר בלאגנים, שר, רוקד, ומלמד את הילדים דברים חדשים בכל פרק.</p>
+        <div class="hero-actions">
+          <a class="btn btn-ink" href="https://www.youtube.com/@Tulilion" target="_blank" rel="noopener">לערוץ של תולי</a>
+          <a class="btn btn-holo" href="#shop">לבובה של תולי</a>
+        </div>
+      </div>
+      <img class="tuli-hero-char" src="assets/img/tuli/tuli-thumbs.webp" alt="תולי האריה מרים אגודל" width="1000" height="1000">
+    </div>
+  </section>
+
+  <section class="section container">
+    <div class="section-head"><div><h2 class="holo-title">החבורה</h2><p>לכל אחד יש כוח משלו, וביחד הם מנצחים כל בלאגן.</p></div></div>
+    <div class="grid grid-4">
+      <button class="flip" type="button" aria-label="תולי האריה, לחיצה להיפוך הכרטיס" onclick="this.classList.toggle('flipped')">
+        <div class="flip-inner">
+          <div class="flip-face flip-front"><div class="face face-img"><img src="assets/img/tuli/tuli.png" alt=""></div><h3>תולי האריה</h3><span class="power">שאגתולי</span><span class="flip-hint">לחצו לגלות את הכוח</span></div>
+          <div class="flip-face flip-back"><span class="power">שאגתולי</span><p class="muted" style="margin:0">שאגה שמרעידה את עיר החלומות ומפילה כל גארדיאן אבן. המנהיג של החבורה, אמיץ, חם, ותמיד הראשון לעזור.</p></div>
+        </div>
+      </button>
+      <button class="flip" type="button" aria-label="פוקס השועל, לחיצה להיפוך הכרטיס" onclick="this.classList.toggle('flipped')">
+        <div class="flip-inner">
+          <div class="flip-face flip-front"><div class="face face-img"><img src="assets/img/tuli/fox.png" alt=""></div><h3>פוקס השועל</h3><span class="power">טכנו פוקס</span><span class="flip-hint">לחצו לגלות את הכוח</span></div>
+          <div class="flip-face flip-back"><span class="power">טכנו פוקס</span><p class="muted" style="margin:0">הממציא של החבורה. גאדג'טים, רחפן שיורה לייזרים, ואפילו שריון הריינג'רים, הכול יוצא מהמעבדה שלו.</p></div>
+        </div>
+      </button>
+      <button class="flip" type="button" aria-label="הופ הארנבת, לחיצה להיפוך הכרטיס" onclick="this.classList.toggle('flipped')">
+        <div class="flip-inner">
+          <div class="flip-face flip-front"><div class="face face-img"><img src="assets/img/tuli/hop.png" alt=""></div><h3>הופ הארנבת</h3><span class="power">קפיץ קפוץ</span><span class="flip-hint">לחצו לגלות את הכוח</span></div>
+          <div class="flip-face flip-back"><span class="power">קפיץ קפוץ</span><p class="muted" style="margin:0">קפיצה אחת ששולחת אותה מעל בניינים. אופטימית תמיד, גם כשהכול מתפרק.</p></div>
+        </div>
+      </button>
+      <button class="flip" type="button" aria-label="טייגר, לחיצה להיפוך הכרטיס" onclick="this.classList.toggle('flipped')">
+        <div class="flip-inner">
+          <div class="flip-face flip-front"><div class="face" style="background:#ffb074;color:#ffb074">🐯</div><h3>טייגר</h3><span class="power">עין הנמר</span><span class="flip-hint">לחצו לגלות את הכוח</span></div>
+          <div class="flip-face flip-back"><span class="power">עין הנמר</span><p class="muted" style="margin:0">כוח עתיק מהמקדש של הממלכה האבודה. הדמות החדשה של עונה 3. חבר? אויב? תצטרכו לראות.</p></div>
+        </div>
+      </button>
+    </div>
+  </section>
+
+  <section class="section container">
+    <div class="tuli-stage">
+      <img src="assets/img/tuli/stage.webp" alt="תולי, פוקס והופ על הבמה מול קהל ילדים" width="1600" height="1600">
+      <div class="tuli-stage-text"><h2>ההופעה החיה של תולי</h2><p>תולי, פוקס והופ על הבמה, עם שירים, ריקודים והרבה שאגות. <a href="contact.html?topic=show">להזמנת הופעה</a></p></div>
+    </div>
+  </section>
+
+  <section class="section container">
+    <div class="section-head"><div><h2 class="holo-title">מה יש בעולם של תולי</h2></div></div>
+    <div class="series">
+      <div class="card"><div class="card-body"><span class="num">3</span><h3>עונות של הסדרה</h3><p>פרקים מצוירים באיכות סדרה בינלאומית. עונה 3 בדרך, עם ריינג'רים, עיר החלומות וסוד גדול על טייגר.</p></div></div>
+      <div class="card"><div class="card-body"><span class="num">A-Z</span><h3>תולי מלמד אנגלית</h3><p>אות אחת בכל פרק קצר, מילה אחת, ומשחק של "עכשיו אתם". הדרך הכי כיפית להכיר את ה-ABC.</p></div></div>
+      <div class="card"><div class="card-body"><span class="num">♪</span><h3>שירים וקליפים</h3><p>"חברים", "כולם ביחד" ועוד שירים שהילדים שרים בגן. קליפים עם מילים על המסך לשירה משותפת.</p></div></div>
+      <div class="card"><div class="card-body"><span class="num">2</span><h3>משחקים עם תולי</h3><p>המירוץ לפסגה והמירוץ לממלכה, ותולי מופיע גם במיני פייטר ובפלישת הוירוסים. <a href="games.html">לכל המשחקים</a>.</p></div></div>
+      <div class="card" id="shop"><div class="card-body"><span class="num">🧸</span><h3>הבובה של תולי</h3><p>בובת פלאש רכה של תולי, לחיבוק לפני השינה. <a id="shop-link" href="#" target="_blank" rel="noopener">לחנות שלנו</a>.</p></div></div>
+      <div class="card"><div class="card-body"><span class="num">🎤</span><h3>הופעות חיות</h3><p>תולי ומשפחת ספיר על הבמה: שירים, ריקודים והרבה שאגות. <a href="contact.html">להזמנת הופעה</a>.</p></div></div>
+    </div>
+    <div class="ad-slot ad-leaderboard" data-ad-slot="tuli-bottom"><div>פרסומת<small>(מקום שמור לדוגמה)</small></div></div>
+  </section>
+
+  <section class="section container" style="padding-top:60px">
+    <div class="section-head"><div><h2 class="holo-title">הפרקים האחרונים</h2></div><a class="btn btn-ghost" href="videos.html#tuli">לכל הפרקים</a></div>
+    <div class="vgrid" id="tuli-video"></div>
+  </section>
+</main>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+  document.getElementById("shop-link").href = "shop.html"; document.getElementById("shop-link").removeAttribute("target");
+  const I = window.SAPIR_ICONS;
+  const tc = window.SAPIR.channels.find(c => c.id === "tuli");
+  const tv = document.getElementById("tuli-video");
+  window.fetchChannelVideos(window.channelIdOf(tc)).then(vs => { tv.innerHTML = vs.slice(0, 6).map(v => window.videoCard(v)).join(""); }).catch(() => {
+    tv.innerHTML = `<div class="video-frame" style="grid-column:1/-1">${tc && tc.playlistId
+      ? `<iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=${tc.playlistId}" title="הפרקים של תולי האריה" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`
+      : `<div class="video-placeholder"><div><div class="play">${I.play}</div><strong>תולי האריה</strong></div></div>`}</div>`;
+  });
+</script>
+</body>
+</html>

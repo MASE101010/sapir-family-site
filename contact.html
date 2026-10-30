@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>צור קשר | משפחת ספיר</title>
+  <meta name="description" content="צרו קשר עם משפחת ספיר: פניות עסקיות, הזמנת הופעות, הצעות לבלוג ושאלות.">
+  <link rel="icon" href="assets/img/logo-small.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .contact-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 36px; align-items: start; }
+    @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } }
+    .info { display: grid; gap: 14px; }
+    .info .card { padding: 20px 22px; }
+    .info .card strong { display: block; margin-bottom: 4px; }
+    .info a { color: #8fe9ff; font-weight: 700; text-decoration: none; }
+  </style>
+</head>
+<body data-page="contact">
+<main id="main">
+  <section class="container page-head">
+    <h1 class="holo-title">צור קשר</h1>
+    <p class="lead">שאלה, רעיון לפוסט, הזמנת הופעה או שיתוף פעולה. כתבו לנו ונחזור אליכם.</p>
+  </section>
+
+  <section class="container contact-grid">
+    <form class="card form" style="padding:28px" id="form" novalidate>
+      <label>שם מלא<input type="text" name="name" required autocomplete="name" placeholder="השם שלכם"></label>
+      <div class="row">
+        <label>אימייל<input type="email" name="email" required autocomplete="email" placeholder="name@example.com"></label>
+        <label>טלפון (לא חובה)<input type="tel" name="phone" autocomplete="tel" placeholder="05X-XXX-XXXX"></label>
+      </div>
+      <label>נושא הפנייה
+        <select name="topic" id="topic">
+          <option value="general">שאלה כללית</option>
+          <option value="brand">שיתוף פעולה עסקי</option>
+          <option value="show">הזמנת הופעה</option>
+          <option value="blog">רעיון לפוסט בבלוג</option>
+          <option value="games">משוב על המשחקים</option>
+        </select>
+      </label>
+      <label>ההודעה<textarea name="message" rows="6" required placeholder="ספרו לנו..."></textarea></label>
+      <label style="display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:.92rem"><input type="checkbox" name="consent" required style="margin-top:5px">קראתי את <a href="privacy.html">מדיניות הפרטיות</a> ואני מסכים/ה שהפרטים ישמשו למענה לפנייה בלבד.</label>
+      <div><button class="btn btn-ink" type="submit">שליחת ההודעה</button></div>
+      <p class="muted" id="form-msg" style="margin:0;font-size:.95rem"></p>
+    </form>
+
+    <div class="info">
+      <div class="card"><strong>אימייל לפניות</strong><a id="c-mail" href="#"></a></div>
+      <div class="card"><strong>טלפון</strong><a id="c-phone" href="#"></a><div class="dummy-note">ימים א-ה, 10:00-18:00</div></div>
+            <div class="card"><strong>ברשתות</strong><div class="social-row" id="c-social" style="margin-top:8px"></div></div>
+      <div class="ad-slot ad-rect" data-ad-slot="contact-side"><div>פרסומת<small>(מקום שמור לדוגמה)</small></div></div>
+    </div>
+  </section>
+</main>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+  const S = window.SAPIR;
+  document.getElementById("c-mail").textContent = S.email; document.getElementById("c-mail").href = "mailto:" + S.email;
+  document.getElementById("c-phone").textContent = S.phone; document.getElementById("c-phone").href = "tel:" + S.phone.replace(/-/g, "");
+
+  document.getElementById("c-social").innerHTML = S.social.map(s => `<a href="${s.url}" target="_blank" rel="noopener">${window.SAPIR_ICONS[s.id]}${s.label}</a>`).join("");
+  const t = new URLSearchParams(location.search).get("topic");
+  if (t) document.getElementById("topic").value = t;
+
+  /* הטופס נשלח כרגע דרך mailto. אחרי ההעלאה ל-Cloudflare נחבר אותו ל-Worker ששולח מייל ישירות. */
+  document.getElementById("form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const f = e.target, msg = document.getElementById("form-msg");
+    if (!f.checkValidity()) { msg.textContent = "חסרים פרטים, בדקו את השדות המסומנים."; f.reportValidity(); return; }
+    const d = new FormData(f);
+    const body = `שם: ${d.get("name")}\nאימייל: ${d.get("email")}\nטלפון: ${d.get("phone") || "-"}\nנושא: ${f.topic.options[f.topic.selectedIndex].text}\n\n${d.get("message")}`;
+    location.href = `mailto:${S.email}?subject=${encodeURIComponent("פנייה מהאתר: " + f.topic.options[f.topic.selectedIndex].text)}&body=${encodeURIComponent(body)}`;
+    msg.textContent = "נפתחה תוכנת המייל שלכם עם ההודעה. אם לא נפתחה, כתבו לנו ישירות לכתובת שמופיעה כאן.";
+  });
+</script>
+</body>
+</html>

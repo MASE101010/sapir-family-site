@@ -1,0 +1,373 @@
+/* משפחת ספיר - סקריפט משותף: ניווט, פוטר, נגישות, עזרי בלוג */
+(function () {
+  const S = window.SAPIR;
+  const page = document.body.dataset.page || "";
+
+  const ICONS = {
+    youtube: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 7.1a3 3 0 0 0-2.1-2.1C19 4.5 12 4.5 12 4.5s-7 0-8.9.5A3 3 0 0 0 1 7.1 31 31 0 0 0 .5 12 31 31 0 0 0 1 16.9 3 3 0 0 0 3.1 19c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1c.4-1.6.5-3.3.5-4.9s-.1-3.3-.5-4.9zM9.8 15.5v-7l6 3.5-6 3.5z"/></svg>',
+    instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>',
+    tiktok: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2.3 1.7 3.9 4 4.1v3.2c-1.5 0-2.9-.5-4-1.3v6.4a5.8 5.8 0 1 1-5.8-5.8c.3 0 .6 0 .9.1v3.3a2.6 2.6 0 1 0 1.7 2.4V3h3.2z"/></svg>',
+    facebook: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 8h3V4h-3c-2.8 0-4.5 1.7-4.5 4.5V11H7v4h2.5v6h4v-6H17l.5-4h-4V8.8c0-.5.2-.8.5-.8z"/></svg>',
+    play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>',
+    store: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.6 2.5 13 12l-9.4 9.5c-.4-.2-.6-.7-.6-1.2V3.7c0-.5.2-1 .6-1.2zm1.3-.4 10.9 6.2-2.3 2.3L4.9 2.1zm0 19.8 8.6-8.5 2.3 2.3L4.9 21.9zM20 10.2c.9.5 .9 1.9 0 2.4l-2.7 1.5L14.5 12l2.8-2.8 2.7 1.5z"/></svg>',
+    globe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>',
+    a11y: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="4.5" r="2"/><path d="M20 8.5c-5.3 1.2-10.7 1.2-16 0l-.5 2c2 .5 4 .8 6 1v3l-2.5 7 2 .7 2.6-6.2h.8l2.6 6.2 2-.7-2.5-7v-3c2-.2 4-.5 6-1z"/></svg>'
+  };
+  window.SAPIR_ICONS = ICONS;
+
+  /* ---------- ניווט ---------- */
+  const NAV = [
+    ["index.html", "בית", "home"],
+    ["videos.html", "סרטונים", "videos"],
+    ["games.html", "משחקים", "games"],
+    ["blog.html", "הבלוג", "blog"],
+    ["tuli.html", "תולי האריה", "tuli"],
+    ["about.html", "מי אנחנו", "about"],
+    ["brands.html", "למותגים", "brands"]
+  ];
+
+  /* ---------- רקע: אורורה, כוכבים, רעש, וילון מעבר ---------- */
+  const bg = document.createElement("div");
+  bg.innerHTML = `<div class="bg-aurora" aria-hidden="true"><span></span><span></span><span></span><span></span></div><canvas class="bg-stars" aria-hidden="true"></canvas><div class="bg-noise" aria-hidden="true"></div>`;
+  while (bg.firstChild) document.body.prepend(bg.lastChild);
+
+  const header = document.createElement("header");
+  header.className = "site-header";
+  header.innerHTML = `
+    <div class="container nav">
+      <a class="nav-logo" href="index.html" aria-label="משפחת ספיר - דף הבית">
+        <img src="assets/img/logo-small.png" alt="לוגו משפחת ספיר" width="180" height="96">
+      </a>
+      <ul class="nav-links">
+        ${NAV.map(([href, label, key]) => `<li><a href="${href}" ${page === key ? 'aria-current="page"' : ""}>${label}</a></li>`).join("")}
+      </ul>
+      <a class="btn btn-holo btn-sm nav-cta" href="shop.html">החנות שלנו</a>
+      <button class="nav-toggle" aria-label="פתיחת תפריט" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>`;
+  document.body.prepend(header);
+  const skip = document.createElement("a"); skip.className = "skip-link"; skip.href = "#main"; skip.textContent = "דילוג לתוכן";
+  document.body.prepend(skip);
+  const ld = document.createElement("script"); ld.type = "application/ld+json";
+  ld.textContent = JSON.stringify({ "@context": "https://schema.org", "@type": "Organization", name: "משפחת ספיר", url: S.domain, logo: S.domain + "/assets/img/logo.png", email: S.email, sameAs: S.social.map(x => x.url) });
+  document.head.append(ld);
+
+  /* ניווט תחתון במובייל */
+  const TAB_ICONS = {
+    home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 11 12 3l9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>',
+    videos: ICONS.play,
+    games: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 11v3M5.5 12.5h3M15.5 11.5h.01M18 13.5h.01"/></svg>',
+    blog: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16v16H4zM8 9h8M8 13h8M8 17h5"/></svg>',
+    tuli: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="6"/><path d="M5 8l2-4 3 3M19 8l-2-4-3 3M9.5 13h.01M14.5 13h.01M10.5 16c.8.7 2.2.7 3 0"/></svg>'
+  };
+  const tabbar = document.createElement("nav"); tabbar.className = "tabbar"; tabbar.setAttribute("aria-label", "ניווט מהיר");
+  tabbar.innerHTML = NAV.filter(n => TAB_ICONS[n[2]]).map(([href, label, key]) => `<a href="${href}" ${page === key ? 'aria-current="page"' : ""}><span class="ti">${TAB_ICONS[key]}</span><span>${label}</span></a>`).join("");
+  document.body.append(tabbar);
+  const nav = header.querySelector(".nav");
+  header.querySelector(".nav-toggle").addEventListener("click", (e) => {
+    const open = nav.classList.toggle("open");
+    e.currentTarget.setAttribute("aria-expanded", open);
+  });
+
+  /* ---------- פוטר ---------- */
+  const footer = document.createElement("footer");
+  footer.className = "site-footer";
+  footer.innerHTML = `
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <img class="footer-logo" src="assets/img/logo-small.png" alt="" width="190">
+          <p style="color:rgba(255,255,255,.75);max-width:34ch">הבית של משפחת ספיר ברשת: סרטונים, משחקים, תולי האריה ובלוג יומי להורים ולילדים.</p>
+          <div class="social-row" style="margin-top:10px">
+            ${S.social.map(s => `<a href="${s.url}" target="_blank" rel="noopener" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff">${ICONS[s.id]}${s.label}</a>`).join("")}
+          </div>
+        </div>
+        <div>
+          <h4>באתר</h4>
+          <ul>${NAV.slice(1).map(([h, l]) => `<li><a href="${h}">${l}</a></li>`).join("")}</ul>
+        </div>
+        <div>
+          <h4>עוד</h4>
+          <ul>
+            <li><a href="shop.html">החנות שלנו</a></li>
+            <li><a href="contact.html">צור קשר</a></li>
+            <li><a href="brands.html">שיתופי פעולה</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>משפטי</h4>
+          <ul>
+            <li><a href="privacy.html">מדיניות פרטיות</a></li>
+            <li><a href="terms.html">תנאי שימוש</a></li>
+            <li><a href="accessibility.html">הצהרת נגישות</a></li>
+            <li><a href="#" onclick="window.SAPIR_RESET_CONSENT();return false;">הגדרות עוגיות</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© ${new Date().getFullYear()} משפחת ספיר. כל הזכויות שמורות.</span>
+        <span>נבנה באהבה בישראל</span>
+      </div>
+    </div>`;
+  document.body.append(footer);
+
+  /* ---------- נגישות (לפי ת"י 5568 / WCAG 2.1 AA) ---------- */
+  const a11yBtn = document.createElement("button");
+  a11yBtn.className = "a11y-btn"; a11yBtn.setAttribute("aria-label", "תפריט נגישות"); a11yBtn.setAttribute("aria-expanded", "false"); a11yBtn.setAttribute("aria-controls", "a11y-panel");
+  a11yBtn.innerHTML = ICONS.a11y;
+  const panel = document.createElement("div");
+  panel.className = "a11y-panel"; panel.id = "a11y-panel"; panel.setAttribute("role", "dialog"); panel.setAttribute("aria-label", "אפשרויות נגישות");
+  const OPTS = [["a11y-big", "הגדלת טקסט"], ["a11y-bigger", "טקסט גדול מאוד"], ["a11y-contrast", "ניגודיות גבוהה"], ["a11y-gray", "גווני אפור"], ["a11y-links", "הדגשת קישורים"], ["a11y-font", "גופן קריא"], ["a11y-cursor", "סמן גדול"], ["a11y-nomotion", "עצירת אנימציות"]];
+  panel.innerHTML = `<div class="a11y-head"><strong>נגישות</strong><button class="a11y-close" aria-label="סגירת תפריט נגישות">✕</button></div>` +
+    OPTS.map(([c, l]) => `<button data-cls="${c}" aria-pressed="false">${l}</button>`).join("") +
+    `<button data-reset style="color:#ff9ae6">איפוס הגדרות</button><a href="accessibility.html">הצהרת נגישות</a>`;
+  document.body.append(a11yBtn, panel);
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem("sapir-a11y") || "{}"); } catch (e) {}
+  const applyA11y = () => { OPTS.forEach(([c]) => document.body.classList.toggle(c, !!saved[c])); panel.querySelectorAll("button[data-cls]").forEach(b => b.setAttribute("aria-pressed", !!saved[b.dataset.cls])); };
+  applyA11y();
+  panel.addEventListener("click", (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.cls) { const c = b.dataset.cls; saved[c] = !saved[c]; if (c === "a11y-big" && saved[c]) saved["a11y-bigger"] = false; if (c === "a11y-bigger" && saved[c]) saved["a11y-big"] = false; }
+    else if (b.hasAttribute("data-reset")) saved = {};
+    else if (b.classList.contains("a11y-close")) { panel.classList.remove("open"); a11yBtn.setAttribute("aria-expanded", "false"); a11yBtn.focus(); return; }
+    applyA11y();
+    try { localStorage.setItem("sapir-a11y", JSON.stringify(saved)); } catch (err) {}
+  });
+  a11yBtn.addEventListener("click", () => { const open = panel.classList.toggle("open"); a11yBtn.setAttribute("aria-expanded", open); if (open) panel.querySelector("button[data-cls]").focus(); });
+  addEventListener("keydown", (e) => { if (e.key === "Escape" && panel.classList.contains("open")) { panel.classList.remove("open"); a11yBtn.setAttribute("aria-expanded", "false"); } });
+
+  /* ---------- הסכמה לעוגיות (חוק הגנת הפרטיות, תיקון 13 + פרסומות) ---------- */
+  let consent = null;
+  try { consent = JSON.parse(localStorage.getItem("sapir-consent") || "null"); } catch (e) {}
+  window.SAPIR_CONSENT = consent;
+  const loadAds = () => { if (window.SAPIR_CONSENT && window.SAPIR_CONSENT.ads && typeof window.SAPIR_LOAD_ADS === "function") window.SAPIR_LOAD_ADS(); };
+  if (!consent) {
+    const cb = document.createElement("div"); cb.className = "cookie-bar"; cb.setAttribute("role", "region"); cb.setAttribute("aria-label", "הודעה על שימוש בעוגיות");
+    cb.innerHTML = `<div class="cookie-text"><strong>עוגיות באתר</strong> אנחנו משתמשים בעוגיות הכרחיות לתפעול האתר, ובהסכמתכם גם בעוגיות של YouTube ושל פרסומות מותאמות. אפשר לשנות את הבחירה בכל זמן בתחתית העמוד. <a href="privacy.html">למדיניות הפרטיות</a></div>
+      <div class="cookie-actions"><button class="btn btn-ink btn-sm" data-c="all">מאשר/ת הכול</button><button class="btn btn-ghost btn-sm" data-c="essential">רק הכרחיות</button></div>`;
+    document.body.append(cb);
+    cb.addEventListener("click", (e) => {
+      const b = e.target.closest("button[data-c]"); if (!b) return;
+      consent = { ads: b.dataset.c === "all", media: b.dataset.c === "all", date: new Date().toISOString() };
+      window.SAPIR_CONSENT = consent;
+      try { localStorage.setItem("sapir-consent", JSON.stringify(consent)); } catch (err) {}
+      cb.classList.add("bye"); setTimeout(() => cb.remove(), 400); loadAds();
+    });
+  } else loadAds();
+  window.SAPIR_RESET_CONSENT = () => { try { localStorage.removeItem("sapir-consent"); } catch (e) {} location.reload(); };
+
+  /* ---------- אפקטים ---------- */
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // כוכבים נוצצים
+  const canvas = document.querySelector(".bg-stars");
+  if (canvas && !reduced) {
+    const ctx = canvas.getContext("2d");
+    let stars = [], w, h;
+    const resize = () => {
+      w = canvas.width = innerWidth; h = canvas.height = innerHeight;
+      stars = Array.from({ length: Math.min(160, Math.floor(w * h / 9000)) }, () => ({
+        x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.4 + 0.3,
+        t: Math.random() * Math.PI * 2, s: Math.random() * 0.02 + 0.005, v: Math.random() * 0.15 + 0.03
+      }));
+    };
+    resize(); addEventListener("resize", resize);
+    const tick = () => {
+      ctx.clearRect(0, 0, w, h);
+      for (const s of stars) {
+        s.t += s.s; s.y -= s.v; if (s.y < -4) { s.y = h + 4; s.x = Math.random() * w; }
+        const a = 0.35 + Math.sin(s.t) * 0.35;
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${a})`; ctx.fill();
+      }
+      requestAnimationFrame(tick);
+    };
+    tick();
+  }
+
+  // זיקוקים קטנים סביב הסמן + לוגו SWOOSH במעבר עמוד
+  const fx = document.createElement("canvas"); fx.className = "fx-canvas"; fx.setAttribute("aria-hidden", "true");
+  document.body.append(fx);
+  const fctx = fx.getContext("2d");
+  let parts = [], fw = 0, fh = 0, fxRunning = false;
+  const fxResize = () => { fw = fx.width = innerWidth; fh = fx.height = innerHeight; };
+  fxResize(); addEventListener("resize", fxResize);
+  const COLORS = ["#28d7ff", "#7b5cff", "#ff4fd1", "#ffe14d", "#4df5c3", "#ffffff"];
+  const fxLoop = () => {
+    fctx.clearRect(0, 0, fw, fh);
+    parts = parts.filter(p => p.life > 0);
+    for (const p of parts) {
+      p.life -= p.decay; p.x += p.vx; p.y += p.vy; p.vy += p.g; p.vx *= 0.96; p.vy *= 0.96; p.rot += p.vr;
+      fctx.save(); fctx.globalAlpha = Math.max(0, p.life); fctx.translate(p.x, p.y); fctx.rotate(p.rot);
+      fctx.fillStyle = p.c; fctx.shadowColor = p.c; fctx.shadowBlur = 10;
+      if (p.shape) { // כוכב קטן
+        fctx.beginPath(); for (let i = 0; i < 8; i++) { const r = i % 2 ? p.r * 0.4 : p.r, a = i * Math.PI / 4; fctx.lineTo(Math.cos(a) * r, Math.sin(a) * r); } fctx.closePath(); fctx.fill();
+      } else { fctx.beginPath(); fctx.arc(0, 0, p.r, 0, Math.PI * 2); fctx.fill(); }
+      fctx.restore();
+    }
+    if (parts.length) requestAnimationFrame(fxLoop); else fxRunning = false;
+  };
+  const spawn = (x, y, n, power) => {
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * Math.PI * 2, v = (Math.random() * 0.7 + 0.3) * power;
+      parts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - power * 0.25, g: 0.06, r: Math.random() * 3 + 1.5,
+        rot: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.3, life: 1, decay: Math.random() * 0.025 + 0.015,
+        c: COLORS[Math.floor(Math.random() * COLORS.length)], shape: Math.random() < 0.5 });
+    }
+    if (!fxRunning) { fxRunning = true; requestAnimationFrame(fxLoop); }
+  };
+  if (!reduced) {
+    // שובל עדין אחרי העכבר
+    let last = 0;
+    addEventListener("pointermove", (e) => {
+      if (e.pointerType !== "mouse") return;
+      const t = performance.now(); if (t - last < 70) return; last = t;
+      parts.push({ x: e.clientX + (Math.random() - 0.5) * 10, y: e.clientY + (Math.random() - 0.5) * 10, vx: (Math.random() - 0.5) * 0.6, vy: -Math.random() * 0.8 - 0.2, g: 0.01,
+        r: Math.random() * 1.6 + 0.8, rot: 0, vr: 0.1, life: 0.9, decay: 0.03, c: COLORS[Math.floor(Math.random() * COLORS.length)], shape: Math.random() < 0.3 });
+      if (!fxRunning) { fxRunning = true; requestAnimationFrame(fxLoop); }
+    }, { passive: true });
+    // זיקוק קטן בכל לחיצה
+    addEventListener("pointerdown", (e) => spawn(e.clientX, e.clientY, 22, 5), { passive: true });
+  }
+
+  // חשיפה בגלילה
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+  }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+  const observeReveals = () => {
+    document.querySelectorAll(".section-head, .tuli-band, .cta-band, .stats-strip, .with-side, .page-head, .prose, .post-body, .post-hero").forEach(el => { if (!el.classList.contains("reveal")) { el.classList.add("reveal"); io.observe(el); } });
+    document.querySelectorAll(".grid, .games-list, .series, .steps, .audience, .timeline, .kv").forEach(el => { if (!el.classList.contains("reveal-stagger")) { el.classList.add("reveal-stagger"); io.observe(el); } });
+  };
+  observeReveals();
+  new MutationObserver(observeReveals).observe(document.querySelector("main") || document.body, { childList: true, subtree: true });
+
+  // זרקור והטיה בהירו
+  const hero = document.querySelector(".hero");
+  if (hero && !reduced && matchMedia("(pointer: fine)").matches) {
+    const spot = document.createElement("div"); spot.className = "spot"; hero.prepend(spot);
+    const frame = hero.querySelector(".hero-photo .frame");
+    hero.addEventListener("mousemove", (e) => {
+      const r = hero.getBoundingClientRect();
+      hero.style.setProperty("--mx", ((e.clientX - r.left) / r.width * 100) + "%");
+      hero.style.setProperty("--my", ((e.clientY - r.top) / r.height * 100) + "%");
+      if (frame) {
+        const fr = frame.getBoundingClientRect();
+        const dx = (e.clientX - (fr.left + fr.width / 2)) / fr.width, dy = (e.clientY - (fr.top + fr.height / 2)) / fr.height;
+        frame.style.transform = `rotate(-2.5deg) rotateY(${dx * 14}deg) rotateX(${-dy * 14}deg)`;
+      }
+    });
+    hero.addEventListener("mouseleave", () => { if (frame) frame.style.transform = ""; });
+  }
+
+  // מונים שעולים
+  const countUp = (el) => {
+    const raw = el.textContent.trim(); const m = raw.match(/^([^\d]*)([\d.]+)(.*)$/); if (!m) return;
+    const [, pre, numStr, suf] = m; const target = parseFloat(numStr); const dec = (numStr.split(".")[1] || "").length;
+    const t0 = performance.now(), dur = 1400;
+    const step = (t) => {
+      const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = pre + (target * e).toFixed(dec) + suf;
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  const cio = new IntersectionObserver((entries) => { entries.forEach(en => { if (en.isIntersecting) { countUp(en.target); cio.unobserve(en.target); } }); }, { threshold: 0.5 });
+  const observeNums = () => document.querySelectorAll(".stat .num, .kv .num, .audience .num, .float-badge b, .numbers .num").forEach(el => { if (!el.dataset.c) { el.dataset.c = 1; if (!reduced) cio.observe(el); } });
+  observeNums(); setTimeout(observeNums, 500);
+
+  // כותרת בגלילה + חזרה למעלה
+  const toTop = document.createElement("button"); toTop.className = "to-top"; toTop.setAttribute("aria-label", "חזרה למעלה");
+  toTop.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+  toTop.addEventListener("click", () => scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" }));
+  document.body.append(toTop);
+  const onScroll = () => { header.classList.toggle("scrolled", scrollY > 30); toTop.classList.toggle("show", scrollY > 600); };
+  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+  // הטיית תלת-ממד לכרטיסים (דסקטופ בלבד)
+  if (!reduced && matchMedia("(pointer: fine)").matches) {
+    document.addEventListener("pointermove", (e) => {
+      const c = e.target.closest(".card.tilt, a.card, .game-row, .float-badge");
+      if (!c || c.classList.contains("channel-card")) return;
+      const r = c.getBoundingClientRect();
+      const dx = (e.clientX - r.left) / r.width - 0.5, dy = (e.clientY - r.top) / r.height - 0.5;
+      c.style.setProperty("--rx", (-dy * 8) + "deg"); c.style.setProperty("--ry", (dx * 10) + "deg");
+      c.style.setProperty("--gx", (dx * 100 + 50) + "%"); c.style.setProperty("--gy", (dy * 100 + 50) + "%");
+      c.classList.add("tilting");
+    }, { passive: true });
+    document.addEventListener("pointerout", (e) => { const c = e.target.closest(".tilting"); if (c && !c.contains(e.relatedTarget)) { c.classList.remove("tilting"); c.style.removeProperty("--rx"); c.style.removeProperty("--ry"); } }, { passive: true });
+  }
+
+  // פס התקדמות קריאה
+  const prog = document.createElement("div"); prog.className = "scroll-progress"; prog.setAttribute("aria-hidden", "true");
+  document.body.append(prog);
+  const upd = () => { const h = document.documentElement; const p = h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight); prog.style.transform = `scaleX(${p})`; };
+  addEventListener("scroll", upd, { passive: true }); upd();
+
+  /* ---------- סרטונים: RSS של יוטיוב דרך /api/videos ---------- */
+  const vcache = {};
+  window.channelIdOf = (c) => c.channelId || (c.playlistId && c.playlistId.startsWith("UU") ? "UC" + c.playlistId.slice(2) : "");
+  window.fetchChannelVideos = async function (channelId) {
+    if (!channelId) throw new Error("no channel");
+    if (vcache[channelId]) return vcache[channelId];
+    const res = await fetch(`/api/videos?channel=${encodeURIComponent(channelId)}`, { cache: "no-store" });
+    if (!res.ok) throw new Error("api " + res.status);
+    const data = await res.json();
+    if (!data.videos || !data.videos.length) throw new Error("empty");
+    vcache[channelId] = data.videos;
+    return data.videos;
+  };
+  window.fmtViews = (n) => !n ? "" : n >= 1e6 ? (n / 1e6).toFixed(1).replace(/\.0$/, "") + "M צפיות" : n >= 1e3 ? Math.round(n / 1e3) + "K צפיות" : n + " צפיות";
+  window.videoCard = (v, cls = "") => `
+    <button class="vcard ${cls}" type="button" data-video="${v.id}" data-title="${(v.title || "").replace(/"/g, "&quot;")}" aria-label="נגן: ${(v.title || "").replace(/"/g, "&quot;")}">
+      <span class="vthumb"><img src="${v.thumb}" alt="" loading="lazy"><span class="vplay">${ICONS.play}</span>${v.views ? `<small>${window.fmtViews(v.views)}</small>` : ""}</span>
+      <span class="vtitle">${v.title || ""}</span>
+      ${v.published ? `<span class="vdate">${window.fmtDate(v.published.slice(0, 10))}</span>` : ""}
+    </button>`;
+  // נגן צף
+  const modal = document.createElement("div"); modal.className = "vmodal"; modal.setAttribute("role", "dialog"); modal.setAttribute("aria-modal", "true"); modal.setAttribute("aria-label", "נגן וידאו"); modal.hidden = true;
+  modal.innerHTML = `<div class="vmodal-box"><button class="vclose" aria-label="סגירה">✕</button><div class="video-frame" id="vmodal-frame"></div><div class="vmodal-title" id="vmodal-title"></div></div>`;
+  document.body.append(modal);
+  const closeV = () => { modal.hidden = true; document.getElementById("vmodal-frame").innerHTML = ""; document.body.style.overflow = ""; };
+  window.openVideo = (id, title) => {
+    document.getElementById("vmodal-frame").innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" title="${title || ""}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    document.getElementById("vmodal-title").textContent = title || "";
+    modal.hidden = false; document.body.style.overflow = "hidden"; modal.querySelector(".vclose").focus();
+  };
+  modal.addEventListener("click", (e) => { if (e.target === modal || e.target.closest(".vclose")) closeV(); });
+  addEventListener("keydown", (e) => { if (e.key === "Escape" && !modal.hidden) closeV(); });
+  document.addEventListener("click", (e) => { const b = e.target.closest(".vcard"); if (b) window.openVideo(b.dataset.video, b.dataset.title); });
+
+  /* ---------- עזרי בלוג ---------- */
+  const HE_MONTHS = ["ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני", "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"];
+  window.fmtDate = (iso) => {
+    const [y, m, d] = iso.split("-").map(Number);
+    return `${d} ב${HE_MONTHS[m - 1]} ${y}`;
+  };
+  window.todayISO = () => {
+    const now = new Date();
+    const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+    return local.toISOString().slice(0, 10);
+  };
+  /* מחזיר רק פוסטים שתאריכם הגיע ושאושרו - כך אפשר להכין פוסטים מראש וכל יום עולה אחד */
+  window.loadPosts = async function () {
+    const res = await fetch("data/posts.json", { cache: "no-store" });
+    const all = await res.json();
+    const today = window.todayISO();
+    return all
+      .filter(p => p.status === "published" && p.date <= today)
+      .sort((a, b) => (a.date < b.date ? 1 : -1));
+  };
+  window.postCard = function (p) {
+    const cover = p.audience === "kids" ? "cover-kids" : "cover-parents";
+    const badge = p.audience === "kids" ? '<span class="badge badge-kids">לילדים</span>' : '<span class="badge badge-parents">להורים</span>';
+    return `
+      <a class="card post-card" href="post.html?id=${encodeURIComponent(p.id)}">
+        <div class="cover ${cover}"><span class="emoji" aria-hidden="true">${p.emoji || "✨"}</span></div>
+        <div class="card-body">
+          <div class="meta">${badge}<span>${window.fmtDate(p.date)}</span><span>${p.readMinutes || 3} דקות קריאה</span></div>
+          <h3>${p.title}</h3>
+          <p>${p.excerpt}</p>
+        </div>
+      </a>`;
+  };
+})();

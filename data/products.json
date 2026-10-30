@@ -1,0 +1,429 @@
+{
+ "products": [
+  {
+   "name": "בובת תולי, אריה שהוא חתלתולי",
+   "price": "₪149.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%91%d7%95%d7%91%d7%aa-%d7%aa%d7%95%d7%9c%d7%99-%d7%90%d7%a8%d7%99%d7%94-%d7%a9%d7%94%d7%95%d7%90-%d7%97%d7%aa%d7%9c%d7%aa%d7%95%d7%9c%d7%99/",
+   "img": "https://www.merchadvice.com/wp-content/uploads/2022/12/IMG-20260416-WA0033-600x600.jpg",
+   "soldOut": false
+  },
+  {
+   "name": "מבצע מטורף 3 בובות במחיר של 2",
+   "price": "₪330.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%9e%d7%91%d7%a6%d7%a2-%d7%9e%d7%98%d7%95%d7%a8%d7%a3-3-%d7%91%d7%95%d7%91%d7%95%d7%aa-%d7%91%d7%9e%d7%97%d7%99%d7%a8-%d7%a9%d7%9c-2/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "משחק קופסא, אתגר הממלכה: המירוץ לכתר",
+   "price": "₪119.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%9e%d7%a9%d7%97%d7%a7-%d7%a7%d7%95%d7%a4%d7%a1%d7%90-%d7%90%d7%aa%d7%92%d7%a8-%d7%94%d7%9e%d7%9e%d7%9c%d7%9b%d7%94-%d7%94%d7%9e%d7%99%d7%a8%d7%95%d7%a5-%d7%9c%d7%9b%d7%aa%d7%a8/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "אתגר הממלכה 2: המירוץ לאוצר",
+   "price": "₪119.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%90%d7%aa%d7%92%d7%a8-%d7%94%d7%9e%d7%9e%d7%9c%d7%9b%d7%94-2-%d7%94%d7%9e%d7%99%d7%a8%d7%95%d7%a5-%d7%9c%d7%90%d7%95%d7%a6%d7%a8/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "תחפושת שירן או אלין",
+   "price": "₪119.90",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%aa%d7%97%d7%a4%d7%95%d7%a9%d7%95%d7%aa-%d7%9e%d7%a9%d7%a4%d7%97%d7%aa-%d7%a1%d7%a4%d7%99%d7%a8-%d7%90%d7%9c%d7%99%d7%9f-%d7%a1%d7%a4%d7%99%d7%a8-%d7%a9%d7%99%d7%a8%d7%9f-%d7%a1%d7%a4%d7%99/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "תחפושת מיכאל או אלרועי",
+   "price": "₪119.90",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%aa%d7%97%d7%a4%d7%95%d7%a9%d7%aa-%d7%9e%d7%99%d7%9b%d7%90%d7%9c-%d7%90%d7%95-%d7%90%d7%9c%d7%a8%d7%95%d7%a2%d7%99/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "בושם, אלין ספיר",
+   "price": "₪79.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%91%d7%95%d7%a9%d7%9d-%d7%90%d7%9c%d7%99%d7%9f-%d7%a1%d7%a4%d7%99%d7%a8/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "בובת מיכאל ספיר",
+   "price": "₪149.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%91%d7%95%d7%91%d7%aa-%d7%9e%d7%99%d7%9b%d7%90%d7%9c-%d7%a1%d7%a4%d7%99%d7%a8/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "בובת שירן ספיר",
+   "price": "₪149.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%91%d7%95%d7%91%d7%aa-%d7%a9%d7%99%d7%a8%d7%9f-%d7%a1%d7%a4%d7%99%d7%a8/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "בושם, אלרועי ספיר",
+   "price": "₪79.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%91%d7%95%d7%a9%d7%9d-%d7%90%d7%9c%d7%a8%d7%95%d7%a2%d7%99-%d7%a1%d7%a4%d7%99%d7%a8/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "מבצע סט: הבושם של אלין + הבושם של אלרועי",
+   "price": "₪120.00",
+   "oldPrice": "₪158.00",
+   "link": "https://www.merchadvice.com/product/%d7%9e%d7%91%d7%a6%d7%a2-%d7%a1%d7%98-%d7%94%d7%91%d7%95%d7%a9%d7%9d-%d7%a9%d7%9c-%d7%90%d7%9c%d7%99%d7%9f-%d7%94%d7%91%d7%95%d7%a9%d7%9d-%d7%a9%d7%9c-%d7%90%d7%9c%d7%a8%d7%95%d7%a2%d7%99/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "קופסת ההפתעות של משפחת ספיר לחנוכה, עם ישראל חי",
+   "price": "₪200.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%a7%d7%95%d7%a4%d7%a1%d7%aa-%d7%94%d7%94%d7%a4%d7%aa%d7%a2%d7%95%d7%aa-%d7%a9%d7%9c-%d7%9e%d7%a9%d7%a4%d7%97%d7%aa-%d7%a1%d7%a4%d7%99%d7%a8-%d7%9c%d7%97%d7%a0%d7%95%d7%9b%d7%94-%d7%a2%d7%9d/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "חולצה, המשפחתית החדשה של ספיר",
+   "price": "₪70.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%97%d7%95%d7%9c%d7%a6%d7%94-%d7%94%d7%9e%d7%a9%d7%a4%d7%97%d7%aa%d7%99%d7%aa-%d7%94%d7%97%d7%93%d7%a9%d7%94-%d7%a9%d7%9c-%d7%a1%d7%a4%d7%99%d7%a8/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "חולצה, עם ישראל חי",
+   "price": "₪70.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%97%d7%95%d7%9c%d7%a6%d7%94-%d7%a2%d7%9d-%d7%99%d7%a9%d7%a8%d7%90%d7%9c-%d7%97%d7%99/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "קפוצ'ון משפחתי, קולקציית הממלכה",
+   "price": "₪120.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%a7%d7%a4%d7%95%d7%a6%d7%95%d7%9f-%d7%9e%d7%a9%d7%a4%d7%97%d7%aa%d7%99-%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%99%d7%aa-%d7%94%d7%9e%d7%9e%d7%9c%d7%9b%d7%94/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "סט מצעים של משפחת ספיר",
+   "price": "₪120.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%a1%d7%98-%d7%9e%d7%a6%d7%a2%d7%99%d7%9d-%d7%a9%d7%9c-%d7%9e%d7%a9%d7%a4%d7%97%d7%aa-%d7%a1%d7%a4%d7%99%d7%a8/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "קופסת ההפתעות של משפחת ספיר",
+   "price": "₪200.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%a7%d7%95%d7%a4%d7%a1%d7%aa-%d7%94%d7%94%d7%a4%d7%aa%d7%a2%d7%95%d7%aa-%d7%a9%d7%9c-%d7%9e%d7%a9%d7%a4%d7%97%d7%aa-%d7%a1%d7%a4%d7%99%d7%a8-2/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "פיג'מה של אלין",
+   "price": "₪99.90",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%a4%d7%99%d7%92%d7%9e%d7%94-%d7%a9%d7%9c-%d7%90%d7%9c%d7%99%d7%9f/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "פיג'מה של אלרועי",
+   "price": "₪99.90",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%a4%d7%99%d7%92%d7%9e%d7%94-%d7%a9%d7%9c-%d7%90%d7%9c%d7%a8%d7%95%d7%a2%d7%99/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "בנדנה ורודה חדשה של אלין",
+   "price": "₪30.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%91%d7%a0%d7%93%d7%a0%d7%94-%d7%95%d7%a8%d7%95%d7%93%d7%94-%d7%97%d7%93%d7%a9%d7%94-%d7%a9%d7%9c-%d7%90%d7%9c%d7%99%d7%9f/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "בנדנה שחורה חדשה של אלרועי",
+   "price": "₪30.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%91%d7%a0%d7%93%d7%a0%d7%94-%d7%a9%d7%97%d7%95%d7%a8%d7%94-%d7%97%d7%93%d7%a9%d7%94-%d7%a9%d7%9c-%d7%90%d7%9c%d7%a8%d7%95%d7%a2%d7%99/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "כובע ורוד, הממלכה",
+   "price": "₪50.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%9b%d7%95%d7%91%d7%a2-%d7%95%d7%a8%d7%95%d7%93-%d7%94%d7%9e%d7%9e%d7%9c%d7%9b%d7%94/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "כובע שחור, הממלכה",
+   "price": "₪50.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%9b%d7%95%d7%91%d7%a2-%d7%a9%d7%97%d7%95%d7%a8-%d7%94%d7%9e%d7%9e%d7%9c%d7%9b%d7%94/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "הגיטרה של אלרועי, גיטרה חשמלית (שירים + קריוקי)",
+   "price": "₪119.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%94%d7%92%d7%99%d7%98%d7%a8%d7%94-%d7%a9%d7%9c-%d7%90%d7%9c%d7%a8%d7%95%d7%a2%d7%99-%d7%92%d7%99%d7%98%d7%a8%d7%94-%d7%97%d7%a9%d7%9e%d7%9c%d7%99%d7%aa-%d7%9e%d7%98%d7%95%d7%a8%d7%a4%d7%aa-%d7%a9/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "חולצה משפחתית ספיר, קולקציית הממלכה",
+   "price": "₪70.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%97%d7%95%d7%9c%d7%a6%d7%94-%d7%9e%d7%a9%d7%a4%d7%97%d7%aa%d7%99%d7%aa-%d7%a1%d7%a4%d7%99%d7%a8-%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%99%d7%aa-%d7%94%d7%9e%d7%9e%d7%9c%d7%9b%d7%94/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "חולצה של מיכאל, קולקציית הממלכה",
+   "price": "₪70.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%97%d7%95%d7%9c%d7%a6%d7%94-%d7%a9%d7%9c-%d7%9e%d7%99%d7%9b%d7%90%d7%9c-%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%99%d7%aa-%d7%94%d7%9e%d7%9e%d7%9c%d7%9b%d7%94/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "חולצה של שירן, קולקציית הממלכה",
+   "price": "₪70.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%97%d7%95%d7%9c%d7%a6%d7%94-%d7%a9%d7%9c-%d7%a9%d7%99%d7%a8%d7%9f-%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%99%d7%aa-%d7%94%d7%9e%d7%9e%d7%9c%d7%9b%d7%94/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "חולצה של אלרועי, קולקציית הממלכה",
+   "price": "₪70.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%97%d7%95%d7%9c%d7%a6%d7%94-%d7%a9%d7%9c-%d7%90%d7%9c%d7%a8%d7%95%d7%a2%d7%99-%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%99%d7%aa-%d7%94%d7%9e%d7%9e%d7%9c%d7%9b%d7%94/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "חולצה של אלין, קולקציית הממלכה",
+   "price": "₪70.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%97%d7%95%d7%9c%d7%a6%d7%94-%d7%a9%d7%9c-%d7%90%d7%9c%d7%99%d7%9f-%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%99%d7%aa-%d7%94%d7%9e%d7%9e%d7%9c%d7%9b%d7%94/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "חולצה של אלאור, קולקציית הממלכה",
+   "price": "₪70.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%97%d7%95%d7%9c%d7%a6%d7%94-%d7%a9%d7%9c-%d7%90%d7%9c%d7%90%d7%95%d7%a8-%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%99%d7%aa-%d7%94%d7%9e%d7%9e%d7%9c%d7%9b%d7%94/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "קפוצ'ון של מיכאל, קולקציית הממלכה",
+   "price": "₪120.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%a7%d7%a4%d7%95%d7%a6%d7%95%d7%9f-%d7%a9%d7%9c-%d7%9e%d7%99%d7%9b%d7%90%d7%9c-%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%99%d7%aa-%d7%94%d7%9e%d7%9e%d7%9c%d7%9b%d7%94/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "קפוצ'ון של שירן, קולקציית הממלכה",
+   "price": "₪120.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%a7%d7%a4%d7%95%d7%a6%d7%95%d7%9f-%d7%a9%d7%9c-%d7%a9%d7%99%d7%a8%d7%9f-%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%99%d7%aa-%d7%94%d7%9e%d7%9e%d7%9c%d7%9b%d7%94/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "קפוצ'ון של אלרועי, קולקציית הממלכה",
+   "price": "₪120.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%a7%d7%a4%d7%95%d7%a6%d7%95%d7%9f-%d7%a9%d7%9c-%d7%90%d7%9c%d7%a8%d7%95%d7%a2%d7%99-%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%99%d7%aa-%d7%94%d7%9e%d7%9e%d7%9c%d7%9b%d7%94/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "קפוצ'ון של אלין, קולקציית הממלכה",
+   "price": "₪120.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%a7%d7%a4%d7%95%d7%a6%d7%95%d7%9f-%d7%a9%d7%9c-%d7%90%d7%9c%d7%99%d7%9f-%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%99%d7%aa-%d7%94%d7%9e%d7%9e%d7%9c%d7%9b%d7%94/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "קפוצ'ון של אלאור, קולקציית הממלכה",
+   "price": "₪120.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%a7%d7%a4%d7%95%d7%a6%d7%95%d7%9f-%d7%a9%d7%9c-%d7%90%d7%9c%d7%90%d7%95%d7%a8-%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%99%d7%aa-%d7%94%d7%9e%d7%9e%d7%9c%d7%9b%d7%94/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "קפוצ'ון קנגרו שחור, הקולקצייה החדשה",
+   "price": "₪100.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%a7%d7%a4%d7%95%d7%a6%d7%95%d7%9f-%d7%a7%d7%a0%d7%92%d7%a8%d7%95-%d7%a9%d7%97%d7%95%d7%a8-%d7%94%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%99%d7%94-%d7%94%d7%97%d7%93%d7%a9%d7%94/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "קפוצ'ון קנגרו לבן, הקולקצייה החדשה",
+   "price": "₪100.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%a7%d7%a4%d7%95%d7%a6%d7%95%d7%9f-%d7%a7%d7%a0%d7%92%d7%a8%d7%95-%d7%9c%d7%91%d7%9f-%d7%94%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%99%d7%94-%d7%94%d7%97%d7%93%d7%a9%d7%94/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "חולצה לבנה הקולקציה החדשה, משפחתית",
+   "price": "₪70.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%97%d7%95%d7%9c%d7%a6%d7%94-%d7%9c%d7%91%d7%a0%d7%94-%d7%94%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%94-%d7%94%d7%97%d7%93%d7%a9%d7%94-%d7%9e%d7%a9%d7%a4%d7%97%d7%aa%d7%99%d7%aa/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "חולצה שחורה הקולקציה החדשה, משפחתית",
+   "price": "₪70.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%97%d7%95%d7%9c%d7%a6%d7%94-%d7%a9%d7%97%d7%95%d7%a8%d7%94-%d7%94%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%94-%d7%94%d7%97%d7%93%d7%a9%d7%94-%d7%9e%d7%a9%d7%a4%d7%97%d7%aa%d7%99%d7%aa-2/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "מבצע חולצה + כובע, הקולקצייה החדשה",
+   "price": "₪100.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%9e%d7%91%d7%a6%d7%a2-%d7%97%d7%95%d7%9c%d7%a6%d7%94-%d7%9b%d7%95%d7%91%d7%a2-%d7%94%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%99%d7%94-%d7%94%d7%97%d7%93%d7%a9%d7%94/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "חולצה לבנה הקולקציה החדשה, מיכאל",
+   "price": "₪70.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%97%d7%95%d7%9c%d7%a6%d7%94-%d7%9c%d7%91%d7%a0%d7%94-%d7%94%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%94-%d7%94%d7%97%d7%93%d7%a9%d7%94-%d7%9e%d7%99%d7%9b%d7%90%d7%9c/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "חולצה לבנה הקולקציה החדשה, אלרועי",
+   "price": "₪70.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%97%d7%95%d7%9c%d7%a6%d7%94-%d7%9c%d7%91%d7%a0%d7%94-%d7%94%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%94-%d7%94%d7%97%d7%93%d7%a9%d7%94-%d7%90%d7%9c%d7%a8%d7%95%d7%a2%d7%99/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "חולצה לבנה הקולקציה החדשה, אלין",
+   "price": "₪70.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%97%d7%95%d7%9c%d7%a6%d7%94-%d7%9c%d7%91%d7%a0%d7%94-%d7%94%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%94-%d7%94%d7%97%d7%93%d7%a9%d7%94-%d7%90%d7%9c%d7%99%d7%9f/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "חולצה לבנה הקולקציה החדשה, שירן",
+   "price": "₪70.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%97%d7%95%d7%9c%d7%a6%d7%94-%d7%9c%d7%91%d7%a0%d7%94-%d7%94%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%94-%d7%94%d7%97%d7%93%d7%a9%d7%94-%d7%a9%d7%99%d7%a8%d7%9f/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "צמיד חברות",
+   "price": "₪29.90",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%a6%d7%9e%d7%99%d7%93-%d7%97%d7%91%d7%a8%d7%95%d7%aa/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "שרשרת חברות",
+   "price": "₪29.90",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%a9%d7%a8%d7%a9%d7%a8%d7%aa-%d7%97%d7%91%d7%a8%d7%95%d7%aa/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "צמידים עם צ'ארמס LOL",
+   "price": "₪29.90",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%a6%d7%9e%d7%99%d7%93%d7%99%d7%9d-%d7%a2%d7%9d-%d7%a6%d7%90%d7%a8%d7%9e%d7%a1-lol/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "קפוצ'ון שחור עם רוכסן, הקולקצייה החדשה",
+   "price": "₪100.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%a7%d7%a4%d7%a6%d7%95%d7%9f-%d7%a9%d7%97%d7%95%d7%a8-%d7%a2%d7%9d-%d7%a8%d7%95%d7%9b%d7%a1%d7%9f-%d7%94%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%99%d7%94-%d7%94%d7%97%d7%93%d7%a9%d7%94/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "קפוצ'ון ורוד עם רוכסן, הקולקצייה החדשה",
+   "price": "₪100.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%a7%d7%a4%d7%95%d7%a6%d7%95%d7%9f-%d7%95%d7%a8%d7%95%d7%93-%d7%a2%d7%9d-%d7%a8%d7%95%d7%9b%d7%a1%d7%9f-%d7%94%d7%a7%d7%95%d7%9c%d7%a7%d7%a6%d7%99%d7%99%d7%94-%d7%94%d7%97%d7%93%d7%a9%d7%94/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "אוברול תינוקות, הדפס משפחתי",
+   "price": "₪50.00",
+   "oldPrice": "",
+   "link": "https://www.merchadvice.com/product/%d7%90%d7%95%d7%91%d7%a8%d7%95%d7%9c-%d7%aa%d7%99%d7%a0%d7%95%d7%a7%d7%95%d7%aa-%d7%94%d7%93%d7%a4%d7%a1-%d7%9e%d7%a9%d7%a4%d7%97%d7%aa%d7%99/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "מבצע! חולצה משפחתית, ספיר",
+   "price": "₪60.00",
+   "oldPrice": "₪70.00",
+   "link": "https://www.merchadvice.com/product/%d7%97%d7%95%d7%9c%d7%a6%d7%94-%d7%9e%d7%a9%d7%a4%d7%97%d7%aa%d7%99%d7%aa-%d7%a1%d7%a4%d7%99%d7%a8/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "מבצע! חולצה של אלין",
+   "price": "₪60.00",
+   "oldPrice": "₪70.00",
+   "link": "https://www.merchadvice.com/product/%d7%97%d7%95%d7%9c%d7%a6%d7%94-%d7%a9%d7%9c-%d7%90%d7%9c%d7%99%d7%9f/",
+   "img": "",
+   "soldOut": false
+  },
+  {
+   "name": "מבצע! חולצה של אלרועי",
+   "price": "₪60.00",
+   "oldPrice": "₪70.00",
+   "link": "https://www.merchadvice.com/product/%d7%97%d7%95%d7%9c%d7%a6%d7%94-%d7%a9%d7%9c-%d7%90%d7%9c%d7%a8%d7%95%d7%a2%d7%99/",
+   "img": "",
+   "soldOut": false
+  }
+ ],
+ "note": "תמונת מצב ידנית; אחרי העלאה ל-Cloudflare הרשימה נטענת חיה מ-/api/shop"
+}

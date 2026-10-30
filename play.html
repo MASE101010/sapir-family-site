@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>משחק | משפחת ספיר</title>
+  <link rel="icon" href="assets/img/logo-small.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    body { padding-bottom: 0 !important; }
+    .play-bar { display: flex; align-items: center; gap: 12px; padding: 10px 0; }
+    .play-bar h1 { font-size: 1.5rem; margin: 0; }
+    .play-bar .sp { margin-inline-start: auto; display: flex; gap: 8px; }
+    .stage { position: relative; border-radius: 22px; overflow: hidden; border: 1px solid var(--line); background: #000; box-shadow: var(--shadow-ink); height: calc(100vh - 180px); height: calc(100svh - 180px); min-height: 420px; }
+    .stage.portrait { max-width: 520px; margin-inline: auto; }
+    .stage iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .stage:fullscreen { border-radius: 0; height: 100vh; max-width: none; }
+    .soon { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 30px; background: radial-gradient(600px 300px at 50% 120%, rgba(123,92,255,0.6), transparent 60%), #0a0d33; }
+    .soon .big { font-size: 5rem; line-height: 1; margin-bottom: 10px; }
+    .tabbar { display: none !important; }
+    .tips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    .tips span { background: var(--glass); border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; font-size: 0.9rem; color: var(--ink-2); }
+  </style>
+</head>
+<body data-page="games">
+<main id="main" class="container">
+  <div class="play-bar">
+    <a class="btn btn-ghost btn-sm" href="games.html">→ לכל המשחקים</a>
+    <h1 id="g-name"></h1>
+    <div class="sp">
+      <button class="btn btn-ghost btn-sm" id="fs" type="button">מסך מלא</button>
+      <a class="btn btn-ink btn-sm" id="store" href="#" target="_blank" rel="noopener" hidden>גוגל פליי</a>
+    </div>
+  </div>
+  <div class="stage" id="stage"></div>
+  <div class="tips" id="tips"></div>
+</main>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+(() => {
+  const S = window.SAPIR, id = new URLSearchParams(location.search).get("game");
+  const g = S.games.find(x => x.id === id) || S.games[0];
+  document.title = `${g.name} | משפחת ספיר`;
+  document.getElementById("g-name").textContent = g.name;
+  const stage = document.getElementById("stage");
+  if (g.orientation === "portrait") stage.classList.add("portrait");
+  if (g.play) { const st = document.getElementById("store"); st.href = g.play; st.hidden = false; }
+  if (g.playReady && g.playUrl) {
+    stage.innerHTML = `<iframe src="${g.playUrl}" title="${g.name}" allow="fullscreen; autoplay; gamepad" allowfullscreen></iframe>`;
+    document.getElementById("tips").innerHTML = ["הכי כיף במסך מלא", "במובייל: סובבו את המכשיר לפי המשחק", "ההתקדמות נשמרת בדפדפן הזה"].map(t => `<span>${t}</span>`).join("");
+  } else {
+    stage.innerHTML = `<div class="soon"><div><div class="big">🎮</div><h2>${g.name}, גרסת הדפדפן בדרך</h2><p class="muted" style="max-width:40ch;margin-inline:auto">${g.blurb}</p>${g.play ? `<a class="btn btn-ink" href="${g.play}" target="_blank" rel="noopener">בינתיים, להורדה בגוגל פליי</a>` : `<a class="btn btn-ghost" href="games.html">לשאר המשחקים</a>`}</div></div>`;
+    document.getElementById("fs").hidden = true;
+  }
+  document.getElementById("fs").addEventListener("click", () => { if (document.fullscreenElement) document.exitFullscreen(); else stage.requestFullscreen && stage.requestFullscreen(); });
+})();
+</script>
+</body>
+</html>

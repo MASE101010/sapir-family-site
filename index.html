@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>משפחת ספיר | הבית של המשפחה ברשת</title>
+  <meta name="description" content="הבית הרשמי של משפחת ספיר: כל הסרטונים, המשחקים שלנו, תולי האריה ובלוג יומי עם טיפים להורים ולילדים.">
+  <meta property="og:title" content="משפחת ספיר | הבית של המשפחה ברשת">
+  <meta property="og:description" content="סרטונים, משחקים, תולי האריה ובלוג יומי להורים ולילדים.">
+  <meta property="og:image" content="assets/img/family.jpg">
+  <link rel="icon" href="assets/img/logo-small.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="home">
+<main id="main">
+
+  <!-- הירו -->
+  <section class="hero" id="top">
+    <div class="hero-rays" aria-hidden="true"></div>
+    <div class="hero-shards" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="container hero-grid">
+      <div class="hero-text">
+        <img class="hero-logo" src="assets/img/logo.webp" alt="משפחת ספיר" width="1600" height="853" fetchpriority="high">
+        <h1 class="hero-tagline"><span class="tag-static">הבית של</span> <span class="cycle"><span class="cycle-word is-on">הסרטונים</span><span class="cycle-word" aria-hidden="true">המשחקים</span></span></h1>
+        <p class="hero-copy">מיכאל, שירן, אלין, אלרועי, אלאור ואריאל. מעל 3 מיליון עוקבים, שבעה ערוצים, חמישה משחקים, אריה אחד בשם תולי, ובלוג חדש בכל יום.</p>
+        <div class="hero-actions">
+          <a class="btn btn-ink" href="videos.html">לצפות בסרטונים</a>
+          <a class="btn btn-holo" href="games.html">לשחק במשחקים שלנו</a>
+        </div>
+      </div>
+      <div class="hero-photo">
+        <div class="frame">
+          <img src="assets/img/family.webp" alt="משפחת ספיר: מיכאל, שירן, אלין, אלרועי, אלאור ואריאל" width="1800" height="1200">
+        </div>
+        <p class="photo-caption">מעל 3 מיליון עוקבים בכל הרשתות החברתיות</p>
+      </div>
+    </div>
+    <a class="scroll-hint" href="#today" aria-label="גללו למטה"><span></span></a>
+  </section>
+
+  <!-- פס רץ -->
+  <div class="ticker-wrap" aria-hidden="true"><div class="ticker"><div class="ticker-track" id="ticker"></div></div></div>
+
+  <!-- חדש היום -->
+  <section class="section container" id="today">
+    <div class="section-head">
+      <div><h2 class="holo-title">חדש היום</h2><p>הסרטון האחרון שעלה והפוסט של היום בבלוג. מתעדכן לבד, כל יום.</p></div>
+    </div>
+    <div class="today">
+      <div class="video-frame" id="featured-video"></div>
+      <div class="today-post" id="today-post"></div>
+    </div>
+  </section>
+
+
+  <!-- שורטס -->
+  <section class="section container">
+    <div class="section-head">
+      <div><h2 class="holo-title">השורטס האחרונים</h2><p>רגעים קצרים מהחיים שלנו, כל יום משהו חדש בטיקטוק וביוטיוב.</p></div>
+      <a class="btn btn-ghost" id="shorts-link" href="#" target="_blank" rel="noopener">לעוד שורטס</a>
+    </div>
+    <div class="shorts-row" id="shorts"></div>
+  </section>
+
+  <!-- משחקים -->
+  <section class="section container">
+    <div class="section-head">
+      <div><h2 class="holo-title">המשחקים שלנו</h2><p>משחקים שבנינו בעצמנו, עם כל בני המשפחה ותולי בפנים. בחינם בגוגל פליי, חלקם גם בדפדפן.</p></div>
+      <a class="btn btn-ghost" href="games.html">לכל המשחקים</a>
+    </div>
+    <div class="grid grid-3" id="home-games"></div>
+  </section>
+
+  <!-- ערוצים -->
+  <section class="section container">
+    <div class="section-head">
+      <div><h2 class="holo-title">שבעה ערוצים, משפחה אחת</h2><p>לכל אחד מאיתנו יש ערוץ משלו. בחרו את מי אתם רוצים לראות היום.</p></div>
+      <a class="btn btn-ghost" href="videos.html">לכל הסרטונים</a>
+    </div>
+    <div class="grid grid-4 channels-grid" id="home-channels"></div>
+  </section>
+
+  <!-- תולי -->
+  <section class="container">
+    <div class="tuli-band tuli-band-art">
+      <div>
+        <img class="tuli-logo" src="assets/img/tuli/logo.png" alt="תולי האריה" width="621" height="425">
+        <p class="lead">הכוכב של הילדים: סדרה מצוירת, שירים, משחקים, בובות והופעות חיות. תולי, פוקס השועל והופ הארנבת שומרים על עיר החלומות, ומלמדים גם קצת אנגלית בדרך.</p>
+        <div class="hero-actions">
+          <a class="btn btn-ink" href="tuli.html">לעולם של תולי</a>
+          <a class="btn btn-ghost" href="videos.html#tuli">לפרקים</a>
+        </div>
+      </div>
+      <div class="tuli-stage-side">
+        <img src="assets/img/tuli/stage.webp" alt="תולי, פוקס והופ על הבמה מול קהל ילדים" width="1600" height="1600" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- בלוג -->
+  <section class="section container">
+    <div class="section-head">
+      <div><h2 class="holo-title">הבלוג היומי</h2><p>כל יום פוסט חדש: טיפ להורים או משהו כיפי לילדים. קצר, פרקטי, וממש מהחיים שלנו.</p></div>
+      <a class="btn btn-ghost" href="blog.html">לכל הפוסטים</a>
+    </div>
+    <div class="grid grid-3" id="home-posts"></div>
+    <div class="ad-slot ad-leaderboard" data-ad-slot="home-bottom"><div>פרסומת<small>(מקום שמור לדוגמה, ייכנס אחרי ההשקה)</small></div></div>
+  </section>
+
+
+  <!-- שאלות נפוצות -->
+  <section class="section container">
+    <div class="section-head"><div><h2 class="holo-title">שאלות ששואלים אותנו</h2></div></div>
+    <div class="faq">
+      <details><summary>איפה אפשר לראות את כל הפרקים של תולי?</summary><div class="ans">בערוץ SAPIRTV ביוטיוב, ובעמוד <a href="videos.html">הסרטונים</a> כאן באתר, שמתעדכן אוטומטית.</div></details>
+      <details><summary>איך מזמינים אתכם להופעה?</summary><div class="ans">דרך <a href="contact.html?topic=show">טופס יצירת הקשר</a>, בוחרים "הזמנת הופעה" וכותבים לנו תאריך ומקום. חוזרים תוך יומיים.</div></details>
+      <details><summary>איפה קונים את הבובה של תולי?</summary><div class="ans">ב<a id="faq-shop" href="#" target="_blank" rel="noopener">חנות שלנו</a>. משלוחים לכל הארץ.</div></details>
+      <details><summary>המשחקים שלכם בחינם?</summary><div class="ans">כן. כל המשחקים בחינם בגוגל פליי, עם פרסומות רק במסכי התפריט. יש אפשרות לרכישה חד-פעמית קטנה שמסירה פרסומות ופותחת הכול.</div></details>
+      <details><summary>אפשר להציע נושא לבלוג?</summary><div class="ans">בשמחה. כתבו לנו דרך <a href="contact.html?topic=blog">צור קשר</a> ונכניס את זה לתור. הפוסטים הכי טובים שלנו התחילו משאלות של עוקבים.</div></details>
+    </div>
+  </section>
+
+  <!-- מותגים -->
+  <section class="container">
+    <div class="cta-band">
+      <div>
+        <h2>רוצים לעבוד איתנו?</h2>
+        <p class="lead" style="color:rgba(255,255,255,.8)">קמפיינים למותגים, הופעות חיות ותוכן משפחתי שמגיע למיליוני צופים בישראל. בואו נדבר.</p>
+        <div class="hero-actions">
+          <a class="btn btn-ink" href="brands.html">למידע למותגים</a>
+          <a class="btn btn-ghost" style="color:#fff;border-color:rgba(255,255,255,.4)" href="contact.html">צור קשר</a>
+        </div>
+      </div>
+      <div class="kv">
+        <div><span class="num">3M+</span><span class="lbl">עוקבים</span></div>
+        <div><span class="num">7</span><span class="lbl">ערוצי יוטיוב</span></div>
+        <div><span class="num">100%</span><span class="lbl">תוכן משפחתי</span></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ניוזלטר -->
+  <section class="container">
+    <div class="newsletter">
+      <div>
+        <h2 class="holo-title" style="font-size:clamp(1.6rem,3vw,2.3rem)">הפוסט היומי ישר למייל</h2>
+        <p class="muted" style="margin:0">טיפ אחד ביום, בלי ספאם, אפשר לבטל בלחיצה. (דמה, יחובר בהשקה)</p>
+      </div>
+      <form id="nl" novalidate>
+        <input type="email" name="email" placeholder="האימייל שלכם" aria-label="אימייל" required>
+        <button class="btn btn-ink" type="submit">הרשמה</button>
+        <p class="muted" id="nl-msg" style="margin:0;flex-basis:100%;font-size:.95rem"></p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+(async () => {
+  const S = window.SAPIR, I = window.SAPIR_ICONS;
+
+  // סרטון מומלץ: הסרטון החדש ביותר מהערוץ הראשי (RSS), עם גיבוי לפלייליסט ההעלאות
+  const fv = document.getElementById("featured-video");
+  const mainCh = S.channels.find(c => c.id === "family") || S.channels[0];
+  const fallbackFeatured = () => { fv.innerHTML = S.featuredPlaylistId
+    ? `<iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=${S.featuredPlaylistId}" title="הסרטון החדש של משפחת ספיר" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`
+    : `<div class="video-placeholder"><div><div class="play">${I.play}</div><strong>הסרטון החדש שלנו</strong></div></div>`; };
+  window.fetchChannelVideos(window.channelIdOf(mainCh)).then(vs => {
+    const v = vs[0];
+    fv.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${v.id}?rel=0" title="${v.title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
+    fv.insertAdjacentHTML("afterend", `<p class="muted" style="margin:10px 4px 0;font-size:.95rem"><strong style="color:#fff">${v.title}</strong>, עלה ב-${window.fmtDate(v.published.slice(0, 10))}</p>`);
+  }).catch(fallbackFeatured);
+
+  // משחקים בבית (3 ראשונים)
+  const gameIcons = {
+    fist: '<svg viewBox="0 0 64 64" fill="#fff"><path d="M18 30V16a4 4 0 0 1 8 0v8h2V12a4 4 0 0 1 8 0v12h2V14a4 4 0 0 1 8 0v10h2v-4a4 4 0 0 1 8 0v16c0 10-8 18-18 18h-4c-7 0-12-4-14-10l-6-10a4 4 0 0 1 7-4z"/></svg>',
+    "arrow-up": '<svg viewBox="0 0 64 64" fill="#fff"><path d="M32 6 10 30h14v28h16V30h14z"/></svg>',
+    run: '<svg viewBox="0 0 64 64" fill="#fff"><circle cx="40" cy="10" r="6"/><path d="M34 20l-12 6-6 12 6 2 4-8 6-3-2 12-10 12 6 4 10-12 4-8 8 6 4 14 6-2-4-16-10-9 3-7 8 5 3-5-12-9z"/></svg>',
+    abc: '<svg viewBox="0 0 64 64" fill="#fff"><rect x="6" y="14" width="16" height="16" rx="3"/><rect x="24" y="14" width="16" height="16" rx="3" opacity=".8"/><rect x="42" y="14" width="16" height="16" rx="3" opacity=".6"/><rect x="6" y="34" width="16" height="16" rx="3" opacity=".6"/><rect x="24" y="34" width="16" height="16" rx="3"/><rect x="42" y="34" width="16" height="16" rx="3" opacity=".8"/></svg>',
+    rocket: '<svg viewBox="0 0 64 64" fill="#fff"><path d="M32 4c8 6 12 16 12 28l6 8-8 2-2 6-8-4-8 4-2-6-8-2 6-8C20 20 24 10 32 4zm0 14a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM26 54l6 8 6-8z"/></svg>'
+  };
+  const gameCard = g => `
+    <a class="card" href="play.html?game=${g.id}">
+      <div class="game-tile ${g.tile}"><span class="kind">${g.kind}</span><div>${gameIcons[g.icon]}<div class="name">${g.name}</div></div></div>
+      <div class="card-body">
+        <div>${g.playReady ? '<span class="badge badge-live">לשחק עכשיו בדפדפן</span>' : '<span class="badge badge-soon">גרסת דפדפן בקרוב</span>'}</div>
+        <p>${g.blurb}</p>
+      </div>
+    </a>`;
+  document.getElementById("home-games").innerHTML = S.games.map(gameCard).join("");
+
+  // ערוצים
+  document.getElementById("home-channels").innerHTML = S.channels.map(c => `
+    <a class="card channel-card" href="videos.html#${c.id}">
+      <div class="avatar" style="background:${c.color};color:${c.color}">${c.avatar ? `<img src="${c.avatar}" alt="">` : c.initial}</div>
+      <div><h3>${c.name}</h3><p>${c.who}${c.subs ? `, ${c.subs} מנויים` : ""}</p></div>
+    </a>`).join("");
+
+  // פוסטים
+  try {
+    const posts = await window.loadPosts();
+    document.getElementById("home-posts").innerHTML = posts.slice(0, 3).map(window.postCard).join("");
+    const t = posts[0];
+    document.getElementById("today-post").innerHTML = t ? `
+      <span class="emoji" aria-hidden="true">${t.emoji || "✨"}</span>
+      <div class="meta muted" style="font-size:.9rem">הפוסט של היום, ${window.fmtDate(t.date)}</div>
+      <h3>${t.title}</h3>
+      <p class="muted">${t.excerpt}</p>
+      <a class="btn btn-ink btn-sm" href="post.html?id=${encodeURIComponent(t.id)}">לקריאה</a>` : `<div class="empty">הפוסט הראשון עולה בקרוב</div>`;
+  } catch (e) {
+    document.getElementById("home-posts").innerHTML = '<div class="empty">הבלוג ייטען אחרי העלאה לשרת</div>';
+    document.getElementById("today-post").innerHTML = '<div class="empty">הבלוג ייטען אחרי העלאה לשרת</div>';
+  }
+
+  // שורטס: הסרטונים האחרונים מערוץ Sapir TV (RSS), עם גיבוי לכרטיסי דמה
+  const shortsCh = S.channels.find(c => c.id === "sapirtv");
+  const shortsData = [["🎢","היום בלונה פארק","2.1M"],["🦁","תולי מלמד את האות E","880K"],["🍕","מי מכין פיצה יותר טוב?","1.4M"],["🎮","אלרועי מנצח את אבא","3.2M"]];
+  const grads = ["linear-gradient(160deg,#ff3d6e,#7b2bd6)","linear-gradient(160deg,#ffb84d,#ff4fd1)","linear-gradient(160deg,#28d7ff,#3d2bd6)","linear-gradient(160deg,#4df5c3,#1b4a8a)"];
+  const dummyShorts = () => { document.getElementById("shorts").innerHTML = shortsData.map(([e, t, v], i) => `<a class="short" href="videos.html#sapirtv" style="background:${grads[i]}"><small>${v} צפיות</small><div class="play"><span>${I.play}</span></div><span style="font-size:4rem;position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);opacity:.9">${e}</span><b>${t}</b></a>`).join(""); };
+  window.fetchChannelVideos(window.channelIdOf(shortsCh)).then(vs => {
+    document.getElementById("shorts").innerHTML = vs.slice(0, 4).map(v => window.videoCard(v, "vshort")).join("");
+  }).catch(dummyShorts);
+  document.getElementById("shorts-link").href = "videos.html#sapirtv"; document.getElementById("shorts-link").removeAttribute("target");
+  document.getElementById("faq-shop").href = "shop.html"; document.getElementById("faq-shop").removeAttribute("target");
+  document.getElementById("nl").addEventListener("submit", (e) => { e.preventDefault(); const f = e.target, m = document.getElementById("nl-msg"); if (!f.email.validity.valid) { m.textContent = "בדקו את כתובת האימייל."; return; } m.textContent = "נרשמתם! (דמה, הרישום יחובר בהשקה)"; f.reset(); });
+
+  // פס רץ
+  const items = ["10 מיליון צפיות בחודש", "מעל 3 מיליון עוקבים", "7 ערוצי יוטיוב", "תוכן ערכי ומותאם לילדים"];
+  const seq = items.map(t => `<span>${t}</span><em>✦</em>`).join("");
+  document.getElementById("ticker").innerHTML = seq + seq + seq + seq;
+
+  // מילים מתחלפות בכותרת: קרוס-פייד איטי ורך
+  const words = ["הסרטונים", "המשחקים", "תולי האריה", "הבלוג היומי", "משפחת ספיר"];
+  const layers = document.querySelectorAll(".cycle-word");
+  let wi = 0, on = 0;
+  const FADE = { duration: 1400, easing: "ease-in-out", fill: "forwards" };
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(() => {
+    wi = (wi + 1) % words.length;
+    const cur = layers[on], next = layers[1 - on];
+    next.textContent = words[wi];
+    cur.animate([{ opacity: 1, filter: "blur(0px)" }, { opacity: 0, filter: "blur(4px)" }], FADE);
+    next.animate([{ opacity: 0, filter: "blur(4px)" }, { opacity: 1, filter: "blur(0px)" }], FADE);
+    on = 1 - on;
+  }, 3400);
+})();
+</script>
+</body>
+</html>

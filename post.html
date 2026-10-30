@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>הבלוג | משפחת ספיר</title>
+  <link rel="icon" href="assets/img/logo-small.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .post-cover { max-width: 760px; margin: 24px auto 0; aspect-ratio: 21 / 9; border-radius: var(--radius-lg); display: grid; place-items: center; }
+    .post-cover .emoji { font-size: 5.5rem; line-height: 1; filter: drop-shadow(0 12px 24px rgba(0,0,0,.25)); }
+    .share { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 30px; align-items: center; }
+  </style>
+</head>
+<body data-page="blog">
+<main id="main">
+  <article class="container">
+    <div class="post-hero" id="post-hero"></div>
+    <div class="post-cover" id="post-cover"></div>
+    <div class="post-body" id="post-body"></div>
+    <div class="post-body">
+      <div class="share" id="share"></div>
+      <div class="ad-slot ad-leaderboard" data-ad-slot="post-bottom"><div>פרסומת<small>(מקום שמור לדוגמה)</small></div></div>
+      <div class="post-nav" id="post-nav"></div>
+    </div>
+  </article>
+
+  <section class="section container">
+    <div class="section-head"><div><h2 class="holo-title">עוד מהבלוג</h2></div><a class="btn btn-ghost" href="blog.html">לכל הפוסטים</a></div>
+    <div class="grid grid-3" id="more"></div>
+  </section>
+</main>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+(async () => {
+  const id = new URLSearchParams(location.search).get("id");
+  let posts = [];
+  try { posts = await window.loadPosts(); } catch (e) {}
+  const i = posts.findIndex(p => p.id === id);
+  const hero = document.getElementById("post-hero");
+  if (i < 0) {
+    hero.innerHTML = `<h1>הפוסט לא נמצא</h1><p class="lead">אולי הוא עוד לא עלה, או שהקישור השתנה.</p><a class="btn btn-ink" href="blog.html">לכל הפוסטים</a>`;
+    return;
+  }
+  const p = posts[i];
+  document.title = `${p.title} | הבלוג של משפחת ספיר`;
+  const badge = p.audience === "kids" ? '<span class="badge badge-kids">לילדים</span>' : '<span class="badge badge-parents">להורים</span>';
+  hero.innerHTML = `
+    <div class="meta muted" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.95rem">${badge}<span>${window.fmtDate(p.date)}</span><span>${p.readMinutes || 3} דקות קריאה</span></div>
+    <h1 style="margin-top:10px">${p.title}</h1>
+    <p class="lead">${p.excerpt}</p>`;
+  const cover = document.getElementById("post-cover");
+  cover.className += p.audience === "kids" ? " cover-kids" : " cover-parents";
+  cover.innerHTML = `<span class="emoji" aria-hidden="true">${p.emoji || "✨"}</span>`;
+  document.getElementById("post-body").innerHTML = p.body;
+
+  const url = encodeURIComponent(location.href), txt = encodeURIComponent(p.title);
+  document.getElementById("share").innerHTML = `
+    <span class="muted">שתפו:</span>
+    <a class="btn btn-ghost btn-sm" href="https://wa.me/?text=${txt}%20${url}" target="_blank" rel="noopener">וואטסאפ</a>
+    <a class="btn btn-ghost btn-sm" href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" rel="noopener">פייסבוק</a>
+    <button class="btn btn-ghost btn-sm" id="copy">העתקת קישור</button>`;
+  document.getElementById("copy").addEventListener("click", async (e) => {
+    try { await navigator.clipboard.writeText(location.href); e.target.textContent = "הקישור הועתק"; } catch (err) {}
+  });
+
+  const prev = posts[i + 1], next = posts[i - 1];
+  document.getElementById("post-nav").innerHTML =
+    (prev ? `<a class="btn btn-ghost" href="post.html?id=${encodeURIComponent(prev.id)}">הפוסט הקודם</a>` : "<span></span>") +
+    (next ? `<a class="btn btn-ghost" href="post.html?id=${encodeURIComponent(next.id)}">הפוסט הבא</a>` : "");
+  document.getElementById("more").innerHTML = posts.filter(x => x.id !== id).slice(0, 3).map(window.postCard).join("");
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>הצהרת נגישות | משפחת ספיר</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="assets/img/logo-small.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="legal">
+<main id="main" class="container">
+  <div class="page-head"><h1 class="holo-title">הצהרת נגישות</h1><p class="muted">עדכון אחרון: 30 באוקטובר 2026</p></div>
+  <div class="prose">
+    <p>משפחת ספיר רואה חשיבות רבה בהנגשת האתר לאנשים עם מוגבלות, ופועלת בהתאם לחוק שוויון זכויות לאנשים עם מוגבלות, התשנ"ח-1998, ולתקנות שוויון זכויות לאנשים עם מוגבלות (התאמות נגישות לשירות), התשע"ג-2013. האתר נבנה במטרה לעמוד בתקן הישראלי ת"י 5568 ברמה AA, המבוסס על הנחיות WCAG 2.1.</p>
+    <h2>מה נעשה באתר</h2>
+    <ul>
+      <li>ניווט מלא במקלדת, עם סימון פוקוס ברור.</li>
+      <li>מבנה כותרות היררכי ותגיות סמנטיות לקוראי מסך.</li>
+      <li>טקסט חלופי לתמונות.</li>
+      <li>ניגודיות צבעים תקנית בטקסטים.</li>
+      <li>תפריט נגישות (הכפתור בפינה התחתונה): שתי רמות הגדלת טקסט, ניגודיות גבוהה, גווני אפור, הדגשת קישורים, גופן קריא, סמן גדול ועצירת אנימציות. ההגדרות נשמרות בדפדפן.</li>
+      <li>קישור "דילוג לתוכן" בתחילת כל עמוד, סגירת חלונות במקש Escape, ותוויות ARIA לרכיבים אינטראקטיביים (נגן, תפריטים, טפסים).</li>
+      <li>כיבוד הגדרת "הפחתת תנועה" של מערכת ההפעלה.</li>
+      <li>התאמה מלאה לנייד, לטאבלט ולמחשב.</li>
+    </ul>
+    <h2>מגבלות ידועות</h2>
+    <p>סרטוני יוטיוב המוטמעים באתר מופעלים דרך נגן YouTube, והנגישות שלהם (כתוביות, שליטה במקלדת) תלויה ביוטיוב. אנחנו משתדלים להוסיף כתוביות לסרטונים שלנו. אם נתקלתם ברכיב שאינו נגיש, נשמח לדעת.</p>
+    <h2>דרכי פנייה בנושא נגישות</h2>
+    <p>רכזת הנגישות: צוות משפחת ספיר<br>אימייל: <a id="mail" href="#"></a><br>טלפון: <span id="phone"></span></p>
+    <p>נשיב לפניות בנושא נגישות בהקדם האפשרי ולא יאוחר מ-14 ימי עסקים.</p>
+  </div>
+</main>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/site.js"></script>
+<script>
+  const S = window.SAPIR;
+  document.getElementById("mail").textContent = S.email; document.getElementById("mail").href = "mailto:" + S.email;
+  document.getElementById("phone").textContent = S.phone;
+</script>
+</body>
+</html>
