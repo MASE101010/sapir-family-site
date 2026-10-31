@@ -22,16 +22,29 @@ export async function onRequestGet(ctx) {
 async function handle({ request, env }) {
   const url = new URL(request.url);
   const cache = caches.default;
-  const cacheKey = new Request(url.origin + "/api/library?v=6", request);
+  const cacheKey = new Request(url.origin + "/api/library?v=7", request);
   if (!url.searchParams.has("fresh")) { const hit = await cache.match(cacheKey); if (hit) return hit; }
 
   const key = env.YT_API_KEY;
-  let videos = [], source = "rss";
+  let videos = [], source = "rss", pending = 0;
   if (key) {
     try { videos = await viaDataApi(key); source = "api"; } catch (e) { videos = []; }
   }
-  let pending = 0;
-  if (!videos.length) { videos = await viaRss(); pending = await markShorts(videos, url.origin); }
+  if (!videos.length) {
+    // הקובץ הסטטי שנבנה ב-GitHub Actions (כל ההיסטוריה), בתוספת הסרטונים הטריים מה-RSS שעוד לא בתוכו
+    let built = [];
+    try { const r = await env.ASSETS.fetch(new URL("/data/library.json", url.origin)); if (r.ok) built = (await r.json()).videos || []; } catch (e) {}
+    const fresh = await viaRss();
+    if (built.length) {
+      source = "built";
+      const have = new Set(built.map(v => v.id));
+      const extra = fresh.filter(v => !have.has(v.id));
+      pending = await markShorts(extra, url.origin);
+      const views = new Map(fresh.map(v => [v.id, v.views]));
+      for (const v of built) if (views.get(v.id)) v.views = Math.max(v.views || 0, views.get(v.id));
+      videos = [...built, ...extra];
+    } else { videos = fresh; pending = await markShorts(videos, url.origin); }
+  }
 
   videos.sort((a, b) => (a.published < b.published ? 1 : -1));
   const ttl = pending ? 60 : 10800;
