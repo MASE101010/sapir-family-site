@@ -19,7 +19,7 @@ const MAX_PER_CHANNEL = 600;
 export async function onRequestGet({ request, env }) {
   const url = new URL(request.url);
   const cache = caches.default;
-  const cacheKey = new Request(url.origin + "/api/library?v=4", request);
+  const cacheKey = new Request(url.origin + "/api/library?v=5", request);
   if (!url.searchParams.has("fresh")) { const hit = await cache.match(cacheKey); if (hit) return hit; }
 
   const key = env.YT_API_KEY;
@@ -27,10 +27,13 @@ export async function onRequestGet({ request, env }) {
   if (key) {
     try { videos = await viaDataApi(key); source = "api"; } catch (e) { videos = []; }
   }
-  if (!videos.length) { videos = await viaRss(); await markShorts(videos); }
+  let pending = 0;
+  if (!videos.length) { videos = await viaRss(); pending = await markShorts(videos, url.origin); }
+  for (const v of videos) delete v.checked;
 
   videos.sort((a, b) => (a.published < b.published ? 1 : -1));
-  const out = json({ source, count: videos.length, fetched: new Date().toISOString(), videos }, 200, { "cache-control": "public, max-age=1800, s-maxage=10800" });
+  const ttl = pending ? 60 : 10800;
+  const out = json({ source, count: videos.length, pending, fetched: new Date().toISOString(), videos }, 200, { "cache-control": `public, max-age=${Math.min(ttl, 1800)}, s-maxage=${ttl}` });
   await cache.put(cacheKey, out.clone());
   return out;
 }
@@ -81,23 +84,26 @@ async function viaRss() {
   return all;
 }
 
-/* בלי מפתח API אין אורך, אז מזהים שורטס לפי התמונה האנכית (oardefault.jpg) שיוטיוב מייצר רק לשורטס,
-   ועם גיבוי של בדיקת /shorts/<id> (200 לשורט, הפניה לסרטון רגיל). */
-async function markShorts(videos) {
-  const todo = videos.filter(v => !v.isShort);
-  for (let i = 0; i < todo.length; i += 20) {
-    await Promise.all(todo.slice(i, i + 20).map(async v => {
-      try {
-        const t = await fetch(`https://i.ytimg.com/vi/${v.id}/oardefault.jpg`, { method: "HEAD" });
-        if (t.ok) { v.isShort = true; return; }
-      } catch (e) {}
-      try {
-        const r = await fetch(`https://www.youtube.com/shorts/${v.id}`, { redirect: "manual", headers: { "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36", "accept-language": "he,en" } });
-        if (r.status === 200) v.isShort = true;
-        else if (r.status >= 300 && r.status < 400) { const loc = r.headers.get("location") || ""; if (/\/shorts\//.test(loc)) v.isShort = true; }
-      } catch (e) {}
-    }));
+/* בלי מפתח API אין אורך, אז מזהים שורטס לפי התמונה האנכית (oardefault.jpg) שיוטיוב מייצר רק לשורטס.
+   מגבלת Cloudflare: 50 בקשות משנה לכל קריאה, לכן בודקים עד 36 סרטונים בכל פעם ושומרים כל תוצאה במטמון ל-30 יום;
+   אחרי כמה קריאות כל הספרייה מסומנת. מחזיר כמה סרטונים נשארו לא בדוקים. */
+async function markShorts(videos, origin) {
+  const cache = caches.default;
+  const flagReq = id => new Request(`${origin}/__short/${id}`);
+  const todo = [];
+  for (const v of videos) {
+    if (v.isShort) continue;
+    const hit = await cache.match(flagReq(v.id));
+    if (hit) { v.isShort = (await hit.text()) === "1"; v.checked = true; } else todo.push(v);
   }
+  const batch = todo.slice(0, 36);
+  await Promise.all(batch.map(async v => {
+    let flag = "0";
+    try { const t = await fetch(`https://i.ytimg.com/vi/${v.id}/oardefault.jpg`, { method: "HEAD" }); if (t.ok) flag = "1"; } catch (e) { return; }
+    v.isShort = flag === "1"; v.checked = true;
+    await cache.put(flagReq(v.id), new Response(flag, { headers: { "cache-control": "public, max-age=2592000" } }));
+  }));
+  return todo.length - batch.length;
 }
 
 function isoSeconds(iso) { const m = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/.exec(iso || ""); return m ? (+m[1] || 0) * 3600 + (+m[2] || 0) * 60 + (+m[3] || 0) : 0; }
