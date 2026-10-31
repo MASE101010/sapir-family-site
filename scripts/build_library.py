@@ -60,6 +60,39 @@ def hebrewize(videos):
             v["titleChecked"] = True
             if t and HEB.search(t): v["title"] = t
 
+def rss_dates(videos):
+    """תאריכים מה-RSS הרשמי (15 האחרונים לערוץ, כולל שורטס): כך כל שורט חדש מקבל תאריך מדויק תוך שעות."""
+    n = 0
+    for key, cid in CHANNELS:
+        try:
+            req = urllib.request.Request(f"https://www.youtube.com/feeds/videos.xml?channel_id={cid}", headers={"User-Agent": "Mozilla/5.0"})
+            xml = urllib.request.urlopen(req, timeout=20).read().decode("utf-8")
+        except Exception:
+            continue
+        for m in re.finditer(r"<entry>(.*?)</entry>", xml, re.S):
+            e = m.group(1)
+            vid = re.search(r"<yt:videoId>([^<]+)", e); pub = re.search(r"<published>([^<]+)", e)
+            if vid and pub and vid.group(1) in videos and not videos[vid.group(1)].get("published"):
+                videos[vid.group(1)]["published"] = pub.group(1)[:19] + "Z"; n += 1
+    print(f"rss dates added: {n}")
+
+def shorts_playlist_dates(videos):
+    """ניסיון: פלייליסט השורטס של הערוץ (UUSH...) במצב flat עם approximate_date. אם יש תאריכים, משתמשים בהם."""
+    n = 0
+    for key, cid in CHANNELS:
+        url = f"https://www.youtube.com/playlist?list=UUSH{cid[2:]}"
+        cmd = ["yt-dlp", "--flat-playlist", "--dump-single-json", "--no-warnings", "--ignore-errors", "--extractor-args", "youtubetab:approximate_date", url]
+        try:
+            out = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
+            data = json.loads(out.stdout) if out.stdout.strip() else None
+            for e in (data or {}).get("entries") or []:
+                vid = e.get("id")
+                if vid in videos and not videos[vid].get("published") and ts(e):
+                    videos[vid]["published"] = ts(e); n += 1
+        except Exception as ex:
+            print(f"  UUSH {key}: {ex}")
+    print(f"shorts playlist dates added: {n}")
+
 def date_shorts(videos, limit=150):
     """לשונית השורטס לא מחזירה תאריכים במצב flat, אז משלימים תאריך ואורך לשורטס בלי תאריך, עד limit בכל ריצה."""
     todo = [v for v in videos.values() if v["isShort"] and not v.get("published") and not v.get("dateChecked")][:limit]
@@ -113,7 +146,9 @@ def main():
         if v["isShort"] and not v.get("published") and old.get(vid, {}).get("published"): v["published"] = old[vid]["published"]
         if old.get(vid, {}).get("dateChecked"): v["dateChecked"] = True
     hebrewize(videos)
-    date_shorts(videos)
+    rss_dates(videos)
+    shorts_playlist_dates(videos)
+    date_shorts(videos, limit=40)
     # סרטונים רגילים לפי תאריך (חדש לראשון); שורטס לפי המיקום בלשונית (חדש לראשון), משולבים בין הערוצים
     vod = sorted([v for v in videos.values() if not v["isShort"]], key=lambda v: v["published"], reverse=True)
     # שורטס: לפי תאריך (חדש לראשון) כשיש, אחרת לפי המיקום בלשונית
