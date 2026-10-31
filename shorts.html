@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preload" href="/data/library.json" as="fetch" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=202611010009">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611010015">
   <style>
     /* ---- עמוד השורטס: מסך מלא, גלילה אנכית בלבד, נגן יוטיוב בשליטה מלאה ---- */
     html, body { height: 100%; overflow: hidden !important; overscroll-behavior: none; background: #000; }
@@ -113,6 +113,18 @@
       .tabbar { background: rgba(0,0,0,0.9); }
     }
     .toast { position: fixed; bottom: calc(var(--bottom) + 24px); left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 10px 18px; border-radius: 999px; font-weight: 700; z-index: 9; box-shadow: 0 8px 30px rgba(0,0,0,0.5); }
+    .sgrid { position: fixed; inset: 0; z-index: 70; background: #000; display: flex; flex-direction: column; }
+    .sgrid[hidden] { display: none; }
+    .sgrid-head { display: flex; align-items: center; gap: 12px; padding: calc(10px + env(safe-area-inset-top)) 14px 10px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff; }
+    .sgrid-head b { font-size: 1.1rem; display: block; } .sgrid-head small { color: rgba(255,255,255,0.6); font-size: 0.8rem; }
+    .sgrid-close { width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.12); color: #fff; font-size: 1.1rem; cursor: pointer; }
+    .sgrid-sort { margin-inline-start: auto; display: flex; gap: 6px; }
+    .sgrid-sort button { border: 1px solid rgba(255,255,255,0.2); background: none; color: #fff; border-radius: 999px; padding: 6px 12px; font: inherit; font-size: 0.85rem; cursor: pointer; }
+    .sgrid-sort button.on { background: #fff; color: #000; }
+    .sgrid-body { flex: 1; overflow-y: auto; padding: 10px 10px calc(20px + var(--bottom)); display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; align-content: start; overscroll-behavior: contain; }
+    @media (min-width: 700px) { .sgrid-body { grid-template-columns: repeat(5, 1fr); padding: 14px; gap: 10px; } }
+    @media (min-width: 1200px) { .sgrid-body { grid-template-columns: repeat(7, 1fr); } }
+    .sgrid .vcard.vshort { background: #111; border-radius: 10px; overflow: hidden; }
     .empty-feed { height: 100%; display: grid; place-items: center; text-align: center; padding: 30px; color: #fff; }
   </style>
 </head>
@@ -121,12 +133,18 @@
   <div class="mini-top">
     <a href="index.html" aria-label="חזרה לדף הבית"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7-1.4-1.4L13.2 12 7.6 6.4z"/></svg></a>
     <div class="t"><img src="assets/img/logo-small.png" alt="">שורטס</div>
-    <a href="vod.html" aria-label="לסרטונים הארוכים"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4zM2 4v16h20V4zm8 4 6 4-6 4z"/></svg></a>
+    <a href="#" id="grid-open-m" aria-label="כל השורטס ברשימה"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4zm9 0h7v7h-7zM4 13h7v7H4zm9 0h7v7h-7z"/></svg></a>
   </div>
   <div class="stage" id="stage"><div class="feed" id="feed" aria-label="השורטס שלנו, גללו למטה לסרטון הבא" tabindex="0"></div></div>
   <div class="nav-arrows">
     <button id="prev" aria-label="השורט הקודם"><svg viewBox="0 0 24 24"><path d="M12 4l8 8-1.4 1.4L13 7.8V20h-2V7.8l-5.6 5.6L4 12z"/></svg></button>
     <button id="next" aria-label="השורט הבא"><svg viewBox="0 0 24 24"><path d="M12 20l-8-8 1.4-1.4 5.6 5.6V4h2v12.2l5.6-5.6L20 12z"/></svg></button>
+    <button id="grid-open" aria-label="כל השורטס ברשימה" title="כל השורטס"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4zm9 0h7v7h-7zM4 13h7v7H4zm9 0h7v7h-7z"/></svg></button>
+  </div>
+  <!-- תצוגת רשת: כל השורטס מהחדש לישן -->
+  <div class="sgrid" id="sgrid" hidden>
+    <div class="sgrid-head"><button class="sgrid-close" id="grid-close" aria-label="חזרה לנגן">✕</button><div><b>כל השורטס</b><small id="sgrid-count"></small></div><div class="sgrid-sort"><button class="on" data-sort="new">מהחדש לישן</button><button data-sort="views">הנצפים</button></div></div>
+    <div class="sgrid-body" id="sgrid-body"></div>
   </div>
   <button class="sound-tip" id="sound-tip" hidden><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>הפעלת קול</button>
 </main>
@@ -140,9 +158,9 @@
     setTimeout(check, 5000);
   })();
 </script>
-<script src="assets/js/config.js?v=202611010009"></script>
-<script src="assets/js/site.js?v=202611010009"></script>
-<script src="assets/js/library.js?v=202611010009"></script>
+<script src="assets/js/config.js?v=202611010015"></script>
+<script src="assets/js/site.js?v=202611010015"></script>
+<script src="assets/js/library.js?v=202611010015"></script>
 <script>
 (async () => {
   const feed = document.getElementById("feed"), stage = document.getElementById("stage"), S = window.SAPIR;
@@ -291,6 +309,29 @@
     const nxt = slotFor(n); if (nxt && nxt.ready && sameVideo(nxt)) { try { if (muted) nxt.p.mute(); else nxt.p.unMute(); nxt.p.playVideo(); } catch (e) {} } // מתחיל כבר בזמן האנימציה
     setTimeout(() => { animating = false; activate(); }, 340);
   };
+
+  /* ---- תצוגת רשת: כל השורטס, מהחדש לישן (או לפי צפיות), נטענת בחלקים ---- */
+  const sgrid = document.getElementById("sgrid"), sbody = document.getElementById("sgrid-body");
+  let gsort = "new", gRendered = 0, gList = [];
+  const gridList = () => gsort === "views" ? [...shorts].sort((a, b) => (b.views || 0) - (a.views || 0)) : [...shorts].sort((a, b) => (b.published || "").localeCompare(a.published || "") || 0); // בקובץ השורטס כבר מסודרים מהחדש לישן; תאריך מדויק כשיש
+  const gridMore = () => { const chunk = gList.slice(gRendered, gRendered + 45); sbody.insertAdjacentHTML("beforeend", chunk.map(v => window.videoCard(v, "vshort")).join("")); gRendered += chunk.length; };
+  const openGrid = () => { gList = gridList(); gRendered = 0; sbody.innerHTML = ""; gridMore(); document.getElementById("sgrid-count").textContent = `${shorts.length} שורטס`; sgrid.hidden = false; const c = curSlot(); if (c && c.ready) { try { c.p.pauseVideo(); } catch (e) {} } };
+  const closeGrid = () => { sgrid.hidden = true; const c = curSlot(); if (c && c.ready && c.user !== "pause") { try { c.p.playVideo(); } catch (e) {} } };
+  sbody.addEventListener("scroll", () => { if (sbody.scrollTop + sbody.clientHeight > sbody.scrollHeight - 900 && gRendered < gList.length) gridMore(); }, { passive: true });
+  document.getElementById("grid-open").addEventListener("click", openGrid);
+  document.getElementById("grid-open-m").addEventListener("click", (e) => { e.preventDefault(); openGrid(); });
+  document.getElementById("grid-close").addEventListener("click", closeGrid);
+  sgrid.querySelectorAll(".sgrid-sort button").forEach(b => b.addEventListener("click", () => { sgrid.querySelectorAll(".sgrid-sort button").forEach(x => x.classList.toggle("on", x === b)); gsort = b.dataset.sort; openGrid(); }));
+  // לחיצה על שורט ברשת: מתחילים את הפיד ממנו (והבאים אחריו לפי אותו סדר)
+  sbody.addEventListener("click", (e) => {
+    const card = e.target.closest(".vcard"); if (!card) return; e.preventDefault(); e.stopPropagation();
+    const k = gList.findIndex(v => v.id === card.dataset.video); if (k < 0) return;
+    order = gList.slice(k).concat(gList.slice(0, k)); round = 1;
+    current = 0; for (const s of slots) { s.index = -9; }
+    fill(slots[0], 0); fill(slots[1], 1); if (slots[2]) slots[2].index = -9;
+    layout(); closeGrid();
+    playCurrent(); if (slots[1].ready) load(slots[1], !SAVE_DATA);
+  }, true);
 
   /* ---- קול ---- */
   const soundTip = document.getElementById("sound-tip");

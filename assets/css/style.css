@@ -70,6 +70,11 @@ img { max-width: 100%; height: auto; display: block; }
 a { color: inherit; }
 button { font: inherit; cursor: pointer; }
 :focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; border-radius: 6px; }
+/* טלוויזיות חכמות ומסכים גדולים: טקסט גדול יותר, מרחקים גדולים, פוקוס בולט לניווט בשלט */
+@media (min-width: 1900px) { html { font-size: 19px; } :root { --container: 1700px; } }
+@media (min-width: 2500px) { html { font-size: 24px; } :root { --container: 2200px; } }
+.tv-nav :focus-visible, .tv-nav .tile:focus, .tv-nav .vcard:focus, .tv-nav .card:focus, .tv-nav .btn:focus, .tv-nav a:focus { outline: 4px solid #fff; outline-offset: 4px; box-shadow: 0 0 0 8px rgba(40,215,255,0.45); transform: scale(1.04); z-index: 5; transition: transform 0.15s; }
+.tv-nav .tile:focus { z-index: 6; }
 ::selection { background: var(--magenta); color: #fff; }
 
 .container { width: min(var(--container), 100% - 2 * var(--gutter)); margin-inline: auto; position: relative; }

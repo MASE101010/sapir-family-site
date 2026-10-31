@@ -60,6 +60,26 @@ def hebrewize(videos):
             v["titleChecked"] = True
             if t and HEB.search(t): v["title"] = t
 
+def date_shorts(videos, limit=150):
+    """לשונית השורטס לא מחזירה תאריכים במצב flat, אז משלימים תאריך ואורך לשורטס בלי תאריך, עד limit בכל ריצה."""
+    todo = [v for v in videos.values() if v["isShort"] and not v.get("published") and not v.get("dateChecked")][:limit]
+    if not todo: return
+    print(f"dating shorts: {len(todo)}")
+    cmd = ["yt-dlp", "--skip-download", "--no-warnings", "--ignore-errors", "--print", "%(id)s|%(timestamp)s|%(upload_date)s|%(duration)s|%(view_count)s"] + [f"https://www.youtube.com/shorts/{v['id']}" for v in todo]
+    try:
+        out = subprocess.run(cmd, capture_output=True, text=True, timeout=1500)
+        for line in out.stdout.splitlines():
+            parts = line.strip().split("|")
+            if len(parts) != 5 or parts[0] not in videos: continue
+            v = videos[parts[0]]; v["dateChecked"] = True
+            e = {"timestamp": None if parts[1] in ("NA", "") else float(parts[1]), "upload_date": None if parts[2] == "NA" else parts[2]}
+            if ts(e): v["published"] = ts(e)
+            if parts[3] not in ("NA", ""): v["duration"] = int(float(parts[3]))
+            if parts[4] not in ("NA", ""): v["views"] = max(v.get("views", 0), int(float(parts[4])))
+    except Exception as ex:
+        print(f"  dating failed: {ex}")
+    for v in todo: v["dateChecked"] = True
+
 def main():
     old = {}
     if OUT.exists():
@@ -90,10 +110,14 @@ def main():
     for vid, v in videos.items():
         if old.get(vid, {}).get("titleChecked") and not HEB.search(v["title"]) and HEB.search(old[vid].get("title", "")): v["title"] = old[vid]["title"]
         if old.get(vid, {}).get("titleChecked"): v["titleChecked"] = True
+        if v["isShort"] and not v.get("published") and old.get(vid, {}).get("published"): v["published"] = old[vid]["published"]
+        if old.get(vid, {}).get("dateChecked"): v["dateChecked"] = True
     hebrewize(videos)
+    date_shorts(videos)
     # סרטונים רגילים לפי תאריך (חדש לראשון); שורטס לפי המיקום בלשונית (חדש לראשון), משולבים בין הערוצים
     vod = sorted([v for v in videos.values() if not v["isShort"]], key=lambda v: v["published"], reverse=True)
-    shorts = sorted([v for v in videos.values() if v["isShort"]], key=lambda v: (v["rank"], v["channel"] != "sapirtv"))
+    # שורטס: לפי תאריך (חדש לראשון) כשיש, אחרת לפי המיקום בלשונית
+    shorts = sorted([v for v in videos.values() if v["isShort"]], key=lambda v: (0 if v.get("published") else 1, -(int(v["published"][:4] + v["published"][5:7] + v["published"][8:10]) if v.get("published") else 0), v["rank"], v["channel"] != "sapirtv"))
     arr = vod + shorts
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps({"built": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "count": len(arr), "videos": arr}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")

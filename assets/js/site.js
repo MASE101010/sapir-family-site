@@ -381,6 +381,38 @@
     navigator.serviceWorker.register("/sw.js").catch(() => {});
   });
 
+  /* ---------- ניווט בשלט / מקלדת (טלוויזיות חכמות): חצים בין כרטיסים, Enter פותח ---------- */
+  (function () {
+    const FOCUSABLE = ".tile, .vcard, a.card, .btn, .tab, .nav-links a, .tabbar a, .poster-play, .post-card, .channel-card";
+    let tv = false;
+    const enableTv = () => { if (!tv) { tv = true; document.body.classList.add("tv-nav"); } };
+    const items = () => [...document.querySelectorAll(FOCUSABLE)].filter(el => el.offsetParent !== null && !el.closest("[hidden]"));
+    const center = (r) => ({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
+    const pick = (dir) => { // הכרטיס הקרוב ביותר בכיוון המבוקש
+      const cur = document.activeElement; if (!cur || cur === document.body) return items()[0];
+      const cr = cur.getBoundingClientRect(), c = center(cr); let best = null, bestD = Infinity;
+      for (const el of items()) { if (el === cur) continue; const r = el.getBoundingClientRect(), p = center(r);
+        const dx = p.x - c.x, dy = p.y - c.y;
+        const ok = dir === "left" ? dx < -8 && Math.abs(dy) < Math.max(cr.height, r.height) : dir === "right" ? dx > 8 && Math.abs(dy) < Math.max(cr.height, r.height) : dir === "up" ? dy < -8 : dy > 8;
+        if (!ok) continue;
+        const d = (dir === "up" || dir === "down") ? Math.abs(dy) * 1 + Math.abs(dx) * 2.2 : Math.abs(dx) + Math.abs(dy) * 3;
+        if (d < bestD) { bestD = d; best = el; } }
+      return best;
+    };
+    addEventListener("keydown", (e) => {
+      if (page === "shorts" || e.target.matches("input, textarea, select") || e.altKey || e.metaKey || e.ctrlKey) return;
+      const modal = document.querySelector(".vmodal:not([hidden])");
+      const map = { ArrowLeft: "left", ArrowRight: "right", ArrowUp: "up", ArrowDown: "down" };
+      if (map[e.key]) {
+        enableTv();
+        if (modal && !modal.contains(document.activeElement)) { const f = modal.querySelector(".vcard, .btn"); if (f) f.focus(); e.preventDefault(); return; }
+        const n = pick(map[e.key]); if (n) { e.preventDefault(); n.focus({ preventScroll: true }); n.scrollIntoView({ block: "center", inline: "center", behavior: "smooth" }); }
+      } else if (e.key === "Enter" && document.activeElement && document.activeElement.matches(FOCUSABLE)) { if (document.activeElement.tagName !== "A") { e.preventDefault(); document.activeElement.click(); } }
+      else if (e.key === "Backspace" && modal) { e.preventDefault(); modal.querySelector(".vclose").click(); }
+    });
+    addEventListener("pointerdown", () => { if (tv) { tv = false; document.body.classList.remove("tv-nav"); } }, { passive: true });
+  })();
+
   /* ---------- עזרי בלוג ---------- */
   const HE_MONTHS = ["ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני", "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"];
   window.fmtDate = (iso) => {
