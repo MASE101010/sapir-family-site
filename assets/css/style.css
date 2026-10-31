@@ -407,6 +407,7 @@ p { margin: 0 0 1em; }
 .grid-3 { grid-template-columns: repeat(3, 1fr); }
 .grid-4 { grid-template-columns: repeat(4, 1fr); }
 @media (max-width: 1000px) { .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1001px) { .posts-grid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 640px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
 
 .card {
@@ -686,7 +687,7 @@ a.card.tilting::after, .game-row.tilting::after { opacity: 1; }
 .short:hover .play svg { fill: #0b0d2e; }
 .short b { font-family: var(--font-display); font-size: 1.15rem; line-height: 1.2; text-shadow: 0 4px 16px rgba(0,0,0,0.7); position: relative; }
 .short small { position: absolute; top: 12px; inset-inline-start: 12px; background: rgba(0,0,0,0.45); padding: 3px 10px; border-radius: 999px; font-size: 0.8rem; }
-@media (max-width: 900px) { .shorts-row { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; } .shorts-row .vcard .vtitle { font-size: 0.75rem; -webkit-line-clamp: 1; } }
+@media (max-width: 900px) { .shorts-row { grid-template-columns: repeat(3, 1fr); gap: 8px; } .shorts-row .vcard .vtitle { font-size: 0.75rem; -webkit-line-clamp: 1; } }
 
 /* פוסט מומלץ */
 .featured-post { display: grid; grid-template-columns: 1.1fr 0.9fr; border-radius: var(--radius-xl); overflow: hidden; border: 1px solid var(--line); background: var(--glass); text-decoration: none; color: inherit; margin-bottom: 28px; position: relative; }
@@ -760,7 +761,7 @@ a.card.tilting::after, .game-row.tilting::after { opacity: 1; }
 /* ---------- כרטיסי וידאו ונגן צף ---------- */
 .vgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 @media (max-width: 900px) { .vgrid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 520px) { .vgrid { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .vgrid { grid-template-columns: repeat(2, 1fr); gap: 10px; } .vgrid .vtitle { font-size: 0.82rem; padding: 6px 8px 0; } .vgrid .vdate { font-size: 0.72rem; padding: 2px 8px 6px; } }
 .vcard { background: var(--glass); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; padding: 0 0 12px; text-align: right; color: inherit; display: grid; gap: 6px; transition: transform 0.3s var(--ease), box-shadow 0.3s, border-color 0.3s; cursor: pointer; font: inherit; }
 .vcard:hover { transform: translateY(-4px); border-color: var(--line-2); box-shadow: var(--shadow-glow); }
 .vthumb { position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden; background: #000; }

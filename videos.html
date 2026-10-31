@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202610312354">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611010006">
   <style>
     .channel-head { display: flex; align-items: center; gap: 16px; margin: 0 0 16px; }
     .channel-head .avatar { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-display); font-size: 1.6rem; color: #fff; flex: none; overflow: hidden; box-shadow: 0 0 24px -4px currentColor; }
@@ -55,9 +55,9 @@
   </section>
 </main>
 
-<script src="assets/js/config.js?v=202610312354"></script>
-<script src="assets/js/site.js?v=202610312354"></script>
-<script src="assets/js/library.js?v=202610312354"></script>
+<script src="assets/js/config.js?v=202611010006"></script>
+<script src="assets/js/site.js?v=202611010006"></script>
+<script src="assets/js/library.js?v=202611010006"></script>
 <script>
 (async () => {
   const S = window.SAPIR, I = window.SAPIR_ICONS;
@@ -76,14 +76,14 @@
         <a class="btn btn-ghost btn-sm" href="${c.url}" target="_blank" rel="noopener">${I.youtube} להרשמה לערוץ</a>
       </div>
       <div class="vgrid" id="vg-${c.id}"><div class="video-frame" style="grid-column:1/-1"><div class="video-placeholder"><div><div class="play">${I.play}</div><strong>${c.name}</strong><small>טוען את הסרטונים האחרונים...</small></div></div></div></div>
-      <div class="card-foot" style="margin-top:14px"><a class="btn btn-ghost btn-sm" href="${c.url}/videos" target="_blank" rel="noopener">לכל הסרטונים של ${c.name} ביוטיוב</a></div>
+      <div class="card-foot" style="margin-top:14px"><a class="btn btn-ghost btn-sm" href="vod.html#ch-${c.id}">לכל הסרטונים של ${c.name}</a> <a class="btn btn-ghost btn-sm" href="${c.url}" target="_blank" rel="noopener">${I.youtube} לערוץ ביוטיוב</a></div>
     </section>`).join("");
   // טעינת הסרטונים מה-RSS של כל ערוץ, וגיבוי לפלייליסט ההעלאות אם ה-API לא זמין
   S.channels.forEach(c => {
     const box = document.getElementById("vg-" + c.id);
-    const fromLib = lib ? lib.filter(v => v.channel === c.id && !v.isShort).slice(0, 9) : [];
+    const fromLib = lib ? lib.filter(v => v.channel === c.id && !v.isShort).slice(0, 6) : [];
     (fromLib.length ? Promise.resolve(fromLib) : window.fetchChannelVideos(window.channelIdOf(c)).then(vs => vs.filter(v => !/#shorts/i.test(v.title)))).then(vs => {
-      box.innerHTML = vs.slice(0, 9).map(v => window.videoCard(v)).join("");
+      box.innerHTML = vs.slice(0, 6).map(v => window.videoCard(v)).join("");
     }).catch(() => {
       box.innerHTML = `<div class="video-frame" style="grid-column:1/-1">${c.playlistId
         ? `<iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=${c.playlistId}" title="הסרטונים של ${c.name}" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`

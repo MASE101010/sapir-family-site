@@ -15,7 +15,7 @@
   <link rel="icon" href="assets/img/logo-small.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202610312354">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611010006">
   <style>
     .ticker-wrap { display: none; }
     /* בילבורד: תמונת 16:9 שלמה, בלי חיתוך, בכל גודל מסך */
@@ -74,6 +74,17 @@
       .bb-inner > .bb-text { padding: 12px 16px 16px; }
     }
     .row h2 { position: relative; z-index: 2; }
+    .vod-tools { margin-top: 18px; }
+    .vsearch { display: flex; align-items: center; gap: 10px; background: var(--glass); border: 1px solid var(--line-2); border-radius: 999px; padding: 6px 16px; max-width: 560px; }
+    .vsearch svg { width: 22px; height: 22px; fill: var(--ink-soft); flex: none; }
+    .vsearch input { flex: 1; background: none; border: 0; color: #fff; font: inherit; font-size: 1rem; padding: 8px 0; outline: none; min-width: 0; }
+    .vsearch input::placeholder { color: var(--ink-soft); }
+    .vsearch:focus-within { border-color: #fff; }
+    .vresults { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 16px; }
+    .vresults .tile { flex: none; width: 100%; }
+    .vresults .cap { opacity: 1 !important; padding-bottom: 28px; }
+    .vresults .none { grid-column: 1 / -1; color: var(--ink-soft); padding: 10px 0; }
+    .row { scroll-margin-top: 90px; }
     .top10 .track { padding-top: 10px; padding-inline-start: 4px; }
     .tile .pl { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; transition: opacity 0.3s; }
     .tile:hover .pl { opacity: 1; }
@@ -95,12 +106,16 @@
 <body data-page="vod">
 <main id="main">
   <section class="billboard" id="billboard"><div class="blur" id="bb-blur"></div><div class="bb-media"><img id="bb-img" alt="" fetchpriority="high"><button class="bb-play" id="bb-play" aria-label="נגן"></button></div><div class="bb-inner"><div class="bb-text" id="bb"></div><div class="bb-dots" id="bb-dots"></div></div></section>
+  <section class="container vod-tools">
+    <div class="vsearch"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.8l-.3-.3A6.5 6.5 0 1 0 14 15.5l.3.3v.8l5 5 1.5-1.5-5-5zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg><input id="vq" type="search" placeholder="חיפוש בכל הסרטונים..." aria-label="חיפוש סרטונים" autocomplete="off"></div>
+    <div class="vresults" id="vresults" hidden></div>
+  </section>
   <section class="container" id="rows"></section>
   <section class="container" style="margin-top:50px"><div class="ad-slot ad-leaderboard" data-ad-slot="vod-bottom"><div>פרסומת<small>(מקום שמור לדוגמה)</small></div></div></section>
 </main>
-<script src="assets/js/config.js?v=202610312354"></script>
-<script src="assets/js/site.js?v=202610312354"></script>
-<script src="assets/js/library.js?v=202610312354"></script>
+<script src="assets/js/config.js?v=202611010006"></script>
+<script src="assets/js/site.js?v=202611010006"></script>
+<script src="assets/js/library.js?v=202611010006"></script>
 <script>
 (async () => {
   const S = window.SAPIR, I = window.SAPIR_ICONS;
@@ -124,8 +139,12 @@
       <span class="cap">${v.title}</span>
     </button>`;
   rows.forEach(r => r.items.slice(0, 7).forEach(v => { v.__eager = true; }));
+  // המשך צפייה: הסרטונים האחרונים שנפתחו במכשיר הזה
+  let seen = []; try { seen = JSON.parse(localStorage.getItem("sapir-seen") || "[]"); } catch (e) {}
+  const seenItems = seen.map(id => videos.find(v => v.id === id)).filter(Boolean);
+  if (seenItems.length >= 2) rows.splice(1, 0, { key: "seen", title: "המשך צפייה", items: seenItems });
   rowsEl.innerHTML = rows.map(r => `
-    <div class="row ${r.kind === "top10" ? "top10" : ""}" data-row="${r.key}">
+    <div class="row ${r.kind === "top10" ? "top10" : ""}" data-row="${r.key}" id="${r.key}">
       <h2>${r.title}<small>${r.items.length} סרטונים</small></h2>
       <button class="arrow r" aria-label="הקודמים">‹</button><button class="arrow l" aria-label="הבאים">›</button>
       <div class="track">${r.items.map((v, i) => tile(v, r.kind === "top10" ? i + 1 : 0)).join("")}</div>
@@ -136,6 +155,21 @@
     row.querySelector(".arrow.r").addEventListener("click", () => t.scrollBy({ left: t.clientWidth * 0.9 }));
   });
   rowsEl.addEventListener("click", (e) => { const b = e.target.closest(".tile"); if (b) window.openVideo(b.dataset.video, b.dataset.title); });
+  if (location.hash) { const el = document.getElementById(location.hash.slice(1)); if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth" }), 300); }
+
+  // חיפוש מיידי בכל הספרייה (כולל שורטס): לפי מילים בכותרת
+  const vq = document.getElementById("vq"), vres = document.getElementById("vresults");
+  const norm = t => (t || "").toLowerCase().replace(/[^\p{L}\p{N} ]/gu, " ");
+  const all = videos.filter(v => !v.unknown);
+  vq.addEventListener("input", () => {
+    const q = norm(vq.value).trim();
+    if (q.length < 2) { vres.hidden = true; rowsEl.hidden = false; document.getElementById("billboard").hidden = false; return; }
+    const words = q.split(/\s+/);
+    const hits = all.filter(v => { const t = norm(v.title); return words.every(w => t.includes(w)); }).sort((a, b) => b.views - a.views).slice(0, 48);
+    vres.innerHTML = hits.length ? hits.map(v => tile(v, 0)).join("") : `<div class="none">לא מצאנו סרטון עם "${vq.value}". נסו מילה אחרת.</div>`;
+    vres.hidden = false; rowsEl.hidden = true; document.getElementById("billboard").hidden = true;
+  });
+  vres.addEventListener("click", (e) => { const b = e.target.closest(".tile"); if (b) { const v = all.find(x => x.id === b.dataset.video); if (v && v.isShort) location.href = `shorts.html?v=${v.id}`; else window.openVideo(b.dataset.video, b.dataset.title); } });
 
   // בילבורד: מתחלף בין סרטוני הטופ 10, תמונה 16:9 שלמה
   const top = (rows.find(r => r.kind === "top10") || rows[0]).items.slice(0, 5);

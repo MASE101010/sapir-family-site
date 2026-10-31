@@ -353,6 +353,7 @@
   document.body.append(modal);
   const closeV = () => { modal.hidden = true; document.getElementById("vmodal-frame").innerHTML = ""; document.body.style.overflow = ""; };
   window.openVideo = (id, title) => {
+    try { const seen = JSON.parse(localStorage.getItem("sapir-seen") || "[]").filter(x => x !== id); seen.unshift(id); localStorage.setItem("sapir-seen", JSON.stringify(seen.slice(0, 12))); } catch (e) {}
     document.getElementById("vmodal-frame").innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" title="${title || ""}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
     document.getElementById("vmodal-title").textContent = title || "";
     modal.hidden = false; document.body.style.overflow = "hidden"; modal.querySelector(".vclose").focus();
