@@ -27,7 +27,7 @@ export async function onRequestGet({ request, env }) {
   if (key) {
     try { videos = await viaDataApi(key); source = "api"; } catch (e) { videos = []; }
   }
-  if (!videos.length) videos = await viaRss();
+  if (!videos.length) { videos = await viaRss(); await markShorts(videos); }
 
   videos.sort((a, b) => (a.published < b.published ? 1 : -1));
   const out = json({ source, count: videos.length, fetched: new Date().toISOString(), videos }, 200, { "cache-control": "public, max-age=1800, s-maxage=10800" });
@@ -79,6 +79,19 @@ async function viaRss() {
     } catch (e) {}
   }));
   return all;
+}
+
+/* בלי מפתח API אין אורך, אז בודקים מול יוטיוב: /shorts/<id> מחזיר 200 לשורט ומפנה (303) לסרטון רגיל */
+async function markShorts(videos) {
+  const todo = videos.filter(v => !v.isShort);
+  for (let i = 0; i < todo.length; i += 20) {
+    await Promise.all(todo.slice(i, i + 20).map(async v => {
+      try {
+        const r = await fetch(`https://www.youtube.com/shorts/${v.id}`, { method: "HEAD", redirect: "manual", headers: { "user-agent": "Mozilla/5.0 (sapirfamily.co.il)" } });
+        if (r.status === 200) v.isShort = true;
+      } catch (e) {}
+    }));
+  }
 }
 
 function isoSeconds(iso) { const m = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/.exec(iso || ""); return m ? (+m[1] || 0) * 3600 + (+m[2] || 0) * 60 + (+m[3] || 0) : 0; }
