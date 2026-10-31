@@ -657,7 +657,7 @@ a.card.tilting::after, .game-row.tilting::after { opacity: 1; }
 .short:hover .play svg { fill: #0b0d2e; }
 .short b { font-family: var(--font-display); font-size: 1.15rem; line-height: 1.2; text-shadow: 0 4px 16px rgba(0,0,0,0.7); position: relative; }
 .short small { position: absolute; top: 12px; inset-inline-start: 12px; background: rgba(0,0,0,0.45); padding: 3px 10px; border-radius: 999px; font-size: 0.8rem; }
-@media (max-width: 900px) { .shorts-row { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; -webkit-overflow-scrolling: touch; } .short { flex: 0 0 62%; scroll-snap-align: start; } }
+@media (max-width: 900px) { .shorts-row { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; -webkit-overflow-scrolling: touch; } .short, .shorts-row .vcard { flex: 0 0 46%; scroll-snap-align: start; } }
 
 /* פוסט מומלץ */
 .featured-post { display: grid; grid-template-columns: 1.1fr 0.9fr; border-radius: var(--radius-xl); overflow: hidden; border: 1px solid var(--line); background: var(--glass); text-decoration: none; color: inherit; margin-bottom: 28px; position: relative; }
