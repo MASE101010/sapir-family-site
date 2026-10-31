@@ -22,7 +22,7 @@ def tab(channel_id, name):
     """לשונית של ערוץ (videos / shorts) במצב flat. קודם בעברית (lang=he); אם נכשל, בלי העדפת שפה."""
     url = f"https://www.youtube.com/channel/{channel_id}/{name}"
     base = ["yt-dlp", "--flat-playlist", "--dump-single-json", "--no-warnings", "--ignore-errors", "--extractor-args", "youtubetab:approximate_date"]
-    variants = [base + ["--extractor-args", "youtube:lang=he", "--add-headers", "Accept-Language:he-IL,he;q=0.9", url], base + [url]]
+    variants = [base + ["--extractor-args", "youtube:lang=iw", "--add-headers", "Accept-Language:he-IL,he;q=0.9", url], base + [url]]
     for cmd in variants:
         try:
             out = subprocess.run(cmd, capture_output=True, text=True, timeout=900)
@@ -35,7 +35,7 @@ def tab(channel_id, name):
     return []
 
 def ts(e):
-    if e.get("timestamp"): return datetime.datetime.utcfromtimestamp(e["timestamp"]).strftime("%Y-%m-%dT%H:%M:%SZ")
+    if e.get("timestamp"): return datetime.datetime.fromtimestamp(e["timestamp"], datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     d = e.get("upload_date")
     if d and re.fullmatch(r"\d{8}", d): return f"{d[:4]}-{d[4:6]}-{d[6:]}T12:00:00Z"
     return ""
@@ -96,7 +96,7 @@ def main():
     shorts = sorted([v for v in videos.values() if v["isShort"]], key=lambda v: (v["rank"], v["channel"] != "sapirtv"))
     arr = vod + shorts
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps({"built": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"), "count": len(arr), "videos": arr}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    OUT.write_text(json.dumps({"built": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "count": len(arr), "videos": arr}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print(f"wrote {len(arr)} videos -> {OUT}")
 
 if __name__ == "__main__":
