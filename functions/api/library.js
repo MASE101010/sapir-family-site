@@ -16,10 +16,13 @@ const CHANNELS = [
 ];
 const MAX_PER_CHANNEL = 600;
 
-export async function onRequestGet({ request, env }) {
+export async function onRequestGet(ctx) {
+  try { return await handle(ctx); } catch (e) { return json({ error: String(e && e.message || e) }, 500); }
+}
+async function handle({ request, env }) {
   const url = new URL(request.url);
   const cache = caches.default;
-  const cacheKey = new Request(url.origin + "/api/library?v=5", request);
+  const cacheKey = new Request(url.origin + "/api/library?v=6", request);
   if (!url.searchParams.has("fresh")) { const hit = await cache.match(cacheKey); if (hit) return hit; }
 
   const key = env.YT_API_KEY;
@@ -29,7 +32,6 @@ export async function onRequestGet({ request, env }) {
   }
   let pending = 0;
   if (!videos.length) { videos = await viaRss(); pending = await markShorts(videos, url.origin); }
-  for (const v of videos) delete v.checked;
 
   videos.sort((a, b) => (a.published < b.published ? 1 : -1));
   const ttl = pending ? 60 : 10800;
@@ -85,24 +87,23 @@ async function viaRss() {
 }
 
 /* בלי מפתח API אין אורך, אז מזהים שורטס לפי התמונה האנכית (oardefault.jpg) שיוטיוב מייצר רק לשורטס.
-   מגבלת Cloudflare: 50 בקשות משנה לכל קריאה, לכן בודקים עד 36 סרטונים בכל פעם ושומרים כל תוצאה במטמון ל-30 יום;
-   אחרי כמה קריאות כל הספרייה מסומנת. מחזיר כמה סרטונים נשארו לא בדוקים. */
+   מגבלת Cloudflare: 50 בקשות משנה לכל קריאה, לכן בודקים עד 36 סרטונים בכל פעם; התוצאות נשמרות יחד
+   במסמך אחד במטמון (30 יום). אחרי כמה קריאות כל הספרייה מסומנת. מחזיר כמה סרטונים נשארו לא בדוקים. */
 async function markShorts(videos, origin) {
   const cache = caches.default;
-  const flagReq = id => new Request(`${origin}/__short/${id}`);
+  const flagsReq = new Request(`${origin}/__short-flags`);
+  let flags = {};
+  try { const hit = await cache.match(flagsReq); if (hit) flags = await hit.json(); } catch (e) { flags = {}; }
   const todo = [];
   for (const v of videos) {
     if (v.isShort) continue;
-    const hit = await cache.match(flagReq(v.id));
-    if (hit) { v.isShort = (await hit.text()) === "1"; v.checked = true; } else todo.push(v);
+    if (v.id in flags) v.isShort = flags[v.id] === 1; else todo.push(v);
   }
   const batch = todo.slice(0, 36);
   await Promise.all(batch.map(async v => {
-    let flag = "0";
-    try { const t = await fetch(`https://i.ytimg.com/vi/${v.id}/oardefault.jpg`, { method: "HEAD" }); if (t.ok) flag = "1"; } catch (e) { return; }
-    v.isShort = flag === "1"; v.checked = true;
-    await cache.put(flagReq(v.id), new Response(flag, { headers: { "cache-control": "public, max-age=2592000" } }));
+    try { const t = await fetch(`https://i.ytimg.com/vi/${v.id}/oardefault.jpg`, { method: "HEAD" }); flags[v.id] = t.ok ? 1 : 0; v.isShort = t.ok; } catch (e) {}
   }));
+  try { await cache.put(flagsReq, new Response(JSON.stringify(flags), { headers: { "content-type": "application/json", "cache-control": "public, max-age=2592000" } })); } catch (e) {}
   return todo.length - batch.length;
 }
 
