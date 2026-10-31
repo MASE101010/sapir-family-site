@@ -327,7 +327,7 @@
   window.fmtViews = (n) => !n ? "" : n >= 1e6 ? (n / 1e6).toFixed(1).replace(/\.0$/, "") + "M צפיות" : n >= 1e3 ? Math.round(n / 1e3) + "K צפיות" : n + " צפיות";
   window.videoCard = (v, cls = "") => `
     <button class="vcard ${cls}" type="button" data-video="${v.id}" data-title="${(v.title || "").replace(/"/g, "&quot;")}" aria-label="נגן: ${(v.title || "").replace(/"/g, "&quot;")}">
-      <span class="vthumb"><img src="${v.thumb}" alt="" loading="lazy"><span class="vplay">${ICONS.play}</span>${v.views ? `<small>${window.fmtViews(v.views)}</small>` : ""}</span>
+      <span class="vthumb">${cls.includes("vshort") ? `<img src="https://i.ytimg.com/vi/${v.id}/oardefault.jpg" onerror="this.onerror=null;this.src='${v.thumb}'" alt="" loading="lazy">` : `<img src="${v.thumb}" alt="" loading="lazy">`}<span class="vplay">${ICONS.play}</span>${v.views ? `<small>${window.fmtViews(v.views)}</small>` : ""}</span>
       <span class="vtitle">${v.title || ""}</span>
       ${v.published ? `<span class="vdate">${window.fmtDate(v.published.slice(0, 10))}</span>` : ""}
     </button>`;
