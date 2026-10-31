@@ -19,7 +19,7 @@ const MAX_PER_CHANNEL = 600;
 export async function onRequestGet({ request, env }) {
   const url = new URL(request.url);
   const cache = caches.default;
-  const cacheKey = new Request(url.origin + "/api/library?v=3", request);
+  const cacheKey = new Request(url.origin + "/api/library?v=4", request);
   if (!url.searchParams.has("fresh")) { const hit = await cache.match(cacheKey); if (hit) return hit; }
 
   const key = env.YT_API_KEY;
@@ -81,14 +81,20 @@ async function viaRss() {
   return all;
 }
 
-/* בלי מפתח API אין אורך, אז בודקים מול יוטיוב: /shorts/<id> מחזיר 200 לשורט ומפנה (303) לסרטון רגיל */
+/* בלי מפתח API אין אורך, אז מזהים שורטס לפי התמונה האנכית (oardefault.jpg) שיוטיוב מייצר רק לשורטס,
+   ועם גיבוי של בדיקת /shorts/<id> (200 לשורט, הפניה לסרטון רגיל). */
 async function markShorts(videos) {
   const todo = videos.filter(v => !v.isShort);
   for (let i = 0; i < todo.length; i += 20) {
     await Promise.all(todo.slice(i, i + 20).map(async v => {
       try {
-        const r = await fetch(`https://www.youtube.com/shorts/${v.id}`, { method: "HEAD", redirect: "manual", headers: { "user-agent": "Mozilla/5.0 (sapirfamily.co.il)" } });
+        const t = await fetch(`https://i.ytimg.com/vi/${v.id}/oardefault.jpg`, { method: "HEAD" });
+        if (t.ok) { v.isShort = true; return; }
+      } catch (e) {}
+      try {
+        const r = await fetch(`https://www.youtube.com/shorts/${v.id}`, { redirect: "manual", headers: { "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36", "accept-language": "he,en" } });
         if (r.status === 200) v.isShort = true;
+        else if (r.status >= 300 && r.status < 400) { const loc = r.headers.get("location") || ""; if (/\/shorts\//.test(loc)) v.isShort = true; }
       } catch (e) {}
     }));
   }
