@@ -12,7 +12,8 @@
     html, body { height: 100%; }
     body { padding-bottom: 0 !important; overflow: hidden; }
     .site-footer, .ticker-wrap, .to-top { display: none !important; }
-    .feed-wrap { position: fixed; inset: 74px 0 0; display: flex; justify-content: center; }
+    main { animation: none !important; transform: none !important; }
+    .feed-wrap { position: fixed; top: 74px; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; }
     .feed { height: 100%; width: min(100vw, calc((100vh - 74px) * 9 / 16)); overflow-y: auto; scroll-snap-type: y mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
     .feed::-webkit-scrollbar { display: none; }
     .slide { height: 100%; scroll-snap-align: start; scroll-snap-stop: always; position: relative; background: #000; }
@@ -76,7 +77,8 @@
 
   const slides = [...feed.children];
   const counter = document.getElementById("counter");
-  let current = -1;
+  let current = 0; counter.textContent = `1 / ${slides.length}`;
+  feed.scrollTop = 0;
   const embed = (sl) => {
     if (sl.querySelector("iframe")) return;
     const id = sl.dataset.id;
