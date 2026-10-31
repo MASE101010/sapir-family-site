@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preload" href="/data/library.json" as="fetch" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=202610312249">
+  <link rel="stylesheet" href="assets/css/style.css?v=202610312252">
   <style>
     /* ---- עמוד השורטס: מסך מלא, גלילה אנכית בלבד, נגן יוטיוב בשליטה מלאה ---- */
     html, body { height: 100%; overflow: hidden !important; overscroll-behavior: none; background: #000; }
@@ -130,9 +130,9 @@
   <button class="sound-tip" id="sound-tip" hidden><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>הפעלת קול</button>
 </main>
 <script src="https://www.youtube.com/iframe_api" async></script>
-<script src="assets/js/config.js?v=202610312249"></script>
-<script src="assets/js/site.js?v=202610312249"></script>
-<script src="assets/js/library.js?v=202610312249"></script>
+<script src="assets/js/config.js?v=202610312252"></script>
+<script src="assets/js/site.js?v=202610312252"></script>
+<script src="assets/js/library.js?v=202610312252"></script>
 <script>
 (async () => {
   const feed = document.getElementById("feed"), stage = document.getElementById("stage"), S = window.SAPIR;
@@ -281,16 +281,6 @@
     setTimeout(() => { animating = false; activate(); }, 340);
   };
 
-  /* ---- התחלה: שלושה נגנים נוצרים פעם אחת בלבד ---- */
-  fill(slots[0], 0); fill(slots[1], 1); fill(slots[2], 2); slots[2].index = -9; // השלישי מחכה מאחורי הקלעים
-  layout();
-  await ytReady;
-  await makePlayer(slots[0]);
-  playCurrent();
-  makePlayer(slots[1]).then(s => load(s, !SAVE_DATA));
-  makePlayer(slots[2]);
-  addEventListener("resize", () => layout());
-
   /* ---- קול ---- */
   const soundTip = document.getElementById("sound-tip");
   const updateMuteUi = () => { feed.querySelectorAll(".b-mute").forEach(b => { b.innerHTML = muted ? SVG.muted : SVG.sound; b.setAttribute("aria-label", muted ? "הפעלת קול" : "השתקה"); }); soundTip.hidden = !muted; };
@@ -375,6 +365,15 @@
     const up = (ev) => { bar.removeEventListener("pointermove", move); bar.removeEventListener("pointerup", up); bar.removeEventListener("pointercancel", up); bar.classList.remove("drag"); try { const d = s.p.getDuration() || 0; s.p.seekTo(barPct(bar, ev.clientX) * d, true); s.p.playVideo(); s.user = ""; } catch (x) {} barDrag = false; };
     bar.addEventListener("pointermove", move); bar.addEventListener("pointerup", up); bar.addEventListener("pointercancel", up);
   });
+
+  /* ---- התחלה: שלושה נגנים נוצרים פעם אחת בלבד ---- */
+  fill(slots[0], 0); fill(slots[1], 1); fill(slots[2], 2); slots[2].index = -9; // השלישי מחכה מאחורי הקלעים
+  layout();
+  await ytReady;
+  makePlayer(slots[0]).then(() => playCurrent());
+  makePlayer(slots[1]).then(s => load(s, !SAVE_DATA));
+  makePlayer(slots[2]);
+  addEventListener("resize", () => layout());
 
   document.addEventListener("visibilitychange", () => { const s = curSlot(); if (!s || !s.ready) return; try { if (document.hidden) s.p.pauseVideo(); else if (s.user !== "pause") s.p.playVideo(); } catch (e) {} });
 })();
