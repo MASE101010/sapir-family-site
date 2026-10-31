@@ -1,0 +1,36 @@
+family:
+  videos: failed: 'NoneType' object has no attribute 'get'
+  videos: 0
+  shorts: failed: 'NoneType' object has no attribute 'get'
+  shorts: 0
+michael:
+  videos: failed: 'NoneType' object has no attribute 'get'
+  videos: 0
+  shorts: failed: 'NoneType' object has no attribute 'get'
+  shorts: 0
+alin:
+  videos: failed: 'NoneType' object has no attribute 'get'
+  videos: 0
+  shorts: failed: 'NoneType' object has no attribute 'get'
+  shorts: 0
+shiran:
+  videos: failed: 'NoneType' object has no attribute 'get'
+  videos: 0
+  shorts: failed: 'NoneType' object has no attribute 'get'
+  shorts: 0
+elroei:
+  videos: failed: 'NoneType' object has no attribute 'get'
+  videos: 0
+  shorts: failed: 'NoneType' object has no attribute 'get'
+  shorts: 0
+sapirtv:
+  videos: failed: 'NoneType' object has no attribute 'get'
+  videos: 0
+  shorts: failed: 'NoneType' object has no attribute 'get'
+  shorts: 0
+tuli:
+  videos: failed: 'NoneType' object has no attribute 'get'
+  videos: 0
+  shorts: failed: 'NoneType' object has no attribute 'get'
+  shorts: 0
+only 0 videos; keeping the previous file
