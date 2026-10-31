@@ -47,7 +47,7 @@ def main():
         for tabname, is_short in (("videos", False), ("shorts", True)):
             entries = tab(cid, tabname)
             print(f"  {tabname}: {len(entries)}")
-            for e in entries:
+            for rank, e in enumerate(entries):
                 vid = e.get("id")
                 if not vid or vid in videos: continue
                 prev = old.get(vid, {})
@@ -57,13 +57,16 @@ def main():
                     "published": ts(e) or prev.get("published") or "",
                     "views": int(e.get("view_count") or prev.get("views") or 0),
                     "duration": int(e.get("duration") or prev.get("duration") or 0),
-                    "isShort": is_short, "thumb": f"https://i.ytimg.com/vi/{vid}/hqdefault.jpg",
+                    "isShort": is_short, "rank": rank, "thumb": f"https://i.ytimg.com/vi/{vid}/hqdefault.jpg",
                 }
     if len(videos) < 50:
         print(f"only {len(videos)} videos; keeping the previous file"); sys.exit(0 if old else 1)
     # סרטונים שהיו בקובץ הקודם ולא חזרו הפעם (חסימה זמנית וכו') נשמרים
     for vid, v in old.items(): videos.setdefault(vid, v)
-    arr = sorted(videos.values(), key=lambda v: v["published"], reverse=True)
+    # סרטונים רגילים לפי תאריך (חדש לראשון); שורטס לפי המיקום בלשונית (חדש לראשון), משולבים בין הערוצים
+    vod = sorted([v for v in videos.values() if not v["isShort"]], key=lambda v: v["published"], reverse=True)
+    shorts = sorted([v for v in videos.values() if v["isShort"]], key=lambda v: (v["rank"], v["channel"] != "sapirtv"))
+    arr = vod + shorts
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps({"built": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"), "count": len(arr), "videos": arr}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print(f"wrote {len(arr)} videos -> {OUT}")

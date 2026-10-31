@@ -22,7 +22,7 @@ export async function onRequestGet(ctx) {
 async function handle({ request, env }) {
   const url = new URL(request.url);
   const cache = caches.default;
-  const cacheKey = new Request(url.origin + "/api/library?v=7", request);
+  const cacheKey = new Request(url.origin + "/api/library?v=8", request);
   if (!url.searchParams.has("fresh")) { const hit = await cache.match(cacheKey); if (hit) return hit; }
 
   const key = env.YT_API_KEY;
@@ -38,7 +38,7 @@ async function handle({ request, env }) {
     if (built.length) {
       source = "built";
       const have = new Set(built.map(v => v.id));
-      const extra = fresh.filter(v => !have.has(v.id));
+      const extra = fresh.filter(v => !have.has(v.id)); extra.forEach(v => { v.fresh = true; });
       pending = await markShorts(extra, url.origin);
       const views = new Map(fresh.map(v => [v.id, v.views]));
       for (const v of built) if (views.get(v.id)) v.views = Math.max(v.views || 0, views.get(v.id));
@@ -46,7 +46,11 @@ async function handle({ request, env }) {
     } else { videos = fresh; pending = await markShorts(videos, url.origin); }
   }
 
-  videos.sort((a, b) => (a.published < b.published ? 1 : -1));
+  if (source !== "built") videos.sort((a, b) => (a.published < b.published ? 1 : -1));
+  else { // שומרים על סדר הקובץ; הסרטונים הטריים מה-RSS נכנסים בהתחלה
+    const freshIds = new Set(videos.filter(v => v.fresh).map(v => v.id));
+    videos.sort((a, b) => (freshIds.has(b.id) ? 1 : 0) - (freshIds.has(a.id) ? 1 : 0));
+  }
   const ttl = pending ? 60 : 10800;
   const out = json({ source, count: videos.length, pending, fetched: new Date().toISOString(), videos }, 200, { "cache-control": `public, max-age=${Math.min(ttl, 1800)}, s-maxage=${ttl}` });
   await cache.put(cacheKey, out.clone());
