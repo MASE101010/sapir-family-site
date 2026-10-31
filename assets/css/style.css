@@ -481,7 +481,9 @@ a.card:hover .game-tile svg, .game-row:hover .game-tile svg { transform: transla
 
 .channel-card { display: flex; align-items: center; gap: 10px; padding: 10px 12px; flex-direction: row; }
 .channel-card .avatar { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-display); font-size: 1.4rem; color: #fff; flex: none; box-shadow: 0 0 22px -4px currentColor; overflow: hidden; border: 2px solid rgba(255,255,255,0.2); }
-.channel-card .avatar img { width: 100%; height: 100%; object-fit: cover; }
+.channel-card .avatar img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; border-radius: 50%; }
+.channel-card .avatar { box-sizing: border-box; padding: 0; line-height: 0; }
+.channel-card > div:last-child { min-width: 0; }
 .channels-grid { gap: 10px; grid-template-columns: repeat(3, 1fr) !important; }
 @media (max-width: 640px) { .channels-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px; } .channel-card { padding: 8px 10px; gap: 8px; } .channel-card .avatar { width: 38px; height: 38px; } }
 .channels-grid .channel-card h3 { font-size: 0.95rem; }
@@ -509,7 +511,7 @@ a.card:hover .game-tile svg, .game-row:hover .game-tile svg { transform: transla
   margin-top: 40px; border-radius: var(--radius-xl); padding: clamp(22px, 3.5vw, 40px); position: relative; overflow: hidden;
   background: radial-gradient(700px 300px at 90% 0%, rgba(255, 225, 77, 0.35), transparent 60%),
               radial-gradient(600px 300px at 0% 100%, rgba(77, 245, 195, 0.3), transparent 60%), rgba(14, 17, 64, 0.5);
-  display: grid; grid-template-columns: 1fr 240px; gap: 30px; align-items: center; border: 1px solid rgba(255, 225, 77, 0.35);
+  display: grid; grid-template-columns: 1fr 260px; gap: 36px; align-items: center; border: 1px solid rgba(255, 225, 77, 0.35);
   box-shadow: 0 0 80px -30px rgba(255,225,77,0.5);
 }
 .tuli-friends { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
@@ -517,7 +519,14 @@ a.card:hover .game-tile svg, .game-row:hover .game-tile svg { transform: transla
 .friend:hover { transform: translateY(-3px) rotate(-2deg); }
 .friend .dot { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-size: 1.2rem; }
 .tuli-mark { font-family: var(--font-display); font-size: clamp(3rem, 8vw, 6rem); line-height: 0.95; text-align: center; animation: float 5s ease-in-out infinite; }
-@media (max-width: 900px) { .tuli-band { grid-template-columns: 1fr; gap: 18px; } .tuli-stage-side { max-width: 220px; margin: 0 auto; } }
+@media (max-width: 900px) {
+  .tuli-band { grid-template-columns: 1fr; gap: 18px; text-align: center; padding: 26px 20px 24px; }
+  .tuli-band > div:first-child { display: flex; flex-direction: column; align-items: center; }
+  .tuli-band .lead { max-width: 46ch; margin-inline: auto; }
+  .tuli-band .hero-actions { justify-content: center; margin-top: 14px; }
+  .tuli-logo { width: min(100%, 190px); margin: 0 auto 10px; }
+  .tuli-stage-side { max-width: 240px; margin: 4px auto 0; transform: none; }
+}
 
 /* מותגים / קשר */
 .cta-band {
