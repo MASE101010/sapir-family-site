@@ -337,10 +337,11 @@
     </button>`;
   /* פוסטר עם כפתור נגינה: התמונה עולה מיד, נגן יוטיוב נטען רק בלחיצה (מהיר, ועובד גם כשההטמעה איטית) */
   window.posterPlayer = (v) => `
-    <button class="poster-play" type="button" data-video="${v.id}" data-title="${(v.title || "").replace(/"/g, "&quot;")}" aria-label="נגן: ${(v.title || "").replace(/"/g, "&quot;")}">
-      <img src="https://i.ytimg.com/vi/${v.id}/maxresdefault.jpg" onerror="this.onerror=null;this.src='${v.thumb || `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`}'" alt="">
+    <div class="poster-play" role="button" tabindex="0" data-video="${v.id}" data-title="${(v.title || "").replace(/"/g, "&quot;")}" aria-label="נגן: ${(v.title || "").replace(/"/g, "&quot;")}">
+      <img src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" srcset="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg 480w, https://i.ytimg.com/vi/${v.id}/maxresdefault.jpg 1280w" sizes="(max-width: 900px) 100vw, 60vw" alt="">
       <span class="pp-btn">${ICONS.play}</span>
-    </button>`;
+    </div>`;
+  document.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.classList && e.target.classList.contains("poster-play")) e.target.click(); });
   document.addEventListener("click", (e) => {
     const b = e.target.closest(".poster-play"); if (!b) return;
     const frame = b.parentElement;
