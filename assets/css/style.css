@@ -648,8 +648,7 @@ a.card.tilting::after, .game-row.tilting::after { opacity: 1; }
 @media (max-width: 800px) { .newsletter { grid-template-columns: 1fr; } .newsletter input { min-width: 0; flex: 1; } }
 
 /* שורטס */
-.shorts-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
-@media (max-width: 1100px) { .shorts-row { grid-template-columns: repeat(5, 1fr); } }
+.shorts-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
 .short { aspect-ratio: 9 / 16; border-radius: 18px; overflow: hidden; position: relative; border: 1px solid var(--line); display: grid; place-items: end; padding: 16px; text-decoration: none; color: #fff; background: var(--bg-2); }
 .short .play { position: absolute; inset: 0; display: grid; place-items: center; }
 .short .play span { width: 56px; height: 56px; border-radius: 50%; background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); border: 1px solid var(--line-2); display: grid; place-items: center; transition: transform 0.3s var(--ease), background 0.3s; }
@@ -658,7 +657,7 @@ a.card.tilting::after, .game-row.tilting::after { opacity: 1; }
 .short:hover .play svg { fill: #0b0d2e; }
 .short b { font-family: var(--font-display); font-size: 1.15rem; line-height: 1.2; text-shadow: 0 4px 16px rgba(0,0,0,0.7); position: relative; }
 .short small { position: absolute; top: 12px; inset-inline-start: 12px; background: rgba(0,0,0,0.45); padding: 3px 10px; border-radius: 999px; font-size: 0.8rem; }
-@media (max-width: 900px) { .shorts-row { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; -webkit-overflow-scrolling: touch; } .short, .shorts-row .vcard { flex: 0 0 46%; scroll-snap-align: start; } }
+@media (max-width: 900px) { .shorts-row { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; } .shorts-row .vcard .vtitle { font-size: 0.75rem; -webkit-line-clamp: 2; } }
 
 /* פוסט מומלץ */
 .featured-post { display: grid; grid-template-columns: 1.1fr 0.9fr; border-radius: var(--radius-xl); overflow: hidden; border: 1px solid var(--line); background: var(--glass); text-decoration: none; color: inherit; margin-bottom: 28px; position: relative; }

@@ -22,7 +22,7 @@
 
   /* מחלק את הספרייה לשורות בסגנון נטפליקס. VOD בלבד (בלי שורטס). */
   window.buildRows = function (videos, channels) {
-    const vod = videos.filter(v => !v.isShort);
+    const vod = videos.filter(v => !v.isShort && !v.unknown && !(v.duration && v.duration <= 180) && !/#shorts/i.test(v.title));
     const byViews = [...vod].sort((a, b) => b.views - a.views);
     const now = Date.now();
     let recent = vod.filter(v => now - Date.parse(v.published) < MONTH);
@@ -48,5 +48,11 @@
   };
 
   window.shortsOf = (videos) => videos.filter(v => v.isShort);
+  window.shuffled = (arr, seed) => { // ערבוב דטרמיניסטי לפי seed (מספר)
+    const a = [...arr]; let s = seed >>> 0 || 1;
+    const rnd = () => { s ^= s << 13; s >>>= 0; s ^= s >>> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; };
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  };
   window.fmtDuration = (s) => !s ? "" : `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 })();

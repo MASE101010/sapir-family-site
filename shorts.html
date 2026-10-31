@@ -23,7 +23,7 @@
     .slide .meta { position: absolute; bottom: 0; inset-inline: 0; padding: 70px 18px 24px; background: linear-gradient(to top, rgba(0,0,0,0.85), transparent); color: #fff; pointer-events: none; }
     .slide .meta b { display: block; font-size: 1.05rem; line-height: 1.35; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
     .slide .meta small { color: rgba(255,255,255,0.75); }
-    .slide .tap { position: absolute; inset: 0; display: grid; place-items: center; cursor: pointer; }
+    .slide::after { content: ""; position: absolute; inset: 0 0 90px; } /* שכבת מגע מעל הנגן: הקשה = השהיה, גלילה חלקה */
     .slide .tap span { width: 80px; height: 80px; border-radius: 50%; background: var(--holo); background-size: 300% 100%; animation: holo-shift 7s linear infinite, pulse 2.4s ease-in-out infinite; display: grid; place-items: center; box-shadow: 0 0 40px rgba(255,79,209,0.6); }
     .slide .tap svg { width: 34px; height: 34px; fill: #0b0d2e; margin-inline-start: -4px; }
     .side { position: fixed; top: 50%; inset-inline-start: calc(50% + min(50vw, (100vh - 74px) * 9 / 32) + 18px); transform: translateY(-50%); display: grid; gap: 10px; z-index: 5; }
@@ -45,7 +45,7 @@
     <a href="videos.html" aria-label="חזרה לסרטונים" title="לסרטונים">✕</a>
   </div>
   <div class="counter" id="counter"></div>
-  <div class="hint">גללו למטה לשורט הבא</div>
+  <div class="hint">גללו למטה לשורט הבא, הקשה משהה</div>
 </main>
 <script src="assets/js/config.js"></script>
 <script src="assets/js/site.js"></script>
@@ -56,65 +56,87 @@
   const start = new URLSearchParams(location.search).get("v");
   let shorts = [];
   try { shorts = window.shortsOf(await window.loadLibrary()); }
-  catch (e) {
-    try { const ch = S.channels.find(c => c.id === "sapirtv"); shorts = await window.fetchChannelVideos(window.channelIdOf(ch)); } catch (e2) {}
-  }
+  catch (e) { try { const ch = S.channels.find(c => c.id === "sapirtv"); shorts = await window.fetchChannelVideos(window.channelIdOf(ch)); } catch (e2) {} }
   if (!shorts.length) { feed.innerHTML = `<div class="slide" style="display:grid;place-items:center;padding:30px;text-align:center"><div><h2>השורטס ייטענו כאן אחרי ההעלאה לאוויר</h2><a class="btn btn-ink" href="videos.html">לסרטונים</a></div></div>`; return; }
-  // מתחילים מהשורט שנלחץ, וממשיכים בסדר: החדשים אחריו
-  let order = shorts;
-  const si = shorts.findIndex(v => v.id === start);
-  if (si > 0) order = [...shorts.slice(si), ...shorts.slice(0, si)];
 
-  let muted = false;
+  // בכל כניסה סדר אקראי חדש: החדשים ביותר נכנסים קצת יותר (חצי מהפיד מהעשירון העליון), והשאר מכל הזמנים
+  const seed = Date.now() ^ (Math.random() * 1e9);
+  const newest = shorts.slice(0, Math.max(20, Math.floor(shorts.length * 0.15)));
+  const rest = shorts.slice(newest.length);
+  const mix = (sd) => { const a = window.shuffled(newest, sd), b = window.shuffled(rest, sd ^ 0x9e3779b9), out = []; let i = 0, j = 0; while (i < a.length || j < b.length) { if (i < a.length) out.push(a[i++]); if (j < b.length) out.push(b[j++]); if (j < b.length) out.push(b[j++]); } return out; };
+  let order = mix(seed);
+  if (start) { const k = order.findIndex(v => v.id === start); if (k > 0) order = [order[k], ...order.slice(0, k), ...order.slice(k + 1)]; else if (k < 0) { const v = shorts.find(x => x.id === start); if (v) order.unshift(v); } }
+
   const chName = id => (S.channels.find(c => c.id === id) || {}).name || "";
-  feed.innerHTML = order.map((v, i) => `
+  const slideHtml = (v, i) => `
     <section class="slide" data-i="${i}" data-id="${v.id}" aria-label="${v.title.replace(/"/g, "&quot;")}">
       <div class="poster" style="background-image:url(${v.thumb})"></div>
-      <img class="poster-img" src="https://i.ytimg.com/vi/${v.id}/oar2.jpg" onerror="this.src='${v.thumb}'" alt="">
-      <div class="tap" data-tap><span>${I.play}</span></div>
+      <img class="poster-img" src="https://i.ytimg.com/vi/${v.id}/oardefault.jpg" onerror="this.onerror=null;this.src='${v.thumb}'" alt="" loading="lazy">
       <div class="meta"><b>${v.title}</b><small>${chName(v.channel)}${v.views ? ", " + window.fmtViews(v.views) : ""}</small></div>
-    </section>`).join("");
+    </section>`;
+  const PAGE = 40;
+  let rendered = 0, round = 1;
+  const addSlides = () => {
+    if (rendered >= order.length) { order = order.concat(mix(seed + round++)); } // פיד אינסופי: סבב מעורבב חדש
+    const chunk = order.slice(rendered, rendered + PAGE);
+    feed.insertAdjacentHTML("beforeend", chunk.map((v, k) => slideHtml(v, rendered + k)).join(""));
+    const newSlides = [...feed.children].slice(rendered);
+    rendered += chunk.length;
+    newSlides.forEach(sl => io.observe(sl));
+  };
 
-  const slides = [...feed.children];
-  const counter = document.getElementById("counter");
-  let current = 0; counter.textContent = `1 / ${slides.length}`;
-  feed.scrollTop = 0;
-  const embed = (sl) => {
-    if (sl.querySelector("iframe")) return;
+  // נגן: מסגרת אחת לכל שקופית סמוכה, רק הנוכחית מנגנת. שליטה דרך postMessage של נגן יוטיוב.
+  let muted = true, current = -1, unlockedSound = false;
+  const counter = document.getElementById("counter"), muteBtn = document.getElementById("mute");
+  const cmd = (iframe, func, args = []) => { try { iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func, args }), "*"); } catch (e) {} };
+  const ensureFrame = (sl, autoplay) => {
+    let f = sl.querySelector("iframe");
+    if (f) return f;
     const id = sl.dataset.id;
-    const f = document.createElement("iframe");
-    f.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=${muted ? 1 : 0}&playsinline=1&rel=0&controls=1&loop=1&playlist=${id}&enablejsapi=1`;
+    f = document.createElement("iframe");
+    f.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=${autoplay ? 1 : 0}&mute=${muted ? 1 : 0}&playsinline=1&rel=0&controls=0&loop=1&playlist=${id}&enablejsapi=1&iv_load_policy=3&modestbranding=1`;
     f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
     f.allowFullscreen = true; f.title = sl.getAttribute("aria-label");
+    f.addEventListener("load", () => { cmd(f, "addEventListener", ["onReady"]); if (sl.dataset.i == current) { cmd(f, muted ? "mute" : "unMute"); cmd(f, "playVideo"); } });
     sl.insertBefore(f, sl.querySelector(".meta"));
-    const tap = sl.querySelector("[data-tap]"); if (tap) tap.remove();
+    return f;
   };
-  const unembed = (sl) => { const f = sl.querySelector("iframe"); if (f) f.remove(); };
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(en => {
-      const i = +en.target.dataset.i;
-      if (en.isIntersecting && en.intersectionRatio > 0.6) {
-        current = i; counter.textContent = `${i + 1} / ${slides.length}`;
-        embed(en.target);
-        slides.forEach((s, j) => { if (Math.abs(j - i) > 1) unembed(s); });
-        history.replaceState(null, "", `shorts.html?v=${en.target.dataset.id}`);
-      }
+  const removeFrame = (sl) => { const f = sl.querySelector("iframe"); if (f) f.remove(); };
+  const activate = (i) => {
+    const slides = [...feed.children];
+    current = i; counter.textContent = `${i + 1}`;
+    slides.forEach((sl, j) => {
+      const d = Math.abs(j - i);
+      if (d === 0) { const f = ensureFrame(sl, true); cmd(f, muted ? "mute" : "unMute"); cmd(f, "playVideo"); }
+      else if (d === 1) { const f = ensureFrame(sl, false); cmd(f, "pauseVideo"); try { cmd(f, "seekTo", [0, true]); } catch (e) {} }
+      else removeFrame(sl);
     });
+    history.replaceState(null, "", `shorts.html?v=${slides[i].dataset.id}`);
+    if (i >= rendered - 5) addSlides();
+  };
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => { if (en.isIntersecting && en.intersectionRatio >= 0.6) { const i = +en.target.dataset.i; if (i !== current) activate(i); } });
   }, { root: feed, threshold: [0.6] });
-  slides.forEach(s => io.observe(s));
-  feed.addEventListener("click", (e) => { const sl = e.target.closest(".slide"); if (sl && e.target.closest("[data-tap]")) embed(sl); });
+  addSlides();
+  feed.scrollTop = 0;
+  setTimeout(() => { if (current < 0) activate(0); }, 300);
 
-  const go = (d) => { const n = Math.min(slides.length - 1, Math.max(0, current + d)); slides[n].scrollIntoView({ behavior: "smooth" }); };
-  document.getElementById("next").addEventListener("click", () => go(1));
-  document.getElementById("prev").addEventListener("click", () => go(-1));
-  addEventListener("keydown", (e) => { if (e.key === "ArrowDown" || e.key === " ") { e.preventDefault(); go(1); } if (e.key === "ArrowUp") { e.preventDefault(); go(-1); } });
-  document.getElementById("mute").addEventListener("click", (e) => {
-    muted = !muted; e.currentTarget.textContent = muted ? "🔇" : "🔊";
-    const f = slides[current] && slides[current].querySelector("iframe");
-    if (f) f.contentWindow.postMessage(JSON.stringify({ event: "command", func: muted ? "mute" : "unMute", args: [] }), "*");
-  });
-  // גלילה אינסופית: בסוף הרשימה חוזרים להתחלה
-  feed.addEventListener("scroll", () => { if (feed.scrollTop + feed.clientHeight >= feed.scrollHeight - 2 && current === slides.length - 1) setTimeout(() => slides[0].scrollIntoView({ behavior: "smooth" }), 1200); }, { passive: true });
+  // קול: הדפדפן מרשה אוטופליי רק בשקט, אז מתחילים בשקט ומדליקים קול במגע הראשון
+  const setMuted = (m) => { muted = m; muteBtn.textContent = m ? "🔇" : "🔊"; muteBtn.setAttribute("aria-label", m ? "הפעלת קול" : "השתקה"); const f = feed.children[current] && feed.children[current].querySelector("iframe"); if (f) cmd(f, m ? "mute" : "unMute"); };
+  setMuted(true);
+  const soundTip = document.createElement("button"); soundTip.className = "btn btn-ink btn-sm sound-tip"; soundTip.textContent = "🔊 הפעלת קול"; soundTip.style.cssText = "position:fixed;top:86px;left:50%;transform:translateX(-50%);z-index:6";
+  document.body.append(soundTip);
+  const unlock = () => { if (unlockedSound) return; unlockedSound = true; setMuted(false); soundTip.remove(); };
+  soundTip.addEventListener("click", unlock);
+  feed.addEventListener("pointerdown", unlock, { once: true });
+  muteBtn.addEventListener("click", () => { unlockedSound = true; soundTip.remove(); setMuted(!muted); });
+
+  const go = (d) => { const n = Math.min(feed.children.length - 1, Math.max(0, current + d)); feed.children[n].scrollIntoView({ behavior: "smooth" }); };
+  document.getElementById("next").addEventListener("click", () => { unlock(); go(1); });
+  document.getElementById("prev").addEventListener("click", () => { unlock(); go(-1); });
+  addEventListener("keydown", (e) => { if (e.key === "ArrowDown" || e.key === " " || e.key === "PageDown") { e.preventDefault(); unlock(); go(1); } if (e.key === "ArrowUp" || e.key === "PageUp") { e.preventDefault(); unlock(); go(-1); } if (e.key.toLowerCase() === "m") setMuted(!muted); });
+  // הקשה על הסרטון: השהיה/המשך
+  feed.addEventListener("click", (e) => { const sl = e.target.closest(".slide"); if (!sl || +sl.dataset.i !== current) return; const f = sl.querySelector("iframe"); if (!f) return; sl.dataset.paused = sl.dataset.paused === "1" ? "0" : "1"; cmd(f, sl.dataset.paused === "1" ? "pauseVideo" : "playVideo"); });
 })();
 </script>
 </body>

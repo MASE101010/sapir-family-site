@@ -22,7 +22,7 @@ export async function onRequestGet(ctx) {
 async function handle({ request, env }) {
   const url = new URL(request.url);
   const cache = caches.default;
-  const cacheKey = new Request(url.origin + "/api/library?v=8", request);
+  const cacheKey = new Request(url.origin + "/api/library?v=9", request);
   if (!url.searchParams.has("fresh")) { const hit = await cache.match(cacheKey); if (hit) return hit; }
 
   const key = env.YT_API_KEY;
@@ -117,8 +117,9 @@ async function markShorts(videos, origin) {
     if (v.id in flags) v.isShort = flags[v.id] === 1; else todo.push(v);
   }
   const batch = todo.slice(0, 36);
+  todo.slice(36).forEach(v => { v.unknown = true; });
   await Promise.all(batch.map(async v => {
-    try { const t = await fetch(`https://i.ytimg.com/vi/${v.id}/oardefault.jpg`, { method: "HEAD" }); flags[v.id] = t.ok ? 1 : 0; v.isShort = t.ok; } catch (e) {}
+    try { const t = await fetch(`https://i.ytimg.com/vi/${v.id}/oardefault.jpg`, { method: "HEAD" }); flags[v.id] = t.ok ? 1 : 0; v.isShort = t.ok; } catch (e) { v.unknown = true; }
   }));
   try { await cache.put(flagsReq, new Response(JSON.stringify(flags), { headers: { "content-type": "application/json", "cache-control": "public, max-age=2592000" } })); } catch (e) {}
   return todo.length - batch.length;
