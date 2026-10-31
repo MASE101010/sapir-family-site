@@ -19,16 +19,20 @@ CHANNELS = [
 OUT = Path(__file__).resolve().parent.parent / "data" / "library.json"
 
 def tab(channel_id, name):
+    """לשונית של ערוץ (videos / shorts) במצב flat. קודם בעברית (lang=he); אם נכשל, בלי העדפת שפה."""
     url = f"https://www.youtube.com/channel/{channel_id}/{name}"
-    cmd = ["yt-dlp", "--flat-playlist", "--dump-single-json", "--no-warnings", "--ignore-errors", "--extractor-args", "youtubetab:approximate_date", "--extractor-args", "youtube:lang=he", "--add-headers", "Accept-Language:he-IL,he;q=0.9", url]
-    try:
-        out = subprocess.run(cmd, capture_output=True, text=True, timeout=900)
-        if not out.stdout.strip():
-            print(f"  {name}: empty ({out.stderr.strip()[:200]})"); return []
-        data = json.loads(out.stdout)
-        return data.get("entries") or []
-    except Exception as e:
-        print(f"  {name}: failed: {e}"); return []
+    base = ["yt-dlp", "--flat-playlist", "--dump-single-json", "--no-warnings", "--ignore-errors", "--extractor-args", "youtubetab:approximate_date"]
+    variants = [base + ["--extractor-args", "youtube:lang=he", "--add-headers", "Accept-Language:he-IL,he;q=0.9", url], base + [url]]
+    for cmd in variants:
+        try:
+            out = subprocess.run(cmd, capture_output=True, text=True, timeout=900)
+            data = json.loads(out.stdout) if out.stdout.strip() else None
+            if isinstance(data, dict) and data.get("entries"):
+                return data["entries"]
+            print(f"  {name}: no entries ({out.stderr.strip().splitlines()[-1][:200] if out.stderr.strip() else 'empty output'})")
+        except Exception as e:
+            print(f"  {name}: failed: {e}")
+    return []
 
 def ts(e):
     if e.get("timestamp"): return datetime.datetime.utcfromtimestamp(e["timestamp"]).strftime("%Y-%m-%dT%H:%M:%SZ")
