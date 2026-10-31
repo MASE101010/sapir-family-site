@@ -375,6 +375,21 @@
   addEventListener("keydown", (e) => { if (e.key === "Escape" && !modal.hidden) closeV(); });
   document.addEventListener("click", (e) => { const b = e.target.closest(".vcard"); if (!b) return; if (b.classList.contains("vshort")) location.href = `shorts.html?v=${b.dataset.video}`; else window.openVideo(b.dataset.video, b.dataset.title); });
 
+  // "הוסיפו למסך הבית": הצעה עדינה פעם אחת, אחרי שני ביקורים, רק כשהדפדפן מאפשר התקנה
+  let installEvt = null;
+  addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault(); installEvt = e;
+    try {
+      const visits = (+localStorage.getItem("sapir-visits") || 0) + 1; localStorage.setItem("sapir-visits", visits);
+      if (visits < 2 || localStorage.getItem("sapir-install-dismissed") || page === "shorts") return;
+    } catch (x) { return; }
+    const bar = document.createElement("div"); bar.className = "install-bar"; bar.setAttribute("role", "dialog"); bar.setAttribute("aria-label", "התקנת האפליקציה");
+    bar.innerHTML = `<img src="assets/img/icon-192.png" alt=""><div><b>משפחת ספיר כאפליקציה</b><small>מסך מלא, פתיחה מהירה, בלי חנות</small></div><button class="btn btn-ink btn-sm" id="install-yes">הוספה</button><button class="install-x" id="install-no" aria-label="לא עכשיו">✕</button>`;
+    document.body.append(bar);
+    document.getElementById("install-yes").addEventListener("click", async () => { bar.remove(); if (installEvt) { installEvt.prompt(); try { await installEvt.userChoice; } catch (x) {} installEvt = null; } });
+    document.getElementById("install-no").addEventListener("click", () => { bar.remove(); try { localStorage.setItem("sapir-install-dismissed", "1"); } catch (x) {} });
+  });
+
   // Service Worker: קבצי האתר נשמרים במכשיר, כניסה חוזרת מיידית (כמו אפליקציה)
   if ("serviceWorker" in navigator && location.protocol === "https:") addEventListener("load", () => {
     if (location.search.includes("nosw")) { navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister())); return; } // לאבחון
