@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preload" href="/data/library.json" as="fetch" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=202610312312">
+  <link rel="stylesheet" href="assets/css/style.css?v=202610312337">
   <style>
     /* ---- עמוד השורטס: מסך מלא, גלילה אנכית בלבד, נגן יוטיוב בשליטה מלאה ---- */
     html, body { height: 100%; overflow: hidden !important; overscroll-behavior: none; background: #000; }
@@ -37,7 +37,8 @@
     .slot .bg { position: absolute; inset: -10%; background: center / cover no-repeat; filter: blur(30px) brightness(0.45); display: none; }
     @media (min-width: 901px) { .slot.near .bg { display: block; } } /* רקע מטושטש רק בדסקטופ ורק לשקופיות הסמוכות */
     .slot .poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.4s; }
-    .slot .yt, .slot .yt iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .slot .yt { position: absolute; inset: 0; overflow: hidden; }
+    .slot .yt iframe { position: absolute; left: 0; width: 100%; top: -58px; height: calc(100% + 58px); border: 0; } /* פס הכותרת של יוטיוב נחתך מחוץ למסגרת */
     .slot .yt { opacity: 0; transition: opacity 0.35s; }
     .slot.playing .yt { opacity: 1; }
     .slot.playing .poster { opacity: 0; }
@@ -139,9 +140,9 @@
     setTimeout(check, 5000);
   })();
 </script>
-<script src="assets/js/config.js?v=202610312312"></script>
-<script src="assets/js/site.js?v=202610312312"></script>
-<script src="assets/js/library.js?v=202610312312"></script>
+<script src="assets/js/config.js?v=202610312337"></script>
+<script src="assets/js/site.js?v=202610312337"></script>
+<script src="assets/js/library.js?v=202610312337"></script>
 <script>
 (async () => {
   const feed = document.getElementById("feed"), stage = document.getElementById("stage"), S = window.SAPIR;
