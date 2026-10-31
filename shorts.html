@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preload" href="/data/library.json" as="fetch" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=202611010018">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611010019">
   <style>
     /* ---- עמוד השורטס: מסך מלא, גלילה אנכית בלבד, נגן יוטיוב בשליטה מלאה ---- */
     html, body { height: 100%; overflow: hidden !important; overscroll-behavior: none; background: #000; }
@@ -121,7 +121,7 @@
     .sgrid-sort { margin-inline-start: auto; display: flex; gap: 6px; }
     .sgrid-sort button { border: 1px solid rgba(255,255,255,0.2); background: none; color: #fff; border-radius: 999px; padding: 6px 12px; font: inherit; font-size: 0.85rem; cursor: pointer; }
     .sgrid-sort button.on { background: #fff; color: #000; }
-    .sgrid-body { flex: 1; overflow-y: auto; padding: 10px 10px calc(20px + var(--bottom)); display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; align-content: start; overscroll-behavior: contain; }
+    .sgrid-body { flex: 1; overflow-y: auto; padding: 10px 10px calc(20px + var(--bottom)); display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: max-content; gap: 8px; align-content: start; overscroll-behavior: contain; }
     @media (min-width: 700px) { .sgrid-body { grid-template-columns: repeat(5, 1fr); padding: 14px; gap: 10px; } }
     @media (min-width: 1200px) { .sgrid-body { grid-template-columns: repeat(7, 1fr); } }
     .sgrid .vcard.vshort { background: #111; border-radius: 10px; overflow: hidden; }
@@ -158,9 +158,9 @@
     setTimeout(check, 5000);
   })();
 </script>
-<script src="assets/js/config.js?v=202611010018"></script>
-<script src="assets/js/site.js?v=202611010018"></script>
-<script src="assets/js/library.js?v=202611010018"></script>
+<script src="assets/js/config.js?v=202611010019"></script>
+<script src="assets/js/site.js?v=202611010019"></script>
+<script src="assets/js/library.js?v=202611010019"></script>
 <script>
 (async () => {
   const feed = document.getElementById("feed"), stage = document.getElementById("stage"), S = window.SAPIR;
