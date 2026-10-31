@@ -30,7 +30,7 @@ export async function onRequestGet({ request }) {
   await cache.put(cacheKey, out.clone());
   return out;
 }
-function strip(s) { return s.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&#8211;/g, ", ").replace(/\s+/g, " ").trim(); }
+function strip(s) { return s.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&#8211;|&ndash;|&#8212;/g, ", ").replace(/&#8362;/g, "₪").replace(/&#(\d+);/g, (m, n) => String.fromCodePoint(Number(n))).replace(/&quot;/g, '"').replace(/&#039;|&#8217;/g, "'").replace(/\s+,/g, ",").replace(/\s+/g, " ").trim(); }
 function json(obj, status = 200, headers = {}) {
   return new Response(JSON.stringify(obj), { status, headers: { "content-type": "application/json; charset=utf-8", ...headers } });
 }
