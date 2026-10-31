@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#000000">
   <link rel="icon" href="assets/img/logo-small.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=202610311846">
+  <link rel="stylesheet" href="assets/css/style.css?v=202610311848">
   <style>
     /* ---- עמוד השורטס: מסך מלא, גלילה אנכית בלבד, נגן יוטיוב בשליטה מלאה ---- */
     html, body { height: 100%; overflow: hidden !important; overscroll-behavior: none; background: #000; }
@@ -65,9 +65,7 @@
     .acts svg { width: 24px; height: 24px; fill: currentColor; }
     .acts .lbl { font-size: 0.68rem; color: #fff; margin-top: -8px; text-shadow: 0 1px 6px rgba(0,0,0,0.9); }
     @media (min-width: 901px) {
-      .slide .acts { inset-inline-end: -64px; bottom: 12px; }
-      .acts button, .acts a { background: rgba(255,255,255,0.1); }
-      .slide .info { padding-inline-start: 14px; }
+      .slide .acts { bottom: 40px; inset-inline-end: 10px; }
     }
 
     /* חיצים בדסקטופ */
@@ -118,9 +116,9 @@
   </div>
   <button class="sound-tip" id="sound-tip" hidden><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>הפעלת קול</button>
 </main>
-<script src="assets/js/config.js?v=202610311846"></script>
-<script src="assets/js/site.js?v=202610311846"></script>
-<script src="assets/js/library.js?v=202610311846"></script>
+<script src="assets/js/config.js?v=202610311848"></script>
+<script src="assets/js/site.js?v=202610311848"></script>
+<script src="assets/js/library.js?v=202610311848"></script>
 <script>
 (async () => {
   const feed = document.getElementById("feed"), S = window.SAPIR;
@@ -270,6 +268,7 @@
   const scrollToIndex = (n) => {
     cancelAnimationFrame(anim);
     const from = feed.scrollTop, to = feed.children[n].offsetTop, t0 = performance.now(), D = 320;
+    if (document.hidden || matchMedia("(prefers-reduced-motion: reduce)").matches) { feed.scrollTop = to; activate(n); return; }
     const step = (t) => { const k = Math.min(1, (t - t0) / D), e = 1 - Math.pow(1 - k, 3); feed.scrollTop = from + (to - from) * e; if (k < 1) anim = requestAnimationFrame(step); else { feed.scrollTop = to; activate(n); } };
     anim = requestAnimationFrame(step);
   };
