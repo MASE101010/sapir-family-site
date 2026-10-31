@@ -188,7 +188,7 @@ p { margin: 0 0 1em; }
 .nav-logo img { height: 48px; width: auto; }
 .nav-links { display: flex; gap: 2px; list-style: none; margin: 0 auto 0 0; padding: 0; }
 .nav-links a {
-  display: block; padding: 0.45em 0.9em; border-radius: var(--radius-pill); position: relative;
+  display: block; padding: 0.45em 0.75em; border-radius: var(--radius-pill); position: relative;
   text-decoration: none; font-weight: 600; color: var(--ink-2); font-size: 0.98rem; transition: color 0.2s, background 0.2s;
 }
 .nav-links a::after {
@@ -648,7 +648,8 @@ a.card.tilting::after, .game-row.tilting::after { opacity: 1; }
 @media (max-width: 800px) { .newsletter { grid-template-columns: 1fr; } .newsletter input { min-width: 0; flex: 1; } }
 
 /* שורטס */
-.shorts-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.shorts-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+@media (max-width: 1100px) { .shorts-row { grid-template-columns: repeat(5, 1fr); } }
 .short { aspect-ratio: 9 / 16; border-radius: 18px; overflow: hidden; position: relative; border: 1px solid var(--line); display: grid; place-items: end; padding: 16px; text-decoration: none; color: #fff; background: var(--bg-2); }
 .short .play { position: absolute; inset: 0; display: grid; place-items: center; }
 .short .play span { width: 56px; height: 56px; border-radius: 50%; background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); border: 1px solid var(--line-2); display: grid; place-items: center; transition: transform 0.3s var(--ease), background 0.3s; }
@@ -740,6 +741,9 @@ a.card.tilting::after, .game-row.tilting::after { opacity: 1; }
 .vtitle { padding: 6px 12px 0; font-weight: 700; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .vdate { padding: 0 12px; font-size: 0.82rem; color: var(--ink-soft); }
 .vcard.vshort .vthumb { aspect-ratio: 9 / 16; }
+.vcard.vshort .vtitle { font-size: 0.85rem; padding: 4px 8px 0; }
+.vcard.vshort .vdate { display: none; }
+.vcard.vshort { padding-bottom: 8px; }
 .vcard.vshort .vthumb img { object-fit: cover; }
 .vcard.vbig .vtitle { font-size: 1.2rem; -webkit-line-clamp: 2; }
 .vmodal { position: fixed; inset: 0; z-index: 120; background: rgba(3,5,20,0.85); backdrop-filter: blur(10px); display: grid; place-items: center; padding: 20px; animation: page-in 0.25s var(--ease); }

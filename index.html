@@ -28,8 +28,9 @@
         <h1 class="hero-tagline"><span class="tag-static">הבית של</span> <span class="cycle"><span class="cycle-word is-on">הסרטונים</span><span class="cycle-word" aria-hidden="true">המשחקים</span></span></h1>
         <p class="hero-copy">מיכאל, שירן, אלין, אלרועי, אלאור ואריאל. מעל 3 מיליון עוקבים, שבעה ערוצים, חמישה משחקים, אריה אחד בשם תולי, ובלוג חדש בכל יום.</p>
         <div class="hero-actions">
-          <a class="btn btn-ink" href="videos.html">לצפות בסרטונים</a>
-          <a class="btn btn-holo" href="games.html">לשחק במשחקים שלנו</a>
+          <a class="btn btn-ink" href="vod.html">לצפות ב-VOD</a>
+          <a class="btn btn-holo" href="shorts.html">לשורטס</a>
+          <a class="btn btn-ghost" href="games.html">למשחקים</a>
         </div>
       </div>
       <div class="hero-photo">
@@ -226,9 +227,9 @@
   const grads = ["linear-gradient(160deg,#ff3d6e,#7b2bd6)","linear-gradient(160deg,#ffb84d,#ff4fd1)","linear-gradient(160deg,#28d7ff,#3d2bd6)","linear-gradient(160deg,#4df5c3,#1b4a8a)"];
   const dummyShorts = () => { document.getElementById("shorts").innerHTML = shortsData.map(([e, t, v], i) => `<a class="short" href="videos.html#sapirtv" style="background:${grads[i]}"><small>${v} צפיות</small><div class="play"><span>${I.play}</span></div><span style="font-size:4rem;position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);opacity:.9">${e}</span><b>${t}</b></a>`).join(""); };
   window.fetchChannelVideos(window.channelIdOf(shortsCh)).then(vs => {
-    document.getElementById("shorts").innerHTML = vs.slice(0, 4).map(v => window.videoCard(v, "vshort")).join("");
+    document.getElementById("shorts").innerHTML = vs.slice(0, 6).map(v => window.videoCard(v, "vshort")).join("");
   }).catch(dummyShorts);
-  document.getElementById("shorts-link").href = "videos.html#sapirtv"; document.getElementById("shorts-link").removeAttribute("target");
+  document.getElementById("shorts-link").href = "shorts.html"; document.getElementById("shorts-link").removeAttribute("target");
   document.getElementById("faq-shop").href = "shop.html"; document.getElementById("faq-shop").removeAttribute("target");
   document.getElementById("nl").addEventListener("submit", (e) => { e.preventDefault(); const f = e.target, m = document.getElementById("nl-msg"); if (!f.email.validity.valid) { m.textContent = "בדקו את כתובת האימייל."; return; } m.textContent = "נרשמתם! (דמה, הרישום יחובר בהשקה)"; f.reset(); });
 

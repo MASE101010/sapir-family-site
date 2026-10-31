@@ -18,7 +18,9 @@
   /* ---------- ניווט ---------- */
   const NAV = [
     ["index.html", "בית", "home"],
-    ["videos.html", "סרטונים", "videos"],
+    ["vod.html", "VOD", "vod"],
+    ["shorts.html", "שורטס", "shorts"],
+    ["videos.html", "הערוצים", "videos"],
     ["games.html", "משחקים", "games"],
     ["blog.html", "הבלוג", "blog"],
     ["tuli.html", "תולי האריה", "tuli"],
@@ -54,13 +56,15 @@
   /* ניווט תחתון במובייל */
   const TAB_ICONS = {
     home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 11 12 3l9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>',
-    videos: ICONS.play,
+    vod: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M10 9l5 3-5 3z" fill="currentColor"/></svg>',
+    shorts: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="3"/><path d="M10.5 9.5l4 2.5-4 2.5z" fill="currentColor"/></svg>',
     games: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 11v3M5.5 12.5h3M15.5 11.5h.01M18 13.5h.01"/></svg>',
     blog: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16v16H4zM8 9h8M8 13h8M8 17h5"/></svg>',
     tuli: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="6"/><path d="M5 8l2-4 3 3M19 8l-2-4-3 3M9.5 13h.01M14.5 13h.01M10.5 16c.8.7 2.2.7 3 0"/></svg>'
   };
   const tabbar = document.createElement("nav"); tabbar.className = "tabbar"; tabbar.setAttribute("aria-label", "ניווט מהיר");
-  tabbar.innerHTML = NAV.filter(n => TAB_ICONS[n[2]]).map(([href, label, key]) => `<a href="${href}" ${page === key ? 'aria-current="page"' : ""}><span class="ti">${TAB_ICONS[key]}</span><span>${label}</span></a>`).join("");
+  const TAB_KEYS = ["home", "vod", "shorts", "games", "blog"];
+  tabbar.innerHTML = NAV.filter(n => TAB_KEYS.includes(n[2])).map(([href, label, key]) => `<a href="${href}" ${page === key ? 'aria-current="page"' : ""}><span class="ti">${TAB_ICONS[key]}</span><span>${label}</span></a>`).join("");
   document.body.append(tabbar);
   const nav = header.querySelector(".nav");
   header.querySelector(".nav-toggle").addEventListener("click", (e) => {
@@ -335,7 +339,7 @@
   };
   modal.addEventListener("click", (e) => { if (e.target === modal || e.target.closest(".vclose")) closeV(); });
   addEventListener("keydown", (e) => { if (e.key === "Escape" && !modal.hidden) closeV(); });
-  document.addEventListener("click", (e) => { const b = e.target.closest(".vcard"); if (b) window.openVideo(b.dataset.video, b.dataset.title); });
+  document.addEventListener("click", (e) => { const b = e.target.closest(".vcard"); if (!b) return; if (b.classList.contains("vshort")) location.href = `shorts.html?v=${b.dataset.video}`; else window.openVideo(b.dataset.video, b.dataset.title); });
 
   /* ---------- עזרי בלוג ---------- */
   const HE_MONTHS = ["ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני", "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"];

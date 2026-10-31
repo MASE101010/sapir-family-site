@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>שורטס | משפחת ספיר</title>
+  <meta name="description" content="כל השורטס של משפחת ספיר במקום אחד: גוללים ורואים, בלי סוף.">
+  <link rel="icon" href="assets/img/logo-small.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    html, body { height: 100%; }
+    body { padding-bottom: 0 !important; overflow: hidden; }
+    .site-footer, .ticker-wrap, .to-top { display: none !important; }
+    .feed-wrap { position: fixed; inset: 74px 0 0; display: flex; justify-content: center; }
+    .feed { height: 100%; width: min(100vw, calc((100vh - 74px) * 9 / 16)); overflow-y: auto; scroll-snap-type: y mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .feed::-webkit-scrollbar { display: none; }
+    .slide { height: 100%; scroll-snap-align: start; scroll-snap-stop: always; position: relative; background: #000; }
+    .slide iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .slide .poster { position: absolute; inset: 0; background: center / cover no-repeat; filter: blur(18px) brightness(0.5); transform: scale(1.1); }
+    .slide .poster-img { position: absolute; inset: 0; margin: auto; max-width: 100%; max-height: 100%; object-fit: contain; }
+    .slide .meta { position: absolute; bottom: 0; inset-inline: 0; padding: 70px 18px 24px; background: linear-gradient(to top, rgba(0,0,0,0.85), transparent); color: #fff; pointer-events: none; }
+    .slide .meta b { display: block; font-size: 1.05rem; line-height: 1.35; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
+    .slide .meta small { color: rgba(255,255,255,0.75); }
+    .slide .tap { position: absolute; inset: 0; display: grid; place-items: center; cursor: pointer; }
+    .slide .tap span { width: 80px; height: 80px; border-radius: 50%; background: var(--holo); background-size: 300% 100%; animation: holo-shift 7s linear infinite, pulse 2.4s ease-in-out infinite; display: grid; place-items: center; box-shadow: 0 0 40px rgba(255,79,209,0.6); }
+    .slide .tap svg { width: 34px; height: 34px; fill: #0b0d2e; margin-inline-start: -4px; }
+    .side { position: fixed; top: 50%; inset-inline-start: calc(50% + min(50vw, (100vh - 74px) * 9 / 32) + 18px); transform: translateY(-50%); display: grid; gap: 10px; z-index: 5; }
+    .side button, .side a { width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--line-2); background: rgba(14,17,64,0.9); color: #fff; display: grid; place-items: center; text-decoration: none; font-size: 1.2rem; }
+    .side button:hover, .side a:hover { background: #fff; color: #0b0d2e; }
+    .counter { position: fixed; top: 86px; inset-inline-end: 16px; z-index: 5; background: rgba(0,0,0,0.5); color: #fff; padding: 4px 12px; border-radius: 999px; font-size: 0.85rem; backdrop-filter: blur(6px); }
+    .hint { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); z-index: 5; color: rgba(255,255,255,0.7); font-size: 0.85rem; background: rgba(0,0,0,0.5); padding: 6px 14px; border-radius: 999px; backdrop-filter: blur(6px); animation: page-in 0.6s var(--ease) 1s both; }
+    @media (max-width: 900px) { .feed-wrap { inset: 74px 0 0; } .feed { width: 100vw; } .side { inset-inline-start: auto; inset-inline-end: 10px; top: auto; bottom: 110px; transform: none; } .hint { bottom: 84px; } }
+    .a11y-btn { display: none; }
+  </style>
+</head>
+<body data-page="shorts">
+<main id="main">
+  <div class="feed-wrap"><div class="feed" id="feed" aria-label="השורטס שלנו, גללו למטה לסרטון הבא"></div></div>
+  <div class="side">
+    <button id="prev" aria-label="השורט הקודם">↑</button>
+    <button id="next" aria-label="השורט הבא">↓</button>
+    <button id="mute" aria-label="השתקה" title="השתקה">🔊</button>
+    <a href="videos.html" aria-label="חזרה לסרטונים" title="לסרטונים">✕</a>
+  </div>
+  <div class="counter" id="counter"></div>
+  <div class="hint">גללו למטה לשורט הבא</div>
+</main>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/library.js"></script>
+<script>
+(async () => {
+  const feed = document.getElementById("feed"), I = window.SAPIR_ICONS, S = window.SAPIR;
+  const start = new URLSearchParams(location.search).get("v");
+  let shorts = [];
+  try { shorts = window.shortsOf(await window.loadLibrary()); }
+  catch (e) {
+    try { const ch = S.channels.find(c => c.id === "sapirtv"); shorts = await window.fetchChannelVideos(window.channelIdOf(ch)); } catch (e2) {}
+  }
+  if (!shorts.length) { feed.innerHTML = `<div class="slide" style="display:grid;place-items:center;padding:30px;text-align:center"><div><h2>השורטס ייטענו כאן אחרי ההעלאה לאוויר</h2><a class="btn btn-ink" href="videos.html">לסרטונים</a></div></div>`; return; }
+  // מתחילים מהשורט שנלחץ, וממשיכים בסדר: החדשים אחריו
+  let order = shorts;
+  const si = shorts.findIndex(v => v.id === start);
+  if (si > 0) order = [...shorts.slice(si), ...shorts.slice(0, si)];
+
+  let muted = false;
+  const chName = id => (S.channels.find(c => c.id === id) || {}).name || "";
+  feed.innerHTML = order.map((v, i) => `
+    <section class="slide" data-i="${i}" data-id="${v.id}" aria-label="${v.title.replace(/"/g, "&quot;")}">
+      <div class="poster" style="background-image:url(${v.thumb})"></div>
+      <img class="poster-img" src="https://i.ytimg.com/vi/${v.id}/oar2.jpg" onerror="this.src='${v.thumb}'" alt="">
+      <div class="tap" data-tap><span>${I.play}</span></div>
+      <div class="meta"><b>${v.title}</b><small>${chName(v.channel)}${v.views ? ", " + window.fmtViews(v.views) : ""}</small></div>
+    </section>`).join("");
+
+  const slides = [...feed.children];
+  const counter = document.getElementById("counter");
+  let current = -1;
+  const embed = (sl) => {
+    if (sl.querySelector("iframe")) return;
+    const id = sl.dataset.id;
+    const f = document.createElement("iframe");
+    f.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=${muted ? 1 : 0}&playsinline=1&rel=0&controls=1&loop=1&playlist=${id}&enablejsapi=1`;
+    f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+    f.allowFullscreen = true; f.title = sl.getAttribute("aria-label");
+    sl.insertBefore(f, sl.querySelector(".meta"));
+    const tap = sl.querySelector("[data-tap]"); if (tap) tap.remove();
+  };
+  const unembed = (sl) => { const f = sl.querySelector("iframe"); if (f) f.remove(); };
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => {
+      const i = +en.target.dataset.i;
+      if (en.isIntersecting && en.intersectionRatio > 0.6) {
+        current = i; counter.textContent = `${i + 1} / ${slides.length}`;
+        embed(en.target);
+        slides.forEach((s, j) => { if (Math.abs(j - i) > 1) unembed(s); });
+        history.replaceState(null, "", `shorts.html?v=${en.target.dataset.id}`);
+      }
+    });
+  }, { root: feed, threshold: [0.6] });
+  slides.forEach(s => io.observe(s));
+  feed.addEventListener("click", (e) => { const sl = e.target.closest(".slide"); if (sl && e.target.closest("[data-tap]")) embed(sl); });
+
+  const go = (d) => { const n = Math.min(slides.length - 1, Math.max(0, current + d)); slides[n].scrollIntoView({ behavior: "smooth" }); };
+  document.getElementById("next").addEventListener("click", () => go(1));
+  document.getElementById("prev").addEventListener("click", () => go(-1));
+  addEventListener("keydown", (e) => { if (e.key === "ArrowDown" || e.key === " ") { e.preventDefault(); go(1); } if (e.key === "ArrowUp") { e.preventDefault(); go(-1); } });
+  document.getElementById("mute").addEventListener("click", (e) => {
+    muted = !muted; e.currentTarget.textContent = muted ? "🔇" : "🔊";
+    const f = slides[current] && slides[current].querySelector("iframe");
+    if (f) f.contentWindow.postMessage(JSON.stringify({ event: "command", func: muted ? "mute" : "unMute", args: [] }), "*");
+  });
+  // גלילה אינסופית: בסוף הרשימה חוזרים להתחלה
+  feed.addEventListener("scroll", () => { if (feed.scrollTop + feed.clientHeight >= feed.scrollHeight - 2 && current === slides.length - 1) setTimeout(() => slides[0].scrollIntoView({ behavior: "smooth" }), 1200); }, { passive: true });
+})();
+</script>
+</body>
+</html>
