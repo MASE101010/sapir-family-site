@@ -783,9 +783,21 @@ a.card.tilting::after, .game-row.tilting::after { opacity: 1; }
 .vmodal { position: fixed; inset: 0; z-index: 120; background: rgba(3,5,20,0.85); backdrop-filter: blur(10px); display: grid; place-items: center; padding: 20px; animation: page-in 0.25s var(--ease); }
 .vmodal[hidden] { display: none; }
 .vmodal-box { width: min(1100px, 100%); position: relative; }
-.vmodal .video-frame { box-shadow: 0 40px 100px -20px rgba(0,0,0,0.9); }
-.vclose { position: absolute; top: -48px; inset-inline-start: 0; background: var(--glass-2); border: 1px solid var(--line-2); color: #fff; width: 40px; height: 40px; border-radius: 50%; font-size: 1.1rem; }
-.vmodal-title { margin-top: 12px; font-weight: 700; font-size: 1.1rem; }
+.vmodal .video-frame { box-shadow: 0 40px 100px -20px rgba(0,0,0,0.9); width: min(100%, calc(60vh * 16 / 9)); margin: 0 auto; }
+.vmodal-bar, .vmodal-more { width: min(100%, calc(60vh * 16 / 9)); margin-inline: auto; }
+@media (max-width: 900px) { .vmodal .video-frame, .vmodal-bar, .vmodal-more { width: 100%; } }
+.vclose { position: absolute; top: 4px; inset-inline-start: 0; background: var(--glass-2); border: 1px solid var(--line-2); color: #fff; width: 40px; height: 40px; border-radius: 50%; font-size: 1.1rem; }
+.vmodal-box { max-height: 100%; overflow-y: auto; scrollbar-width: none; padding-top: 52px; }
+.vmodal-box::-webkit-scrollbar { display: none; }
+.vmodal-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+.vmodal-title { font-weight: 700; font-size: 1.05rem; flex: 1 1 260px; }
+.vmodal-acts { display: flex; gap: 8px; }
+.vmodal-more-title { margin: 18px 0 8px; font-weight: 800; color: var(--ink-2); }
+.vmodal-strip { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(180px, 1fr); gap: 10px; overflow-x: auto; scrollbar-width: none; padding-bottom: 6px; }
+.vmodal-strip::-webkit-scrollbar { display: none; }
+.vcard.vmini .vtitle { font-size: 0.82rem; -webkit-line-clamp: 2; }
+.vcard.vmini .vdate { display: none; }
+@media (max-width: 900px) { .vmodal { padding: 0; align-items: start; } .vmodal-box { padding: 54px 12px 20px; } .vmodal .vclose { top: 10px; inset-inline-start: 12px; } }
 .shorts-row .vcard { flex: 0 0 auto; }
 
 /* פאנל נגישות מורחב + עוגיות */

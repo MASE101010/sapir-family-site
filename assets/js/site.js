@@ -349,16 +349,29 @@
   });
   // נגן צף
   const modal = document.createElement("div"); modal.className = "vmodal"; modal.setAttribute("role", "dialog"); modal.setAttribute("aria-modal", "true"); modal.setAttribute("aria-label", "נגן וידאו"); modal.hidden = true;
-  modal.innerHTML = `<div class="vmodal-box"><button class="vclose" aria-label="סגירה">✕</button><div class="video-frame" id="vmodal-frame"></div><div class="vmodal-title" id="vmodal-title"></div></div>`;
+  modal.innerHTML = `<div class="vmodal-box"><button class="vclose" aria-label="סגירה">✕</button><div class="video-frame" id="vmodal-frame"></div><div class="vmodal-bar"><div class="vmodal-title" id="vmodal-title"></div><div class="vmodal-acts"><button class="btn btn-ghost btn-sm" id="vmodal-share">שיתוף</button><a class="btn btn-ghost btn-sm" id="vmodal-yt" href="#" target="_blank" rel="noopener">${ICONS.youtube} ביוטיוב</a></div></div><div class="vmodal-more" id="vmodal-more"></div></div>`;
   document.body.append(modal);
   const closeV = () => { modal.hidden = true; document.getElementById("vmodal-frame").innerHTML = ""; document.body.style.overflow = ""; };
   window.openVideo = (id, title) => {
     try { const seen = JSON.parse(localStorage.getItem("sapir-seen") || "[]").filter(x => x !== id); seen.unshift(id); localStorage.setItem("sapir-seen", JSON.stringify(seen.slice(0, 12))); } catch (e) {}
     document.getElementById("vmodal-frame").innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" title="${title || ""}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
     document.getElementById("vmodal-title").textContent = title || "";
+    document.getElementById("vmodal-yt").href = `https://www.youtube.com/watch?v=${id}`;
+    const more = document.getElementById("vmodal-more"); more.innerHTML = "";
+    if (window.loadLibrary) window.loadLibrary().then(lib => { // עוד מאותו ערוץ
+      const cur = lib.find(v => v.id === id); if (!cur) return;
+      const rel = lib.filter(v => v.channel === cur.channel && !v.isShort && v.id !== id).slice(0, 6);
+      if (rel.length) more.innerHTML = `<div class="vmodal-more-title">עוד סרטונים</div><div class="vmodal-strip">${rel.map(v => window.videoCard(v, "vmini")).join("")}</div>`;
+      modal.querySelector(".vmodal-box").scrollTop = 0;
+    }).catch(() => {});
     modal.hidden = false; document.body.style.overflow = "hidden"; modal.querySelector(".vclose").focus();
   };
   modal.addEventListener("click", (e) => { if (e.target === modal || e.target.closest(".vclose")) closeV(); });
+  document.getElementById("vmodal-share").addEventListener("click", async () => {
+    const id = (document.getElementById("vmodal-frame").querySelector("iframe") || {}).src || ""; const vid = (id.match(/embed\/([^?]+)/) || [])[1]; if (!vid) return;
+    const url = `${location.origin}${location.pathname.replace(/[^/]*$/, "")}vod.html?v=${vid}`, title = document.getElementById("vmodal-title").textContent;
+    try { if (navigator.share) await navigator.share({ title, url }); else { await navigator.clipboard.writeText(url); const b = document.getElementById("vmodal-share"); b.textContent = "הקישור הועתק"; setTimeout(() => b.textContent = "שיתוף", 1500); } } catch (e) {}
+  });
   addEventListener("keydown", (e) => { if (e.key === "Escape" && !modal.hidden) closeV(); });
   document.addEventListener("click", (e) => { const b = e.target.closest(".vcard"); if (!b) return; if (b.classList.contains("vshort")) location.href = `shorts.html?v=${b.dataset.video}`; else window.openVideo(b.dataset.video, b.dataset.title); });
 
