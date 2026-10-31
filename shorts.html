@@ -2,141 +2,315 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
   <title>שורטס | משפחת ספיר</title>
   <meta name="description" content="כל השורטס של משפחת ספיר במקום אחד: גוללים ורואים, בלי סוף.">
+  <meta name="theme-color" content="#000000">
   <link rel="icon" href="assets/img/logo-small.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/style.css?v=202610311842">
   <style>
-    html, body { height: 100%; }
-    body { padding-bottom: 0 !important; overflow: hidden; }
-    .site-footer, .ticker-wrap, .to-top { display: none !important; }
+    /* ---- עמוד השורטס: מסך מלא, גלילה אנכית בלבד, נגן יוטיוב בשליטה מלאה ---- */
+    html, body { height: 100%; overflow: hidden !important; overscroll-behavior: none; background: #000; }
+    body { padding-bottom: 0 !important; touch-action: pan-y; }
+    .site-footer, .ticker-wrap, .to-top, .scroll-progress, .a11y-btn, .sparks { display: none !important; }
     main { animation: none !important; transform: none !important; }
-    .feed-wrap { position: fixed; top: 74px; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; }
-    .feed { height: 100%; width: min(100vw, calc((100vh - 74px) * 9 / 16)); overflow-y: auto; scroll-snap-type: y mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    :root { --top: 74px; --bottom: 0px; --slide-h: calc(100dvh - var(--top) - var(--bottom)); }
+    @supports not (height: 100dvh) { :root { --slide-h: calc(100vh - var(--top) - var(--bottom)); } }
+
+    .stage { position: fixed; top: var(--top); bottom: var(--bottom); left: 0; right: 0; display: flex; justify-content: center; align-items: stretch; background: #000; }
+    .feed { height: 100%; width: min(100%, calc((var(--slide-h) - 24px) * 9 / 16)); overflow-y: scroll; overflow-x: hidden; scroll-snap-type: y mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; touch-action: pan-y; }
     .feed::-webkit-scrollbar { display: none; }
-    .slide { height: 100%; scroll-snap-align: start; scroll-snap-stop: always; position: relative; background: #000; }
-    .slide iframe { width: 100%; height: 100%; border: 0; display: block; }
-    .slide .poster { position: absolute; inset: 0; background: center / cover no-repeat; filter: blur(18px) brightness(0.5); transform: scale(1.1); }
-    .slide .poster-img { position: absolute; inset: 0; margin: auto; max-width: 100%; max-height: 100%; object-fit: contain; }
-    .slide .meta { position: absolute; bottom: 0; inset-inline: 0; padding: 70px 18px 24px; background: linear-gradient(to top, rgba(0,0,0,0.85), transparent); color: #fff; pointer-events: none; }
-    .slide .meta b { display: block; font-size: 1.05rem; line-height: 1.35; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
-    .slide .meta small { color: rgba(255,255,255,0.75); }
-    .slide::after { content: ""; position: absolute; inset: 0 0 90px; } /* שכבת מגע מעל הנגן: הקשה = השהיה, גלילה חלקה */
-    .slide .tap span { width: 80px; height: 80px; border-radius: 50%; background: var(--holo); background-size: 300% 100%; animation: holo-shift 7s linear infinite, pulse 2.4s ease-in-out infinite; display: grid; place-items: center; box-shadow: 0 0 40px rgba(255,79,209,0.6); }
-    .slide .tap svg { width: 34px; height: 34px; fill: #0b0d2e; margin-inline-start: -4px; }
-    .side { position: fixed; top: 50%; inset-inline-start: calc(50% + min(50vw, (100vh - 74px) * 9 / 32) + 18px); transform: translateY(-50%); display: grid; gap: 10px; z-index: 5; }
-    .side button, .side a { width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--line-2); background: rgba(14,17,64,0.9); color: #fff; display: grid; place-items: center; text-decoration: none; font-size: 1.2rem; }
-    .side button:hover, .side a:hover { background: #fff; color: #0b0d2e; }
-    .counter { position: fixed; top: 86px; inset-inline-end: 16px; z-index: 5; background: rgba(0,0,0,0.5); color: #fff; padding: 4px 12px; border-radius: 999px; font-size: 0.85rem; backdrop-filter: blur(6px); }
-    .hint { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); z-index: 5; color: rgba(255,255,255,0.7); font-size: 0.85rem; background: rgba(0,0,0,0.5); padding: 6px 14px; border-radius: 999px; backdrop-filter: blur(6px); animation: page-in 0.6s var(--ease) 1s both; }
-    @media (max-width: 900px) { .feed-wrap { inset: 74px 0 0; } .feed { width: 100vw; } .side { inset-inline-start: auto; inset-inline-end: 10px; top: auto; bottom: 110px; transform: none; } .hint { bottom: 84px; } }
-    .a11y-btn { display: none; }
+    .slide { height: var(--slide-h); scroll-snap-align: start; scroll-snap-stop: always; position: relative; background: #000; overflow: hidden; }
+    .slide .box { position: absolute; inset: 12px 0; border-radius: 18px; overflow: hidden; background: #0a0a14; }
+    .slide .bg { position: absolute; inset: -10%; background: center / cover no-repeat; filter: blur(30px) brightness(0.45); }
+    .slide .poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.4s; }
+    .slide .yt, .slide .yt iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .slide .yt { opacity: 0; transition: opacity 0.35s; }
+    .slide.playing .yt { opacity: 1; }
+    .slide.playing .poster { opacity: 0; }
+    .slide .touch { position: absolute; inset: 0 0 70px; cursor: pointer; } /* שכבת מגע מעל הנגן: הקשה = השהיה/המשך, גלילה עוברת חלק */
+    .slide .flash { position: absolute; top: 50%; left: 50%; width: 88px; height: 88px; margin: -44px 0 0 -44px; border-radius: 50%; background: rgba(0,0,0,0.55); display: grid; place-items: center; opacity: 0; transform: scale(0.7); pointer-events: none; transition: opacity 0.25s, transform 0.25s; }
+    .slide .flash svg { width: 42px; height: 42px; fill: #fff; }
+    .slide .flash.show { opacity: 1; transform: scale(1); }
+    .slide .flash.stay { opacity: 1; transform: scale(1); }
+    .slide .spin { position: absolute; top: 50%; left: 50%; width: 46px; height: 46px; margin: -23px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.25); border-top-color: #fff; animation: spin 0.9s linear infinite; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
+    .slide.loading .spin { opacity: 1; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* מידע על הסרטון: ערוץ וכותרת, כמו ביוטיוב */
+    .slide .info { position: absolute; bottom: 0; inset-inline: 0; padding: 60px 14px 22px 74px; background: linear-gradient(to top, rgba(0,0,0,0.82), rgba(0,0,0,0.35) 60%, transparent); color: #fff; pointer-events: none; display: grid; gap: 8px; }
+    .slide .ch { display: flex; align-items: center; gap: 10px; pointer-events: auto; text-decoration: none; color: #fff; width: max-content; max-width: 100%; }
+    .slide .ch img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.8); background: #222; }
+    .slide .ch b { font-weight: 700; font-size: 0.95rem; text-shadow: 0 1px 8px rgba(0,0,0,0.8); }
+    .slide .ch .sub { font-size: 0.72rem; font-weight: 700; background: #fff; color: #000; padding: 4px 10px; border-radius: 999px; }
+    .slide .ttl { font-size: 0.98rem; line-height: 1.35; font-weight: 600; text-shadow: 0 1px 10px rgba(0,0,0,0.9); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .slide .views { font-size: 0.8rem; color: rgba(255,255,255,0.75); }
+
+    /* פס התקדמות ניתן לגרירה (להריץ קדימה ואחורה) */
+    .slide .bar { position: absolute; bottom: 0; inset-inline: 0; height: 22px; display: flex; align-items: flex-end; cursor: pointer; touch-action: none; }
+    .slide .bar .track { width: 100%; height: 3px; background: rgba(255,255,255,0.28); transition: height 0.15s; }
+    .slide .bar:hover .track, .slide .bar.drag .track { height: 6px; }
+    .slide .bar .fill { height: 100%; width: 0; background: #fff; transform-origin: right; }
+    .slide .bar .knob { position: absolute; bottom: -4px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transform: translateX(50%) scale(0); transition: transform 0.15s; box-shadow: 0 0 8px rgba(0,0,0,0.6); }
+    .slide .bar:hover .knob, .slide .bar.drag .knob { transform: translateX(50%) scale(1); }
+    .slide .time { position: absolute; bottom: 28px; inset-inline-end: 14px; font-size: 0.75rem; background: rgba(0,0,0,0.6); color: #fff; padding: 2px 8px; border-radius: 6px; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+    .slide .bar.drag ~ .time { opacity: 1; }
+
+    /* כפתורי פעולה בצד השקופית (בתוך הסרטון במובייל, לצידו בדסקטופ) */
+    .slide .acts { position: absolute; bottom: 24px; inset-inline-end: 8px; display: grid; gap: 14px; justify-items: center; z-index: 3; }
+    .acts button, .acts a { width: 46px; height: 46px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.14); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: #fff; display: grid; place-items: center; cursor: pointer; text-decoration: none; transition: transform 0.15s, background 0.2s; }
+    .acts button:active, .acts a:active { transform: scale(0.88); }
+    .acts button:hover, .acts a:hover { background: rgba(255,255,255,0.28); }
+    .acts svg { width: 24px; height: 24px; fill: currentColor; }
+    .acts .lbl { font-size: 0.68rem; color: #fff; margin-top: -8px; text-shadow: 0 1px 6px rgba(0,0,0,0.9); }
+    @media (min-width: 901px) {
+      .slide .acts { inset-inline-end: -64px; bottom: 12px; }
+      .acts button, .acts a { background: rgba(255,255,255,0.1); }
+      .slide .info { padding-inline-start: 14px; }
+    }
+
+    /* חיצים בדסקטופ */
+    .nav-arrows { position: fixed; inset-inline-start: calc(50% + (var(--slide-h) - 24px) * 9 / 32 + 72px); top: 50%; transform: translateY(-50%); display: grid; gap: 14px; z-index: 5; }
+    .nav-arrows button { width: 50px; height: 50px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.1); color: #fff; font-size: 1.3rem; cursor: pointer; display: grid; place-items: center; transition: background 0.2s, transform 0.15s; }
+    .nav-arrows button:hover { background: rgba(255,255,255,0.25); }
+    .nav-arrows button:active { transform: scale(0.9); }
+    .nav-arrows svg { width: 24px; height: 24px; fill: currentColor; }
+    @media (max-width: 900px) { .nav-arrows { display: none; } }
+
+    /* כפתור הפעלת קול (עד המגע הראשון) */
+    .sound-tip { position: fixed; top: calc(var(--top) + 14px); left: 50%; transform: translateX(-50%); z-index: 8; background: #fff; color: #000; border: 0; border-radius: 999px; padding: 10px 18px; font: 700 0.95rem/1 var(--font-body, Heebo, sans-serif); display: flex; align-items: center; gap: 8px; box-shadow: 0 8px 30px rgba(0,0,0,0.5); cursor: pointer; animation: tip-in 0.5s var(--ease) both; }
+    .sound-tip svg { width: 20px; height: 20px; fill: currentColor; }
+    @keyframes tip-in { from { opacity: 0; transform: translate(-50%, -10px); } }
+    .sound-tip.hide { opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+
+    /* סרגל עליון קטן במובייל במקום התפריט הגדול: חזרה, לוגו, "שורטס" */
+    .mini-top { display: none; }
+    @media (max-width: 900px) {
+      :root { --top: 0px; --bottom: calc(68px + env(safe-area-inset-bottom)); }
+      .site-header { display: none !important; }
+      .stage { bottom: var(--bottom); }
+      .feed { width: 100%; }
+      .slide .box { inset: 0; border-radius: 0; }
+      .slide .touch { inset: 0 0 110px; }
+      .mini-top { display: flex; position: fixed; top: 0; inset-inline: 0; z-index: 6; padding: calc(10px + env(safe-area-inset-top)) 12px 10px; align-items: center; justify-content: space-between; background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent); pointer-events: none; }
+      .mini-top > * { pointer-events: auto; }
+      .mini-top a { color: #fff; text-decoration: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: rgba(0,0,0,0.35); }
+      .mini-top a svg { width: 22px; height: 22px; fill: currentColor; }
+      .mini-top .t { font-family: var(--font-display, inherit); color: #fff; font-size: 1.3rem; text-shadow: 0 2px 10px rgba(0,0,0,0.8); display: flex; align-items: center; gap: 8px; }
+      .mini-top .t img { height: 30px; width: auto; }
+      .tabbar { background: rgba(0,0,0,0.9); }
+    }
+    .empty-feed { height: 100%; display: grid; place-items: center; text-align: center; padding: 30px; color: #fff; }
   </style>
 </head>
 <body data-page="shorts">
 <main id="main">
-  <div class="feed-wrap"><div class="feed" id="feed" aria-label="השורטס שלנו, גללו למטה לסרטון הבא"></div></div>
-  <div class="side">
-    <button id="prev" aria-label="השורט הקודם">↑</button>
-    <button id="next" aria-label="השורט הבא">↓</button>
-    <button id="mute" aria-label="השתקה" title="השתקה">🔊</button>
-    <a href="videos.html" aria-label="חזרה לסרטונים" title="לסרטונים">✕</a>
+  <div class="mini-top">
+    <a href="index.html" aria-label="חזרה לדף הבית"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7-1.4-1.4L13.2 12 7.6 6.4z"/></svg></a>
+    <div class="t"><img src="assets/img/logo-small.png" alt="">שורטס</div>
+    <a href="vod.html" aria-label="לסרטונים הארוכים"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4zM2 4v16h20V4zm8 4 6 4-6 4z"/></svg></a>
   </div>
-  <div class="counter" id="counter"></div>
-  <div class="hint">גללו למטה לשורט הבא, הקשה משהה</div>
+  <div class="stage"><div class="feed" id="feed" aria-label="השורטס שלנו, גללו למטה לסרטון הבא" tabindex="0"></div></div>
+  <div class="nav-arrows" aria-hidden="false">
+    <button id="prev" aria-label="השורט הקודם"><svg viewBox="0 0 24 24"><path d="M12 4l8 8-1.4 1.4L13 7.8V20h-2V7.8l-5.6 5.6L4 12z"/></svg></button>
+    <button id="next" aria-label="השורט הבא"><svg viewBox="0 0 24 24"><path d="M12 20l-8-8 1.4-1.4 5.6 5.6V4h2v12.2l5.6-5.6L20 12z"/></svg></button>
+  </div>
+  <button class="sound-tip" id="sound-tip" hidden><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>הפעלת קול</button>
 </main>
-<script src="assets/js/config.js"></script>
-<script src="assets/js/site.js"></script>
-<script src="assets/js/library.js"></script>
+<script src="assets/js/config.js?v=202610311842"></script>
+<script src="assets/js/site.js?v=202610311842"></script>
+<script src="assets/js/library.js?v=202610311842"></script>
 <script>
 (async () => {
-  const feed = document.getElementById("feed"), I = window.SAPIR_ICONS, S = window.SAPIR;
-  const start = new URLSearchParams(location.search).get("v");
+  const feed = document.getElementById("feed"), S = window.SAPIR;
+  const SVG = {
+    play: '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>',
+    pause: '<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>',
+    sound: '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>',
+    muted: '<svg viewBox="0 0 24 24"><path d="M16.5 12A4.5 4.5 0 0 0 14 8v2.2l2.5 2.5zM19 12a7 7 0 0 1-1.5 4.3l1.4 1.4A9 9 0 0 0 21 12a9 9 0 0 0-7-8.8v2.1A7 7 0 0 1 19 12zM4.3 3 3 4.3 7.7 9H3v6h4l5 5v-6.7l4.3 4.3a7 7 0 0 1-2.3 1.2v2.1a9 9 0 0 0 3.7-1.8L19.7 21l1.3-1.3zM12 4 9.9 6.1 12 8.2z"/></svg>',
+    share: '<svg viewBox="0 0 24 24"><path d="M14 9V5l7 7-7 7v-4.1c-5 0-8.5 1.6-11 5.1 1-5 4-10 11-11z"/></svg>',
+    yt: '<svg viewBox="0 0 24 24"><path d="M23 7.1a3 3 0 0 0-2.1-2.1C19 4.5 12 4.5 12 4.5s-7 0-8.9.5A3 3 0 0 0 1 7.1 31 31 0 0 0 .5 12 31 31 0 0 0 1 16.9 3 3 0 0 0 3.1 19c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1c.4-1.6.5-3.3.5-4.9s-.1-3.3-.5-4.9zM9.8 15.5v-7l6 3.5-6 3.5z"/></svg>'
+  };
+  const startId = new URLSearchParams(location.search).get("v");
+  history.replaceState(null, "", "shorts.html"); // רענון = שורט חדש, קישור שיתוף נשאר דרך כפתור השיתוף
+
   let shorts = [];
   try { shorts = window.shortsOf(await window.loadLibrary()); }
   catch (e) { try { const ch = S.channels.find(c => c.id === "sapirtv"); shorts = await window.fetchChannelVideos(window.channelIdOf(ch)); } catch (e2) {} }
-  if (!shorts.length) { feed.innerHTML = `<div class="slide" style="display:grid;place-items:center;padding:30px;text-align:center"><div><h2>השורטס ייטענו כאן אחרי ההעלאה לאוויר</h2><a class="btn btn-ink" href="videos.html">לסרטונים</a></div></div>`; return; }
+  if (!shorts.length) { feed.innerHTML = `<div class="empty-feed"><div><h2>השורטס ייטענו כאן בעוד רגע</h2><a class="btn btn-ink" href="index.html">לדף הבית</a></div></div>`; return; }
 
-  // בכל כניסה סדר אקראי חדש: החדשים ביותר נכנסים קצת יותר (חצי מהפיד מהעשירון העליון), והשאר מכל הזמנים
-  const seed = Date.now() ^ (Math.random() * 1e9);
+  /* סדר אקראי חדש בכל כניסה: החדשים נכנסים קצת יותר, והשאר מכל הזמנים. בלי חזרות עד שנגמר הסבב. */
+  const seed = (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0;
   const newest = shorts.slice(0, Math.max(20, Math.floor(shorts.length * 0.15)));
   const rest = shorts.slice(newest.length);
-  const mix = (sd) => { const a = window.shuffled(newest, sd), b = window.shuffled(rest, sd ^ 0x9e3779b9), out = []; let i = 0, j = 0; while (i < a.length || j < b.length) { if (i < a.length) out.push(a[i++]); if (j < b.length) out.push(b[j++]); if (j < b.length) out.push(b[j++]); } return out; };
-  let order = mix(seed);
-  if (start) { const k = order.findIndex(v => v.id === start); if (k > 0) order = [order[k], ...order.slice(0, k), ...order.slice(k + 1)]; else if (k < 0) { const v = shorts.find(x => x.id === start); if (v) order.unshift(v); } }
+  const mix = (sd) => { const a = window.shuffled(newest, sd), b = window.shuffled(rest, (sd ^ 0x9e3779b9) >>> 0), out = []; let i = 0, j = 0; while (i < a.length || j < b.length) { if (i < a.length) out.push(a[i++]); if (j < b.length) out.push(b[j++]); if (j < b.length) out.push(b[j++]); } return out; };
+  let order = mix(seed), round = 1;
+  if (startId) { const k = order.findIndex(v => v.id === startId); if (k > 0) order = [order[k], ...order.slice(0, k), ...order.slice(k + 1)]; else if (k < 0) { const v = shorts.find(x => x.id === startId); if (v) order.unshift(v); } }
 
-  const chName = id => (S.channels.find(c => c.id === id) || {}).name || "";
-  const slideHtml = (v, i) => `
-    <section class="slide" data-i="${i}" data-id="${v.id}" aria-label="${v.title.replace(/"/g, "&quot;")}">
-      <div class="poster" style="background-image:url(${v.thumb})"></div>
-      <img class="poster-img" src="https://i.ytimg.com/vi/${v.id}/oardefault.jpg" onerror="this.onerror=null;this.src='${v.thumb}'" alt="" loading="lazy">
-      <div class="meta"><b>${v.title}</b><small>${chName(v.channel)}${v.views ? ", " + window.fmtViews(v.views) : ""}</small></div>
-    </section>`;
-  const PAGE = 40;
-  let rendered = 0, round = 1;
+  const chOf = id => S.channels.find(c => c.id === id) || S.channels[0];
+  const esc = s => String(s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+  const slideHtml = (v, i) => { const c = chOf(v.channel); return `
+    <section class="slide loading" data-i="${i}" data-id="${v.id}" aria-label="${esc(v.title)}">
+      <div class="box">
+        <div class="bg" style="background-image:url(${v.thumb})"></div>
+        <img class="poster" src="https://i.ytimg.com/vi/${v.id}/oardefault.jpg" onerror="this.onerror=null;this.src='${v.thumb}'" alt="" ${i < 2 ? "" : 'loading="lazy"'}>
+        <div class="yt"><div id="yt-${i}"></div></div>
+        <div class="spin"></div>
+        <div class="touch" aria-hidden="true"></div>
+        <div class="flash">${SVG.play}</div>
+        <div class="info">
+          <a class="ch" href="${c.url}" target="_blank" rel="noopener"><img src="${c.avatar || ""}" alt=""><b>${esc(c.name)}</b><span class="sub">הרשמה</span></a>
+          <div class="ttl">${esc(v.title)}</div>
+          ${v.views ? `<div class="views">${window.fmtViews(v.views)}</div>` : ""}
+        </div>
+        <div class="acts">
+          <button class="b-mute" aria-label="קול">${SVG.muted}</button>
+          <button class="b-share" aria-label="שיתוף">${SVG.share}</button><span class="lbl">שיתוף</span>
+          <a class="b-yt" href="https://www.youtube.com/shorts/${v.id}" target="_blank" rel="noopener" aria-label="ביוטיוב">${SVG.yt}</a><span class="lbl">יוטיוב</span>
+        </div>
+        <div class="bar" aria-label="מיקום בסרטון"><div class="track"><div class="fill"></div></div><div class="knob"></div></div>
+        <div class="time">0:00</div>
+      </div>
+    </section>`; };
+
+  const PAGE = 30;
+  let rendered = 0;
   const addSlides = () => {
-    if (rendered >= order.length) { order = order.concat(mix(seed + round++)); } // פיד אינסופי: סבב מעורבב חדש
+    if (rendered >= order.length) order = order.concat(mix((seed + round++ * 7919) >>> 0)); // פיד אינסופי: סבב מעורבב חדש
     const chunk = order.slice(rendered, rendered + PAGE);
     feed.insertAdjacentHTML("beforeend", chunk.map((v, k) => slideHtml(v, rendered + k)).join(""));
-    const newSlides = [...feed.children].slice(rendered);
+    [...feed.children].slice(rendered).forEach(sl => io.observe(sl));
     rendered += chunk.length;
-    newSlides.forEach(sl => io.observe(sl));
   };
 
-  // נגן: מסגרת אחת לכל שקופית סמוכה, רק הנוכחית מנגנת. שליטה דרך postMessage של נגן יוטיוב.
-  let muted = true, current = -1, unlockedSound = false;
-  const counter = document.getElementById("counter"), muteBtn = document.getElementById("mute");
-  const cmd = (iframe, func, args = []) => { try { iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func, args }), "*"); } catch (e) {} };
-  const ensureFrame = (sl, autoplay) => {
-    let f = sl.querySelector("iframe");
-    if (f) return f;
-    const id = sl.dataset.id;
-    f = document.createElement("iframe");
-    f.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=${autoplay ? 1 : 0}&mute=${muted ? 1 : 0}&playsinline=1&rel=0&controls=0&loop=1&playlist=${id}&enablejsapi=1&iv_load_policy=3&modestbranding=1`;
-    f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-    f.allowFullscreen = true; f.title = sl.getAttribute("aria-label");
-    f.addEventListener("load", () => { cmd(f, "addEventListener", ["onReady"]); if (sl.dataset.i == current) { cmd(f, muted ? "mute" : "unMute"); cmd(f, "playVideo"); } });
-    sl.insertBefore(f, sl.querySelector(".meta"));
-    return f;
-  };
-  const removeFrame = (sl) => { const f = sl.querySelector("iframe"); if (f) f.remove(); };
-  const activate = (i) => {
-    const slides = [...feed.children];
-    current = i; counter.textContent = `${i + 1}`;
-    slides.forEach((sl, j) => {
-      const d = Math.abs(j - i);
-      if (d === 0) { const f = ensureFrame(sl, true); cmd(f, muted ? "mute" : "unMute"); cmd(f, "playVideo"); }
-      else if (d === 1) { const f = ensureFrame(sl, false); cmd(f, "pauseVideo"); try { cmd(f, "seekTo", [0, true]); } catch (e) {} }
-      else removeFrame(sl);
+  /* ---- נגן יוטיוב (IFrame API): נגן לשקופית הנוכחית ולשכנותיה, רק הנוכחית מנגנת ---- */
+  const ytReady = new Promise(res => { if (window.YT && YT.Player) return res(); window.onYouTubeIframeAPIReady = res; const s = document.createElement("script"); s.src = "https://www.youtube.com/iframe_api"; document.head.append(s); });
+  const players = new Map(); // i -> { p, ready, playing }
+  let muted = localStorage.getItem("sapir-shorts-sound") !== "1", current = -1, soundUnlocked = !muted;
+  const soundTip = document.getElementById("sound-tip");
+
+  const setSlideState = (sl, playing) => { sl.classList.toggle("playing", playing); sl.classList.remove("loading"); const fl = sl.querySelector(".flash"); fl.classList.remove("stay"); if (!playing && sl.dataset.user === "pause") { fl.innerHTML = SVG.play; fl.classList.add("stay"); } };
+  const ensurePlayer = async (i) => {
+    if (players.has(i)) return players.get(i);
+    const sl = feed.children[i]; if (!sl) return null;
+    await ytReady;
+    if (players.has(i)) return players.get(i);
+    const entry = { p: null, ready: false };
+    players.set(i, entry);
+    entry.p = new YT.Player(`yt-${i}`, {
+      host: "https://www.youtube-nocookie.com", videoId: sl.dataset.id, width: "100%", height: "100%",
+      playerVars: { autoplay: 0, mute: muted ? 1 : 0, playsinline: 1, controls: 0, rel: 0, loop: 1, playlist: sl.dataset.id, iv_load_policy: 3, modestbranding: 1, fs: 0, disablekb: 1, cc_load_policy: 0, origin: location.origin },
+      events: {
+        onReady: () => { entry.ready = true; if (+sl.dataset.i === current) play(i); },
+        onStateChange: (e) => {
+          const st = e.data;
+          if (st === YT.PlayerState.PLAYING) { setSlideState(sl, true); if (+sl.dataset.i !== current) { try { entry.p.pauseVideo(); } catch (x) {} } }
+          else if (st === YT.PlayerState.PAUSED) setSlideState(sl, false);
+          else if (st === YT.PlayerState.ENDED) { try { entry.p.seekTo(0, true); entry.p.playVideo(); } catch (x) {} }
+        },
+        onError: () => { sl.classList.remove("loading"); if (+sl.dataset.i === current) setTimeout(() => go(1), 900); }
+      }
     });
-    history.replaceState(null, "", `shorts.html?v=${slides[i].dataset.id}`);
-    if (i >= rendered - 5) addSlides();
+    return entry;
+  };
+  const play = async (i) => {
+    const en = await ensurePlayer(i); if (!en || !en.ready || i !== current) return;
+    const sl = feed.children[i]; sl.dataset.user = "";
+    try { if (muted) en.p.mute(); else en.p.unMute(); en.p.playVideo(); } catch (e) {}
+    // אם הדפדפן חסם ניגון עם קול, חוזרים לשקט ומציעים להדליק בקול במגע
+    if (!muted) setTimeout(() => { try { if (i === current && en.p.getPlayerState() !== YT.PlayerState.PLAYING) { muted = true; soundUnlocked = false; en.p.mute(); en.p.playVideo(); updateMuteUi(); } } catch (e) {} }, 1500);
+  };
+  const pause = (i) => { const en = players.get(i); if (en && en.ready) { try { en.p.pauseVideo(); } catch (e) {} } };
+  const dropPlayer = (i) => { const en = players.get(i); if (!en) return; players.delete(i); try { en.p.destroy(); } catch (e) {} const sl = feed.children[i]; if (sl) { const box = sl.querySelector(".yt"); box.innerHTML = `<div id="yt-${i}"></div>`; sl.classList.remove("playing"); sl.classList.add("loading"); } };
+
+  const activate = (i) => {
+    if (i === current) return;
+    const prev = current; current = i;
+    if (prev >= 0) { pause(prev); const en = players.get(prev); if (en && en.ready) { try { en.p.seekTo(0, true); } catch (e) {} } }
+    for (const k of [...players.keys()]) if (Math.abs(k - i) > 1) dropPlayer(k);
+    play(i);
+    ensurePlayer(i + 1); if (i > 0) ensurePlayer(i - 1);
+    if (i >= rendered - 6) addSlides();
+    feed.children[i].dataset.user = "";
   };
   const io = new IntersectionObserver((entries) => {
-    entries.forEach(en => { if (en.isIntersecting && en.intersectionRatio >= 0.6) { const i = +en.target.dataset.i; if (i !== current) activate(i); } });
+    entries.forEach(en => { if (en.isIntersecting && en.intersectionRatio >= 0.6) activate(+en.target.dataset.i); });
   }, { root: feed, threshold: [0.6] });
   addSlides();
   feed.scrollTop = 0;
-  setTimeout(() => { if (current < 0) activate(0); }, 300);
+  setTimeout(() => { if (current < 0) activate(0); }, 250);
 
-  // קול: הדפדפן מרשה אוטופליי רק בשקט, אז מתחילים בשקט ומדליקים קול במגע הראשון
-  const setMuted = (m) => { muted = m; muteBtn.textContent = m ? "🔇" : "🔊"; muteBtn.setAttribute("aria-label", m ? "הפעלת קול" : "השתקה"); const f = feed.children[current] && feed.children[current].querySelector("iframe"); if (f) cmd(f, m ? "mute" : "unMute"); };
-  setMuted(true);
-  const soundTip = document.createElement("button"); soundTip.className = "btn btn-ink btn-sm sound-tip"; soundTip.textContent = "🔊 הפעלת קול"; soundTip.style.cssText = "position:fixed;top:86px;left:50%;transform:translateX(-50%);z-index:6";
-  document.body.append(soundTip);
-  const unlock = () => { if (unlockedSound) return; unlockedSound = true; setMuted(false); soundTip.remove(); };
+  /* ---- קול ---- */
+  const updateMuteUi = () => { feed.querySelectorAll(".b-mute").forEach(b => { b.innerHTML = muted ? SVG.muted : SVG.sound; b.setAttribute("aria-label", muted ? "הפעלת קול" : "השתקה"); }); soundTip.hidden = !muted; soundTip.classList.toggle("hide", !muted); };
+  const setMuted = (m) => { muted = m; localStorage.setItem("sapir-shorts-sound", m ? "0" : "1"); const en = players.get(current); if (en && en.ready) { try { m ? en.p.mute() : en.p.unMute(); if (!m) en.p.playVideo(); } catch (e) {} } updateMuteUi(); };
+  const unlock = () => { if (soundUnlocked) return; soundUnlocked = true; setMuted(false); };
+  updateMuteUi();
   soundTip.addEventListener("click", unlock);
-  feed.addEventListener("pointerdown", unlock, { once: true });
-  muteBtn.addEventListener("click", () => { unlockedSound = true; soundTip.remove(); setMuted(!muted); });
+  feed.addEventListener("pointerdown", unlock, { once: true, passive: true });
 
-  const go = (d) => { const n = Math.min(feed.children.length - 1, Math.max(0, current + d)); feed.children[n].scrollIntoView({ behavior: "smooth" }); };
+  /* ---- ניווט: גלגלת, חיצים, מקלדת. במגע: גלילה טבעית עם הצמדה ---- */
+  const go = (d) => { const n = Math.min(feed.children.length - 1, Math.max(0, current + d)); if (n !== current) feed.children[n].scrollIntoView({ behavior: "smooth", block: "start" }); };
+  let wheelLock = 0;
+  feed.addEventListener("wheel", (e) => { e.preventDefault(); const now = Date.now(); if (now - wheelLock < 550 || Math.abs(e.deltaY) < 8) return; wheelLock = now; unlock(); go(e.deltaY > 0 ? 1 : -1); }, { passive: false });
   document.getElementById("next").addEventListener("click", () => { unlock(); go(1); });
   document.getElementById("prev").addEventListener("click", () => { unlock(); go(-1); });
-  addEventListener("keydown", (e) => { if (e.key === "ArrowDown" || e.key === " " || e.key === "PageDown") { e.preventDefault(); unlock(); go(1); } if (e.key === "ArrowUp" || e.key === "PageUp") { e.preventDefault(); unlock(); go(-1); } if (e.key.toLowerCase() === "m") setMuted(!muted); });
-  // הקשה על הסרטון: השהיה/המשך
-  feed.addEventListener("click", (e) => { const sl = e.target.closest(".slide"); if (!sl || +sl.dataset.i !== current) return; const f = sl.querySelector("iframe"); if (!f) return; sl.dataset.paused = sl.dataset.paused === "1" ? "0" : "1"; cmd(f, sl.dataset.paused === "1" ? "pauseVideo" : "playVideo"); });
+  const seekBy = (s) => { const en = players.get(current); if (en && en.ready) { try { en.p.seekTo(Math.max(0, en.p.getCurrentTime() + s), true); } catch (e) {} } };
+  addEventListener("keydown", (e) => {
+    if (e.target.tagName === "INPUT") return;
+    if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === "j") { e.preventDefault(); unlock(); go(1); }
+    else if (e.key === "ArrowUp" || e.key === "PageUp" || e.key === "k") { e.preventDefault(); unlock(); go(-1); }
+    else if (e.key === " ") { e.preventDefault(); togglePause(); }
+    else if (e.key.toLowerCase() === "m") setMuted(!muted);
+    else if (e.key === "ArrowRight") seekBy(-5); // RTL: ימינה = אחורה
+    else if (e.key === "ArrowLeft") seekBy(5);
+  });
+
+  /* ---- הקשה על הסרטון: השהיה/המשך עם הבהוב אייקון ---- */
+  const togglePause = () => {
+    const sl = feed.children[current], en = players.get(current); if (!sl || !en || !en.ready) return;
+    const fl = sl.querySelector(".flash");
+    let st; try { st = en.p.getPlayerState(); } catch (e) { return; }
+    if (st === YT.PlayerState.PLAYING) { sl.dataset.user = "pause"; en.p.pauseVideo(); fl.innerHTML = SVG.pause; }
+    else { sl.dataset.user = ""; en.p.playVideo(); fl.innerHTML = SVG.play; fl.classList.remove("stay"); }
+    fl.classList.add("show"); setTimeout(() => fl.classList.remove("show"), 500);
+  };
+  feed.addEventListener("click", (e) => {
+    const sl = e.target.closest(".slide"); if (!sl) return;
+    if (e.target.closest(".b-mute")) { soundUnlocked = true; setMuted(!muted); return; }
+    if (e.target.closest(".b-share")) { share(sl); return; }
+    if (e.target.closest(".bar") || e.target.closest("a")) return;
+    if (+sl.dataset.i !== current) { sl.scrollIntoView({ behavior: "smooth" }); return; }
+    togglePause();
+  });
+  const share = async (sl) => {
+    const url = `${location.origin}${location.pathname.replace(/[^/]*$/, "")}shorts.html?v=${sl.dataset.id}`;
+    const title = sl.getAttribute("aria-label");
+    try { if (navigator.share) await navigator.share({ title, text: `${title} | משפחת ספיר`, url }); else { await navigator.clipboard.writeText(url); toast("הקישור הועתק"); } } catch (e) {}
+  };
+  const toast = (t) => { const d = document.createElement("div"); d.textContent = t; d.style.cssText = "position:fixed;bottom:calc(var(--bottom) + 24px);left:50%;transform:translateX(-50%);background:#fff;color:#000;padding:10px 18px;border-radius:999px;font-weight:700;z-index:9;box-shadow:0 8px 30px rgba(0,0,0,.5)"; document.body.append(d); setTimeout(() => d.remove(), 1800); };
+
+  /* ---- פס התקדמות: מתעדכן כל רבע שנייה, גרירה מריצה קדימה ואחורה ---- */
+  const fmt = s => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+  let dragging = null;
+  setInterval(() => {
+    if (dragging) return;
+    const sl = feed.children[current], en = players.get(current); if (!sl || !en || !en.ready) return;
+    try { const d = en.p.getDuration() || 0, t = en.p.getCurrentTime() || 0; if (d) { const pct = Math.min(100, t / d * 100); sl.querySelector(".fill").style.width = pct + "%"; sl.querySelector(".knob").style.insetInlineStart = `calc(${pct}% )`; sl.querySelector(".time").textContent = `${fmt(t)} / ${fmt(d)}`; } } catch (e) {}
+  }, 250);
+  const barPct = (bar, x) => { const r = bar.getBoundingClientRect(); return Math.max(0, Math.min(1, (r.right - x) / r.width)); }; // RTL: ההתחלה מימין
+  feed.addEventListener("pointerdown", (e) => {
+    const bar = e.target.closest(".bar"); if (!bar) return;
+    const sl = bar.closest(".slide"); if (+sl.dataset.i !== current) return;
+    e.preventDefault(); bar.setPointerCapture(e.pointerId); dragging = { bar, sl }; bar.classList.add("drag");
+    const move = (ev) => { const p = barPct(bar, ev.clientX); sl.querySelector(".fill").style.width = p * 100 + "%"; sl.querySelector(".knob").style.insetInlineStart = `calc(${p * 100}% )`; const en = players.get(current); try { const d = en.p.getDuration() || 0; sl.querySelector(".time").textContent = `${fmt(p * d)} / ${fmt(d)}`; } catch (x) {} };
+    move(e);
+    const up = (ev) => { bar.removeEventListener("pointermove", move); bar.removeEventListener("pointerup", up); bar.removeEventListener("pointercancel", up); bar.classList.remove("drag"); const en = players.get(current); try { const d = en.p.getDuration() || 0; en.p.seekTo(barPct(bar, ev.clientX) * d, true); en.p.playVideo(); sl.dataset.user = ""; } catch (x) {} dragging = null; };
+    bar.addEventListener("pointermove", move); bar.addEventListener("pointerup", up); bar.addEventListener("pointercancel", up);
+  });
+
+  // כשחוזרים לטאב ממשיכים, כשעוזבים עוצרים (כמו באפליקציה)
+  document.addEventListener("visibilitychange", () => { if (document.hidden) pause(current); else if (feed.children[current] && feed.children[current].dataset.user !== "pause") play(current); });
 })();
 </script>
 </body>

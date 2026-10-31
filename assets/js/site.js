@@ -243,6 +243,10 @@
     document.querySelectorAll(".grid, .games-list, .series, .steps, .audience, .timeline, .kv").forEach(el => { if (!el.classList.contains("reveal-stagger")) { el.classList.add("reveal-stagger"); io.observe(el); } });
   };
   observeReveals();
+  // רשת ביטחון: שום דבר לא נשאר שקוף אם ה-observer לא הספיק (טאב ברקע, דפדפנים ישנים)
+  const revealVisible = () => document.querySelectorAll(".reveal:not(.in), .reveal-stagger:not(.in)").forEach(el => { const r = el.getBoundingClientRect(); if (r.top < innerHeight + 40 && r.bottom > -40) el.classList.add("in"); });
+  setTimeout(revealVisible, 1500); setTimeout(revealVisible, 4000);
+  addEventListener("scroll", () => { if (!revealVisible.t) revealVisible.t = setTimeout(() => { revealVisible.t = 0; revealVisible(); }, 400); }, { passive: true });
   new MutationObserver(observeReveals).observe(document.querySelector("main") || document.body, { childList: true, subtree: true });
 
   // זרקור והטיה בהירו
@@ -327,6 +331,17 @@
       <span class="vtitle">${v.title || ""}</span>
       ${v.published ? `<span class="vdate">${window.fmtDate(v.published.slice(0, 10))}</span>` : ""}
     </button>`;
+  /* פוסטר עם כפתור נגינה: התמונה עולה מיד, נגן יוטיוב נטען רק בלחיצה (מהיר, ועובד גם כשההטמעה איטית) */
+  window.posterPlayer = (v) => `
+    <button class="poster-play" type="button" data-video="${v.id}" data-title="${(v.title || "").replace(/"/g, "&quot;")}" aria-label="נגן: ${(v.title || "").replace(/"/g, "&quot;")}">
+      <img src="https://i.ytimg.com/vi/${v.id}/maxresdefault.jpg" onerror="this.onerror=null;this.src='${v.thumb || `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`}'" alt="">
+      <span class="pp-btn">${ICONS.play}</span>
+    </button>`;
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest(".poster-play"); if (!b) return;
+    const frame = b.parentElement;
+    frame.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${b.dataset.video}?autoplay=1&rel=0&playsinline=1" title="${b.dataset.title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  });
   // נגן צף
   const modal = document.createElement("div"); modal.className = "vmodal"; modal.setAttribute("role", "dialog"); modal.setAttribute("aria-modal", "true"); modal.setAttribute("aria-label", "נגן וידאו"); modal.hidden = true;
   modal.innerHTML = `<div class="vmodal-box"><button class="vclose" aria-label="סגירה">✕</button><div class="video-frame" id="vmodal-frame"></div><div class="vmodal-title" id="vmodal-title"></div></div>`;

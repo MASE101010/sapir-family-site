@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/style.css?v=202610311842">
 </head>
 <body data-page="home">
 <main id="main">
@@ -162,23 +162,32 @@
 
 </main>
 
-<script src="assets/js/config.js"></script>
-<script src="assets/js/site.js"></script>
+<script src="assets/js/config.js?v=202610311842"></script>
+<script src="assets/js/site.js?v=202610311842"></script>
+<script src="assets/js/library.js?v=202610311842"></script>
 <script>
 (async () => {
   const S = window.SAPIR, I = window.SAPIR_ICONS;
 
-  // סרטון מומלץ: הסרטון החדש ביותר מהערוץ הראשי (RSS), עם גיבוי לפלייליסט ההעלאות
+  // הסרטון החדש: הסרטון הארוך האחרון מהערוץ הראשי (מהספרייה, עם גיבוי ל-RSS). פוסטר מיידי, הנגן נפתח בלחיצה.
   const fv = document.getElementById("featured-video");
   const mainCh = S.channels.find(c => c.id === "family") || S.channels[0];
+  const showFeatured = (v) => {
+    fv.innerHTML = window.posterPlayer(v);
+    fv.insertAdjacentHTML("afterend", `<p class="muted" style="margin:10px 4px 0;font-size:.95rem"><strong style="color:#fff">${v.title}</strong>, עלה ב-${window.fmtDate(v.published.slice(0, 10))}</p>`);
+  };
   const fallbackFeatured = () => { fv.innerHTML = S.featuredPlaylistId
     ? `<iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=${S.featuredPlaylistId}" title="הסרטון החדש של משפחת ספיר" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`
     : `<div class="video-placeholder"><div><div class="play">${I.play}</div><strong>הסרטון החדש שלנו</strong></div></div>`; };
-  window.fetchChannelVideos(window.channelIdOf(mainCh)).then(vs => {
-    const v = vs[0];
-    fv.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${v.id}?rel=0" title="${v.title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
-    fv.insertAdjacentHTML("afterend", `<p class="muted" style="margin:10px 4px 0;font-size:.95rem"><strong style="color:#fff">${v.title}</strong>, עלה ב-${window.fmtDate(v.published.slice(0, 10))}</p>`);
-  }).catch(fallbackFeatured);
+  (async () => {
+    try {
+      const vs = await window.fetchChannelVideos(window.channelIdOf(mainCh));
+      const v = vs.find(x => !/#shorts/i.test(x.title)) || vs[0];
+      showFeatured(v);
+    } catch (e) {
+      try { const lib = await window.loadLibrary(); const v = lib.find(x => x.channel === "family" && !x.isShort) || lib.find(x => !x.isShort); if (!v) throw 0; showFeatured(v); } catch (e2) { fallbackFeatured(); }
+    }
+  })();
 
   // משחקים בבית (3 ראשונים)
   const gameIcons = {

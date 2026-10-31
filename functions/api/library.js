@@ -22,7 +22,7 @@ export async function onRequestGet(ctx) {
 async function handle({ request, env }) {
   const url = new URL(request.url);
   const cache = caches.default;
-  const cacheKey = new Request(url.origin + "/api/library?v=9", request);
+  const cacheKey = new Request(url.origin + "/api/library?v=10", request);
   if (!url.searchParams.has("fresh")) { const hit = await cache.match(cacheKey); if (hit) return hit; }
 
   const key = env.YT_API_KEY;
@@ -40,8 +40,8 @@ async function handle({ request, env }) {
       const have = new Set(built.map(v => v.id));
       const extra = fresh.filter(v => !have.has(v.id)); extra.forEach(v => { v.fresh = true; });
       pending = await markShorts(extra, url.origin);
-      const views = new Map(fresh.map(v => [v.id, v.views]));
-      for (const v of built) if (views.get(v.id)) v.views = Math.max(v.views || 0, views.get(v.id));
+      const byId = new Map(fresh.map(v => [v.id, v]));
+      for (const v of built) { const f = byId.get(v.id); if (!f) continue; if (f.views) v.views = Math.max(v.views || 0, f.views); if (f.title && /[֐-׿]/.test(f.title)) v.title = f.title; } // ה-RSS מחזיר את כותרת המקור בעברית
       videos = [...built, ...extra];
     } else { videos = fresh; pending = await markShorts(videos, url.origin); }
   }

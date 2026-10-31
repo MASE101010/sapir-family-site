@@ -4,7 +4,7 @@
 yt-dlp במצב flat-playlist קורא את לשוניות ה-Videos וה-Shorts של כל ערוץ (כל ההיסטוריה), עם אורך, צפיות ותאריך.
 רץ ב-GitHub Actions כל כמה שעות (.github/workflows/library.yml) ומתחייב לריפו; האתר מגיש את הקובץ דרך /api/library.
 """
-import json, subprocess, sys, datetime, re
+import json, subprocess, sys, datetime, re, urllib.request, urllib.parse, concurrent.futures
 from pathlib import Path
 
 CHANNELS = [
@@ -20,7 +20,7 @@ OUT = Path(__file__).resolve().parent.parent / "data" / "library.json"
 
 def tab(channel_id, name):
     url = f"https://www.youtube.com/channel/{channel_id}/{name}"
-    cmd = ["yt-dlp", "--flat-playlist", "--dump-single-json", "--no-warnings", "--ignore-errors", "--extractor-args", "youtubetab:approximate_date", url]
+    cmd = ["yt-dlp", "--flat-playlist", "--dump-single-json", "--no-warnings", "--ignore-errors", "--extractor-args", "youtubetab:approximate_date", "--extractor-args", "youtube:lang=he", "--add-headers", "Accept-Language:he-IL,he;q=0.9", url]
     try:
         out = subprocess.run(cmd, capture_output=True, text=True, timeout=900)
         if not out.stdout.strip():
@@ -35,6 +35,26 @@ def ts(e):
     d = e.get("upload_date")
     if d and re.fullmatch(r"\d{8}", d): return f"{d[:4]}-{d[4:6]}-{d[6:]}T12:00:00Z"
     return ""
+
+HEB = re.compile(r"[\u0590-\u05ff]")
+
+def original_title(vid):
+    """כותרת המקור (בעברית) דרך oEmbed, לסרטונים שחזרו עם כותרת מתורגמת לאנגלית."""
+    try:
+        q = urllib.parse.urlencode({"url": f"https://www.youtube.com/watch?v={vid}", "format": "json"})
+        req = urllib.request.Request(f"https://www.youtube.com/oembed?{q}", headers={"Accept-Language": "he-IL,he;q=0.9", "User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=15) as r:
+            return json.load(r).get("title") or ""
+    except Exception:
+        return ""
+
+def hebrewize(videos):
+    todo = [v for v in videos.values() if v["title"] and not HEB.search(v["title"]) and not v.get("titleChecked")]
+    print(f"titles without Hebrew: {len(todo)}")
+    with concurrent.futures.ThreadPoolExecutor(8) as ex:
+        for v, t in zip(todo, ex.map(lambda v: original_title(v["id"]), todo)):
+            v["titleChecked"] = True
+            if t and HEB.search(t): v["title"] = t
 
 def main():
     old = {}
@@ -63,6 +83,10 @@ def main():
         print(f"only {len(videos)} videos; keeping the previous file"); sys.exit(0 if old else 1)
     # סרטונים שהיו בקובץ הקודם ולא חזרו הפעם (חסימה זמנית וכו') נשמרים
     for vid, v in old.items(): videos.setdefault(vid, v)
+    for vid, v in videos.items():
+        if old.get(vid, {}).get("titleChecked") and not HEB.search(v["title"]) and HEB.search(old[vid].get("title", "")): v["title"] = old[vid]["title"]
+        if old.get(vid, {}).get("titleChecked"): v["titleChecked"] = True
+    hebrewize(videos)
     # סרטונים רגילים לפי תאריך (חדש לראשון); שורטס לפי המיקום בלשונית (חדש לראשון), משולבים בין הערוצים
     vod = sorted([v for v in videos.values() if not v["isShort"]], key=lambda v: v["published"], reverse=True)
     shorts = sorted([v for v in videos.values() if v["isShort"]], key=lambda v: (v["rank"], v["channel"] != "sapirtv"))

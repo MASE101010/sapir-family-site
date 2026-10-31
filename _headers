@@ -1,0 +1,10 @@
+/*.html
+  Cache-Control: no-cache
+/
+  Cache-Control: no-cache
+/assets/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/data/library.json
+  Cache-Control: public, max-age=600
+/data/posts.json
+  Cache-Control: no-cache

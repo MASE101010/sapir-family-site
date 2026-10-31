@@ -8,20 +8,36 @@
   <link rel="icon" href="assets/img/logo-small.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/style.css?v=202610311842">
   <style>
     .ticker-wrap { display: none; }
-    /* בילבורד */
-    .billboard { position: relative; min-height: min(78vh, 720px); display: flex; align-items: flex-end; overflow: hidden; margin-top: -1px; }
-    .billboard .bg { position: absolute; inset: 0; background: center 30% / cover no-repeat; transform: scale(1.04); transition: opacity 0.8s; }
-    .billboard::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, var(--bg) 0%, rgba(7,10,34,0.75) 30%, rgba(7,10,34,0.15) 60%, rgba(7,10,34,0.5) 100%), linear-gradient(to left, rgba(7,10,34,0.85) 0%, transparent 55%); }
-    .bb-inner { position: relative; z-index: 1; padding: 40px 0 60px; max-width: 640px; }
-    .bb-tag { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; color: #fff; background: var(--magenta); padding: 4px 14px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 14px; }
-    .bb-title { font-size: clamp(1.8rem, 4.2vw, 3.4rem); line-height: 1.15; margin: 0 0 10px; text-shadow: 0 6px 30px rgba(0,0,0,0.8); }
-    .bb-meta { color: var(--ink-2); display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+    /* בילבורד: תמונת 16:9 שלמה, בלי חיתוך, בכל גודל מסך */
+    .billboard { position: relative; overflow: hidden; background: #000; }
+    .billboard .blur { position: absolute; inset: -8%; background: center / cover no-repeat; filter: blur(40px) brightness(0.5); transform: scale(1.1); }
+    .bb-media { position: relative; width: min(100%, calc(72vh * 16 / 9)); margin: 0 auto; aspect-ratio: 16 / 9; overflow: hidden; }
+    .bb-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.8s; }
+    .bb-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(7,10,34,0.95) 0%, rgba(7,10,34,0.55) 28%, transparent 55%); }
+    .bb-play { position: absolute; inset: 0; margin: auto; width: 84px; height: 84px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.92); display: grid; place-items: center; cursor: pointer; box-shadow: 0 10px 40px rgba(0,0,0,0.6); transition: transform 0.25s var(--ease), background 0.2s; z-index: 2; }
+    .bb-play:hover { transform: scale(1.08); background: #fff; }
+    .bb-play svg { width: 36px; height: 36px; fill: #0b0d2e; margin-inline-start: -4px; }
+    .bb-inner { position: relative; z-index: 1; padding: 0 0 10px; max-width: 680px; margin: -120px auto 0; width: min(100%, calc(72vh * 16 / 9)); }
+    .bb-inner > .bb-text { padding: 0 24px 34px; }
+    .bb-tag { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; color: #fff; background: var(--magenta); padding: 4px 14px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 12px; }
+    .bb-title { font-size: clamp(1.6rem, 3.6vw, 3rem); line-height: 1.15; margin: 0 0 8px; text-shadow: 0 6px 30px rgba(0,0,0,0.8); }
+    .bb-meta { color: var(--ink-2); display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; font-size: 0.95rem; }
     .bb-meta b { color: #7dffd6; }
     .bb-actions { display: flex; gap: 10px; flex-wrap: wrap; }
     .bb-actions .btn-ink { padding: 0.8em 1.8em; font-size: 1.05rem; }
+    .bb-dots { display: flex; gap: 6px; justify-content: center; padding: 6px 0 14px; }
+    .bb-dots i { width: 22px; height: 4px; border-radius: 4px; background: rgba(255,255,255,0.25); transition: background 0.3s; }
+    .bb-dots i.on { background: #fff; }
+    @media (max-width: 900px) {
+      .bb-media { width: 100%; }
+      .bb-media::after { background: linear-gradient(to top, rgba(7,10,34,0.75), transparent 40%); }
+      .bb-inner { margin-top: 0; width: 100%; }
+      .bb-inner > .bb-text { padding: 16px 18px 22px; }
+      .bb-play { width: 64px; height: 64px; } .bb-play svg { width: 28px; height: 28px; }
+    }
     /* שורות */
     .row { margin: 34px 0 0; position: relative; }
     .row h2 { font-size: clamp(1.25rem, 2.2vw, 1.7rem); margin: 0 0 12px; display: flex; align-items: baseline; gap: 12px; }
@@ -55,13 +71,13 @@
 </head>
 <body data-page="vod">
 <main id="main">
-  <section class="billboard" id="billboard"><div class="bg" id="bb-bg"></div><div class="container bb-inner" id="bb"></div></section>
+  <section class="billboard" id="billboard"><div class="blur" id="bb-blur"></div><div class="bb-media"><img id="bb-img" alt="" fetchpriority="high"><button class="bb-play" id="bb-play" aria-label="נגן"></button></div><div class="bb-inner"><div class="bb-text" id="bb"></div><div class="bb-dots" id="bb-dots"></div></div></section>
   <section class="container" id="rows"></section>
   <section class="container" style="margin-top:50px"><div class="ad-slot ad-leaderboard" data-ad-slot="vod-bottom"><div>פרסומת<small>(מקום שמור לדוגמה)</small></div></div></section>
 </main>
-<script src="assets/js/config.js"></script>
-<script src="assets/js/site.js"></script>
-<script src="assets/js/library.js"></script>
+<script src="assets/js/config.js?v=202610311842"></script>
+<script src="assets/js/site.js?v=202610311842"></script>
+<script src="assets/js/library.js?v=202610311842"></script>
 <script>
 (async () => {
   const S = window.SAPIR, I = window.SAPIR_ICONS;
@@ -97,21 +113,29 @@
   });
   rowsEl.addEventListener("click", (e) => { const b = e.target.closest(".tile"); if (b) window.openVideo(b.dataset.video, b.dataset.title); });
 
-  // בילבורד: מתחלף בין סרטוני הטופ 10
+  // בילבורד: מתחלף בין סרטוני הטופ 10, תמונה 16:9 שלמה
   const top = (rows.find(r => r.kind === "top10") || rows[0]).items.slice(0, 5);
-  let bi = 0;
+  let bi = 0, bbTimer;
+  const bbImg = document.getElementById("bb-img"), bbBlur = document.getElementById("bb-blur"), bbPlay = document.getElementById("bb-play"), bbDots = document.getElementById("bb-dots");
+  bbPlay.innerHTML = I.play;
+  bbDots.innerHTML = top.map((_, i) => `<i data-i="${i}"></i>`).join("");
   const showBB = () => {
     const v = top[bi];
-    document.getElementById("bb-bg").style.backgroundImage = `url(https://i.ytimg.com/vi/${v.id}/maxresdefault.jpg), url(${v.thumb})`;
+    const hi = `https://i.ytimg.com/vi/${v.id}/maxresdefault.jpg`;
+    const pre = new Image(); pre.onload = () => { bbImg.src = pre.naturalWidth > 200 ? hi : v.thumb; bbImg.style.opacity = 1; }; pre.onerror = () => { bbImg.src = v.thumb; bbImg.style.opacity = 1; }; pre.src = hi;
+    bbBlur.style.backgroundImage = `url(${v.thumb})`;
+    bbPlay.dataset.play = v.id; bbPlay.dataset.title = v.title;
     bb.innerHTML = `
       <span class="bb-tag">★ טופ 10 החודש, מקום ${bi + 1}</span>
       <h1 class="bb-title">${v.title}</h1>
       <div class="bb-meta"><span>${chName(v.channel)}</span>${v.views ? `<b>${window.fmtViews(v.views)}</b>` : ""}${v.duration ? `<span>${window.fmtDuration(v.duration)} דקות</span>` : ""}<span>${window.fmtDate(v.published.slice(0, 10))}</span></div>
       <div class="bb-actions"><button class="btn btn-ink" data-play="${v.id}" data-title="${v.title.replace(/"/g, "&quot;")}">${I.play} נגן עכשיו</button><a class="btn btn-ghost" href="#rows">לכל הקטגוריות</a></div>`;
+    bbDots.querySelectorAll("i").forEach((d, i) => d.classList.toggle("on", i === bi));
   };
+  const nextBB = (i) => { bi = (i === undefined ? bi + 1 : i) % top.length; bbImg.style.opacity = 0; setTimeout(showBB, 350); };
   showBB();
-  bb.addEventListener("click", (e) => { const b = e.target.closest("[data-play]"); if (b) window.openVideo(b.dataset.play, b.dataset.title); });
-  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(() => { bi = (bi + 1) % top.length; const bg = document.getElementById("bb-bg"); bg.style.opacity = 0; setTimeout(() => { showBB(); bg.style.opacity = 1; }, 500); }, 9000);
+  document.getElementById("billboard").addEventListener("click", (e) => { const b = e.target.closest("[data-play]"); if (b) { window.openVideo(b.dataset.play, b.dataset.title); return; } const d = e.target.closest(".bb-dots i"); if (d) { clearInterval(bbTimer); nextBB(+d.dataset.i); } });
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) bbTimer = setInterval(() => nextBB(), 9000);
 })();
 </script>
 </body>

@@ -440,6 +440,12 @@ a.card:hover .game-tile svg, .game-row:hover .game-tile svg { transform: transla
 /* וידאו */
 .video-frame { position: relative; aspect-ratio: 16 / 9; background: #05071a; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--line); box-shadow: var(--shadow-ink); }
 .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.poster-play { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; padding: 0; background: #000; cursor: pointer; display: block; }
+.poster-play img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s var(--ease); }
+.poster-play:hover img { transform: scale(1.03); }
+.poster-play .pp-btn { position: absolute; inset: 0; margin: auto; width: 78px; height: 78px; border-radius: 50%; background: rgba(255,255,255,0.92); display: grid; place-items: center; box-shadow: 0 10px 40px rgba(0,0,0,0.55); transition: transform 0.25s var(--ease), background 0.2s; }
+.poster-play:hover .pp-btn { transform: scale(1.08); background: #fff; }
+.poster-play .pp-btn svg { width: 34px; height: 34px; fill: #0b0d2e; margin-inline-start: -4px; }
 .video-placeholder {
   position: absolute; inset: 0; display: grid; place-items: center; text-align: center; color: #fff; padding: 24px;
   background: radial-gradient(600px 300px at 50% 120%, rgba(123,92,255,0.6), transparent 60%), radial-gradient(400px 200px at 20% 0%, rgba(40,215,255,0.3), transparent 60%), #0a0d33;
