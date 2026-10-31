@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preload" href="/data/library.json" as="fetch" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=202610312228">
+  <link rel="stylesheet" href="assets/css/style.css?v=202610312241">
   <style>
     /* ---- עמוד השורטס: מסך מלא, גלילה אנכית בלבד, נגן יוטיוב בשליטה מלאה ---- */
     html, body { height: 100%; overflow: hidden !important; overscroll-behavior: none; background: #000; }
@@ -129,9 +129,9 @@
   <button class="sound-tip" id="sound-tip" hidden><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>הפעלת קול</button>
 </main>
 <script src="https://www.youtube.com/iframe_api" async></script>
-<script src="assets/js/config.js?v=202610312228"></script>
-<script src="assets/js/site.js?v=202610312228"></script>
-<script src="assets/js/library.js?v=202610312228"></script>
+<script src="assets/js/config.js?v=202610312241"></script>
+<script src="assets/js/site.js?v=202610312241"></script>
+<script src="assets/js/library.js?v=202610312241"></script>
 <script>
 (async () => {
   const feed = document.getElementById("feed"), S = window.SAPIR;
@@ -197,7 +197,8 @@
 
   /* ---- נגן יוטיוב (IFrame API): נגן לשקופית הנוכחית ולשכנותיה, רק הנוכחית מנגנת ---- */
   const ytReady = new Promise(res => { if (window.YT && YT.Player) return res(); window.onYouTubeIframeAPIReady = res; if (!document.querySelector('script[src*="iframe_api"]')) { const s = document.createElement("script"); s.src = "https://www.youtube.com/iframe_api"; document.head.append(s); } });
-  const players = new Map(); // i -> { p, ready, playing }
+  const players = new Map(); // i -> { p, ready, warm }
+  const LOG = window.__shortsLog = []; // יומן מצבים לאבחון (window.__shortsLog)
   let muted = localStorage.getItem("sapir-shorts-sound") !== "1", current = -1, soundUnlocked = !muted;
   const soundTip = document.getElementById("sound-tip");
 
@@ -213,10 +214,15 @@
       host: "https://www.youtube-nocookie.com", videoId: sl.dataset.id, width: "100%", height: "100%",
       playerVars: { autoplay: 0, mute: muted ? 1 : 0, playsinline: 1, controls: 0, rel: 0, loop: 1, playlist: sl.dataset.id, iv_load_policy: 3, modestbranding: 1, fs: 0, disablekb: 1, cc_load_policy: 0, origin: location.origin },
       events: {
-        onReady: () => { entry.ready = true; if (+sl.dataset.i === current) play(i); else if (+sl.dataset.i === current + 1) warm(entry); },
+        onReady: () => { entry.ready = true; LOG.push([Math.round(performance.now()), i, "ready", current]); if (+sl.dataset.i === current) play(i); else if (+sl.dataset.i === current + 1) warm(entry); },
         onStateChange: (e) => {
           const st = e.data;
-          if (st === YT.PlayerState.PLAYING) { if (+sl.dataset.i !== current) { try { entry.p.pauseVideo(); entry.p.seekTo(0, true); entry.warm = true; } catch (x) {} } else setSlideState(sl, true); }
+          LOG.push([Math.round(performance.now()), i, st, current]);
+          if (st === YT.PlayerState.PLAYING) {
+            if (+sl.dataset.i === current) setSlideState(sl, true);
+            else if (+sl.dataset.i === current + 1 && entry.warm) { /* השורט הבא מנגן בשקט ברקע: מוכן להתחלה מיידית */ }
+            else { try { entry.p.pauseVideo(); } catch (x) {} }
+          }
           else if (st === YT.PlayerState.PAUSED) setSlideState(sl, false);
           else if (st === YT.PlayerState.ENDED) { try { entry.p.seekTo(0, true); entry.p.playVideo(); } catch (x) {} }
         },
@@ -228,7 +234,8 @@
   const play = async (i) => {
     const en = await ensurePlayer(i); if (!en || !en.ready || i !== current) return;
     const sl = feed.children[i]; sl.dataset.user = "";
-    try { if (en.warm) en.p.seekTo(0, true); if (muted) en.p.mute(); else en.p.unMute(); en.p.playVideo(); } catch (e) {}
+    try { const st = en.p.getPlayerState(); if (en.warm && (st === 1 || st === 2) && en.p.getCurrentTime() > 0.5) en.p.seekTo(0, true); if (muted) en.p.mute(); else en.p.unMute(); en.p.playVideo(); } catch (e) {}
+    en.warm = false;
     // אם הדפדפן חסם ניגון עם קול, חוזרים לשקט; אם חסם גם בשקט, מציגים כפתור נגינה גדול (הקשה אחת ומנגן, עם קול)
     const check = (tries) => setTimeout(() => {
       try {
@@ -243,14 +250,14 @@
   };
   // חימום: השכנים מתחילים לנגן בשקט ונעצרים מיד, כך שהקטע הראשון כבר במטמון וכשמגיעים אליהם הם מתחילים מיד
   const SAVE_DATA = !!(navigator.connection && navigator.connection.saveData);
-  const warm = (en) => { if (SAVE_DATA || en.warm) return; try { en.p.mute(); en.p.playVideo(); } catch (e) {} };
+  const warm = (en) => { if (SAVE_DATA || en.warm || !en.ready) return; en.warm = true; try { en.p.mute(); en.p.playVideo(); } catch (e) {} };
   const pause = (i) => { const en = players.get(i); if (en && en.ready) { try { en.p.pauseVideo(); } catch (e) {} } };
   const dropPlayer = (i) => { const en = players.get(i); if (!en) return; players.delete(i); try { en.p.destroy(); } catch (e) {} const sl = feed.children[i]; if (sl) { const box = sl.querySelector(".yt"); box.innerHTML = `<div id="yt-${i}"></div>`; sl.classList.remove("playing"); sl.classList.add("loading"); } };
 
   const activate = (i) => {
     if (i === current) return;
     const prev = current; current = i;
-    if (prev >= 0) { pause(prev); const en = players.get(prev); if (en && en.ready) { try { en.p.seekTo(0, true); } catch (e) {} } }
+    if (prev >= 0) pause(prev);
     if (feed.children[i].dataset.bad) { setTimeout(() => go(prev < i ? 1 : -1), 200); return; }
     for (const k of [...players.keys()]) if (k < i - 1 || k > i + 2) dropPlayer(k);
     play(i);
