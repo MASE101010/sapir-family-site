@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preload" href="/data/library.json" as="fetch" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=202610312306">
+  <link rel="stylesheet" href="assets/css/style.css?v=202610312309">
   <style>
     /* ---- עמוד השורטס: מסך מלא, גלילה אנכית בלבד, נגן יוטיוב בשליטה מלאה ---- */
     html, body { height: 100%; overflow: hidden !important; overscroll-behavior: none; background: #000; }
@@ -129,10 +129,19 @@
   </div>
   <button class="sound-tip" id="sound-tip" hidden><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>הפעלת קול</button>
 </main>
-<script src="https://www.youtube.com/iframe_api" async></script>
-<script src="assets/js/config.js?v=202610312306"></script>
-<script src="assets/js/site.js?v=202610312306"></script>
-<script src="assets/js/library.js?v=202610312306"></script>
+<script>
+  // טוען את ה-API של יוטיוב עם ניסיונות חוזרים (רשתות מסוימות מפילות את הניסיון הראשון)
+  (function () {
+    let tries = 0;
+    const add = () => { tries++; const sc = document.createElement("script"); sc.src = "https://www.youtube.com/iframe_api" + (tries > 1 ? "?r=" + tries : ""); sc.async = true; sc.onerror = () => { if (tries < 4) setTimeout(add, 400); }; document.head.append(sc); };
+    add();
+    const check = () => { if (window.YT && window.YT.Player) return; if (tries < 4) add(); setTimeout(check, 5000); };
+    setTimeout(check, 5000);
+  })();
+</script>
+<script src="assets/js/config.js?v=202610312309"></script>
+<script src="assets/js/site.js?v=202610312309"></script>
+<script src="assets/js/library.js?v=202610312309"></script>
 <script>
 (async () => {
   const feed = document.getElementById("feed"), stage = document.getElementById("stage"), S = window.SAPIR;
@@ -208,7 +217,8 @@
   };
 
   /* ---- נגני יוטיוב ---- */
-  const ytReady = new Promise(res => { if (window.YT && YT.Player) return res(); window.onYouTubeIframeAPIReady = res; if (!document.querySelector('script[src*="iframe_api"]')) { const sc = document.createElement("script"); sc.src = "https://www.youtube.com/iframe_api"; document.head.append(sc); } });
+  const ytReady = new Promise(res => { if (window.YT && YT.Player) return res(); window.onYouTubeIframeAPIReady = res; const poll = setInterval(() => { if (window.YT && YT.Player) { clearInterval(poll); res(); } }, 300); });
+  setTimeout(() => { if (!(window.YT && YT.Player)) { const s0 = slots[0]; s0.el.classList.remove("loading"); const fl = s0.el.querySelector(".flash"); fl.classList.add("stay"); } }, 9000); // אם יוטיוב לא עונה: כפתור נגינה במקום ספינר אינסופי
   const LOG = window.__shortsLog = [];
   const makePlayer = (s) => new Promise(resolve => {
     s.p = new YT.Player(`yt-${s.k}`, {
