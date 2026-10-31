@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202610311907">
+  <link rel="stylesheet" href="assets/css/style.css?v=202610312159">
 </head>
 <body data-page="blog">
 <main id="main">
@@ -47,8 +47,8 @@
   </section>
 </main>
 
-<script src="assets/js/config.js?v=202610311907"></script>
-<script src="assets/js/site.js?v=202610311907"></script>
+<script src="assets/js/config.js?v=202610312159"></script>
+<script src="assets/js/site.js?v=202610312159"></script>
 <script>
 (async () => {
   let posts = [];
@@ -58,7 +58,7 @@
   const render = f => {
     const all = posts.filter(p => f === "all" || p.audience === f);
     const top = all[0], list = all.slice(1);
-    feat.innerHTML = top ? `<a class="featured-post" href="post.html?id=${encodeURIComponent(top.id)}"><span class="tag">הפוסט של היום</span><div class="cover ${top.audience === "kids" ? "cover-kids" : "cover-parents"}"><span>${top.emoji || "✨"}</span></div><div class="body"><div class="meta muted" style="font-size:.9rem">${top.audience === "kids" ? '<span class="badge badge-kids">לילדים</span>' : '<span class="badge badge-parents">להורים</span>'} ${window.fmtDate(top.date)}</div><h2>${top.title}</h2><p class="muted" style="margin:0">${top.excerpt}</p><span class="btn btn-ink btn-sm" style="align-self:flex-start">לקריאה</span></div></a>` : "";
+    feat.innerHTML = top ? `<a class="featured-post" href="post.html?id=${encodeURIComponent(top.id)}"><span class="tag">הפוסט של היום</span><div class="cover ${top.audience === "kids" ? "cover-kids" : "cover-parents"}"></div><div class="body"><div class="meta muted" style="font-size:.9rem">${top.audience === "kids" ? '<span class="badge badge-kids">לילדים</span>' : '<span class="badge badge-parents">להורים</span>'} ${window.fmtDate(top.date)}</div><h2>${top.emoji ? top.emoji + " " : ""}${top.title}</h2><p class="muted" style="margin:0">${top.excerpt}</p><span class="btn btn-ink btn-sm" style="align-self:flex-start">לקריאה</span></div></a>` : "";
     grid.innerHTML = list.map(window.postCard).join("");
     empty.hidden = list.length > 0;
   };

@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202610311907">
+  <link rel="stylesheet" href="assets/css/style.css?v=202610312159">
   <style>
     .post-cover { max-width: 760px; margin: 24px auto 0; aspect-ratio: 21 / 9; border-radius: var(--radius-lg); display: grid; place-items: center; }
     .post-cover .emoji { font-size: 5.5rem; line-height: 1; filter: drop-shadow(0 12px 24px rgba(0,0,0,.25)); }
@@ -27,7 +27,6 @@
 <main id="main">
   <article class="container">
     <div class="post-hero" id="post-hero"></div>
-    <div class="post-cover" id="post-cover"></div>
     <div class="post-body" id="post-body"></div>
     <div class="post-body">
       <div class="share" id="share"></div>
@@ -42,8 +41,8 @@
   </section>
 </main>
 
-<script src="assets/js/config.js?v=202610311907"></script>
-<script src="assets/js/site.js?v=202610311907"></script>
+<script src="assets/js/config.js?v=202610312159"></script>
+<script src="assets/js/site.js?v=202610312159"></script>
 <script>
 (async () => {
   const id = new URLSearchParams(location.search).get("id");
@@ -62,9 +61,7 @@
     <div class="meta muted" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.95rem">${badge}<span>${window.fmtDate(p.date)}</span><span>${p.readMinutes || 3} דקות קריאה</span></div>
     <h1 style="margin-top:10px">${p.title}</h1>
     <p class="lead">${p.excerpt}</p>`;
-  const cover = document.getElementById("post-cover");
-  cover.className += p.audience === "kids" ? " cover-kids" : " cover-parents";
-  cover.innerHTML = `<span class="emoji" aria-hidden="true">${p.emoji || "✨"}</span>`;
+
   document.getElementById("post-body").innerHTML = p.body;
 
   const url = encodeURIComponent(location.href), txt = encodeURIComponent(p.title);

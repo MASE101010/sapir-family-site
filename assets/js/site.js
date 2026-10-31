@@ -390,7 +390,7 @@
         <div class="cover ${cover}"><span class="emoji" aria-hidden="true">${p.emoji || "✨"}</span></div>
         <div class="card-body">
           <div class="meta">${badge}<span>${window.fmtDate(p.date)}</span><span>${p.readMinutes || 3} דקות קריאה</span></div>
-          <h3>${p.title}</h3>
+          <h3 data-emoji="${p.emoji || ""}">${p.title}</h3>
           <p>${p.excerpt}</p>
         </div>
       </a>`;
