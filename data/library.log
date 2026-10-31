@@ -1,53 +1,23 @@
-/home/runner/work/sapir-family-site/sapir-family-site/scripts/build_library.py:38: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).
-  if e.get("timestamp"): return datetime.datetime.utcfromtimestamp(e["timestamp"]).strftime("%Y-%m-%dT%H:%M:%SZ")
-/home/runner/work/sapir-family-site/sapir-family-site/scripts/build_library.py:38: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).
-  if e.get("timestamp"): return datetime.datetime.utcfromtimestamp(e["timestamp"]).strftime("%Y-%m-%dT%H:%M:%SZ")
-/home/runner/work/sapir-family-site/sapir-family-site/scripts/build_library.py:38: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).
-  if e.get("timestamp"): return datetime.datetime.utcfromtimestamp(e["timestamp"]).strftime("%Y-%m-%dT%H:%M:%SZ")
-/home/runner/work/sapir-family-site/sapir-family-site/scripts/build_library.py:38: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).
-  if e.get("timestamp"): return datetime.datetime.utcfromtimestamp(e["timestamp"]).strftime("%Y-%m-%dT%H:%M:%SZ")
-/home/runner/work/sapir-family-site/sapir-family-site/scripts/build_library.py:38: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).
-  if e.get("timestamp"): return datetime.datetime.utcfromtimestamp(e["timestamp"]).strftime("%Y-%m-%dT%H:%M:%SZ")
-/home/runner/work/sapir-family-site/sapir-family-site/scripts/build_library.py:38: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).
-  if e.get("timestamp"): return datetime.datetime.utcfromtimestamp(e["timestamp"]).strftime("%Y-%m-%dT%H:%M:%SZ")
-/home/runner/work/sapir-family-site/sapir-family-site/scripts/build_library.py:38: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).
-  if e.get("timestamp"): return datetime.datetime.utcfromtimestamp(e["timestamp"]).strftime("%Y-%m-%dT%H:%M:%SZ")
-/home/runner/work/sapir-family-site/sapir-family-site/scripts/build_library.py:99: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-  OUT.write_text(json.dumps({"built": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"), "count": len(arr), "videos": arr}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 family:
-  videos: no entries (ERROR: [youtube:tab] UC6BbNPu5iGeIWt13nHucI5Q: Unsupported language code: he. Supported language codes (case-sensitive): af, az, id, ms, bs, ca, cs, da, de, et, en-IN, en-GB, en, es, es-419, es-US, eu)
   videos: 345
-  shorts: no entries (ERROR: [youtube:tab] UC6BbNPu5iGeIWt13nHucI5Q: Unsupported language code: he. Supported language codes (case-sensitive): af, az, id, ms, bs, ca, cs, da, de, et, en-IN, en-GB, en, es, es-419, es-US, eu)
   shorts: 17
 michael:
-  videos: no entries (ERROR: [youtube:tab] UCcF1neMo_jLGqiCVTx9c1eA: Unsupported language code: he. Supported language codes (case-sensitive): af, az, id, ms, bs, ca, cs, da, de, et, en-IN, en-GB, en, es, es-419, es-US, eu)
   videos: 289
-  shorts: no entries (ERROR: [youtube:tab] UCcF1neMo_jLGqiCVTx9c1eA: Unsupported language code: he. Supported language codes (case-sensitive): af, az, id, ms, bs, ca, cs, da, de, et, en-IN, en-GB, en, es, es-419, es-US, eu)
   shorts: 55
 alin:
-  videos: no entries (ERROR: [youtube:tab] UCHo8nq8KJtHaeyaGvkFRbhA: Unsupported language code: he. Supported language codes (case-sensitive): af, az, id, ms, bs, ca, cs, da, de, et, en-IN, en-GB, en, es, es-419, es-US, eu)
   videos: 168
-  shorts: no entries (ERROR: [youtube:tab] UCHo8nq8KJtHaeyaGvkFRbhA: Unsupported language code: he. Supported language codes (case-sensitive): af, az, id, ms, bs, ca, cs, da, de, et, en-IN, en-GB, en, es, es-419, es-US, eu)
   shorts: 24
 shiran:
-  videos: no entries (ERROR: [youtube:tab] UCjh-baaLTpw3vu3nXlln5ZA: Unsupported language code: he. Supported language codes (case-sensitive): af, az, id, ms, bs, ca, cs, da, de, et, en-IN, en-GB, en, es, es-419, es-US, eu)
   videos: 82
-  shorts: no entries (ERROR: [youtube:tab] UCjh-baaLTpw3vu3nXlln5ZA: Unsupported language code: he. Supported language codes (case-sensitive): af, az, id, ms, bs, ca, cs, da, de, et, en-IN, en-GB, en, es, es-419, es-US, eu)
   shorts: 71
 elroei:
-  videos: no entries (ERROR: [youtube:tab] UCSvC41R0WhgYh6bYabdVKOQ: Unsupported language code: he. Supported language codes (case-sensitive): af, az, id, ms, bs, ca, cs, da, de, et, en-IN, en-GB, en, es, es-419, es-US, eu)
   videos: 91
-  shorts: no entries (ERROR: [youtube:tab] UCSvC41R0WhgYh6bYabdVKOQ: Unsupported language code: he. Supported language codes (case-sensitive): af, az, id, ms, bs, ca, cs, da, de, et, en-IN, en-GB, en, es, es-419, es-US, eu)
   shorts: 25
 sapirtv:
-  videos: no entries (ERROR: [youtube:tab] UC9XD0cOXc-_yXfYw-xbO6vw: Unsupported language code: he. Supported language codes (case-sensitive): af, az, id, ms, bs, ca, cs, da, de, et, en-IN, en-GB, en, es, es-419, es-US, eu)
   videos: 79
-  shorts: no entries (ERROR: [youtube:tab] UC9XD0cOXc-_yXfYw-xbO6vw: Unsupported language code: he. Supported language codes (case-sensitive): af, az, id, ms, bs, ca, cs, da, de, et, en-IN, en-GB, en, es, es-419, es-US, eu)
   shorts: 493
 tuli:
-  videos: no entries (ERROR: [youtube:tab] UCtwxMzw0JZzwz58shhzYLbQ: Unsupported language code: he. Supported language codes (case-sensitive): af, az, id, ms, bs, ca, cs, da, de, et, en-IN, en-GB, en, es, es-419, es-US, eu)
   videos: 32
-  shorts: no entries (ERROR: [youtube:tab] UCtwxMzw0JZzwz58shhzYLbQ: Unsupported language code: he. Supported language codes (case-sensitive): af, az, id, ms, bs, ca, cs, da, de, et, en-IN, en-GB, en, es, es-419, es-US, eu)
   shorts: 24
-titles without Hebrew: 467
+titles without Hebrew: 0
 wrote 1795 videos -> /home/runner/work/sapir-family-site/sapir-family-site/data/library.json
