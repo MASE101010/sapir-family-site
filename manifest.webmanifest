@@ -1,0 +1,22 @@
+{
+  "name": "משפחת ספיר",
+  "short_name": "משפחת ספיר",
+  "description": "הבית של משפחת ספיר ברשת: סרטונים, שורטס, משחקים, תולי האריה והבלוג היומי",
+  "lang": "he", "dir": "rtl",
+  "start_url": "/index.html?app=1",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#070a22",
+  "theme_color": "#070a22",
+  "icons": [
+    { "src": "assets/img/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/img/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "assets/img/icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "שורטס", "url": "/shorts.html", "icons": [{ "src": "assets/img/icon-192.png", "sizes": "192x192" }] },
+    { "name": "VOD", "url": "/vod.html", "icons": [{ "src": "assets/img/icon-192.png", "sizes": "192x192" }] },
+    { "name": "משחקים", "url": "/games.html", "icons": [{ "src": "assets/img/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

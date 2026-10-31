@@ -5,10 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>VOD | משפחת ספיר</title>
   <meta name="description" content="ה-VOD של משפחת ספיר: כל הוולוגים והסדרות, מסודרים לפי קטגוריות: הנצפים ביותר, טופ 10 החודש, קומדיה, אקשן, סדרות וחינוכי.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="assets/img/icon-192.png">
+  <link rel="preconnect" href="https://i.ytimg.com">
+  <meta name="theme-color" content="#070a22">
   <link rel="icon" href="assets/img/logo-small.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202610311848">
+  <link rel="stylesheet" href="assets/css/style.css?v=202610311905">
   <style>
     .ticker-wrap { display: none; }
     /* בילבורד: תמונת 16:9 שלמה, בלי חיתוך, בכל גודל מסך */
@@ -50,8 +57,17 @@
     .tile:hover img { transform: scale(1.06); }
     .tile .cap { position: absolute; inset: auto 0 0; padding: 36px 12px 10px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); font-weight: 700; font-size: 0.92rem; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; opacity: 0; transition: opacity 0.3s; }
     .tile:hover .cap, .tile:focus-visible .cap { opacity: 1; }
-    .tile .dur { position: absolute; top: 8px; inset-inline-start: 8px; background: rgba(0,0,0,0.7); padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; }
-    .tile .vw { position: absolute; top: 8px; inset-inline-end: 8px; background: rgba(0,0,0,0.7); padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; }
+    .tile .dur { position: absolute; bottom: 6px; inset-inline-end: 6px; background: rgba(0,0,0,0.65); padding: 1px 6px; border-radius: 5px; font-size: 0.68rem; line-height: 1.5; z-index: 2; }
+    .tile .vw { position: absolute; bottom: 6px; inset-inline-start: 6px; background: rgba(0,0,0,0.65); padding: 1px 6px; border-radius: 5px; font-size: 0.68rem; line-height: 1.5; z-index: 2; }
+    @media (max-width: 900px) {
+      .tile { flex-basis: clamp(150px, 42vw, 220px); }
+      .tile .dur, .tile .vw { font-size: 0.58rem; padding: 0 4px; bottom: 4px; }
+      .tile .dur { inset-inline-end: 4px; } .tile .vw { inset-inline-start: 4px; }
+      .tile .cap { opacity: 0; } /* בנייד התמונה נקייה; הכותרת מופיעה בנגן */
+      .top10 .tile { flex-basis: clamp(170px, 46vw, 240px); margin-inline-start: 40px; }
+      .top10 .num { font-size: 5rem; -webkit-text-stroke-width: 2px; }
+      .row { margin-top: 22px; }
+    }
     .tile .pl { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; transition: opacity 0.3s; }
     .tile:hover .pl { opacity: 1; }
     .tile .pl span { width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,0.92); display: grid; place-items: center; }
@@ -64,7 +80,7 @@
     .arrow { position: absolute; top: 50%; z-index: 4; width: 44px; height: 70px; border: 0; background: rgba(7,10,34,0.7); color: #fff; font-size: 1.6rem; backdrop-filter: blur(6px); display: grid; place-items: center; transform: translateY(-30%); opacity: 0; transition: opacity 0.3s; }
     .row:hover .arrow { opacity: 1; }
     .arrow.r { inset-inline-start: -10px; border-radius: 0 12px 12px 0; } .arrow.l { inset-inline-end: -10px; border-radius: 12px 0 0 12px; }
-    @media (pointer: coarse) { .arrow { display: none; } .tile .cap { opacity: 1; } }
+    @media (pointer: coarse) { .arrow { display: none; } }
     .chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0 0; }
     .vod-empty { padding: 80px 0; text-align: center; }
   </style>
@@ -75,9 +91,9 @@
   <section class="container" id="rows"></section>
   <section class="container" style="margin-top:50px"><div class="ad-slot ad-leaderboard" data-ad-slot="vod-bottom"><div>פרסומת<small>(מקום שמור לדוגמה)</small></div></div></section>
 </main>
-<script src="assets/js/config.js?v=202610311848"></script>
-<script src="assets/js/site.js?v=202610311848"></script>
-<script src="assets/js/library.js?v=202610311848"></script>
+<script src="assets/js/config.js?v=202610311905"></script>
+<script src="assets/js/site.js?v=202610311905"></script>
+<script src="assets/js/library.js?v=202610311905"></script>
 <script>
 (async () => {
   const S = window.SAPIR, I = window.SAPIR_ICONS;

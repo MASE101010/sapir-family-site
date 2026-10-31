@@ -165,7 +165,8 @@
 
   // כוכבים נוצצים
   const canvas = document.querySelector(".bg-stars");
-  if (canvas && !reduced) {
+  const lowPower = matchMedia("(max-width: 900px)").matches || navigator.hardwareConcurrency <= 4;
+  if (canvas && !reduced && page !== "shorts") {
     const ctx = canvas.getContext("2d");
     let stars = [], w, h;
     const resize = () => {
@@ -176,7 +177,10 @@
       }));
     };
     resize(); addEventListener("resize", resize);
-    const tick = () => {
+    let last = 0;
+    const tick = (now) => {
+      requestAnimationFrame(tick);
+      if (document.hidden || now - last < (lowPower ? 50 : 16)) return; last = now; // 20fps בנייד, 60 במחשב
       ctx.clearRect(0, 0, w, h);
       for (const s of stars) {
         s.t += s.s; s.y -= s.v; if (s.y < -4) { s.y = h + 4; s.x = Math.random() * w; }
@@ -184,9 +188,8 @@
         ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255,255,255,${a})`; ctx.fill();
       }
-      requestAnimationFrame(tick);
     };
-    tick();
+    requestAnimationFrame(tick);
   }
 
   // זיקוקים קטנים סביב הסמן + לוגו SWOOSH במעבר עמוד
@@ -355,6 +358,9 @@
   modal.addEventListener("click", (e) => { if (e.target === modal || e.target.closest(".vclose")) closeV(); });
   addEventListener("keydown", (e) => { if (e.key === "Escape" && !modal.hidden) closeV(); });
   document.addEventListener("click", (e) => { const b = e.target.closest(".vcard"); if (!b) return; if (b.classList.contains("vshort")) location.href = `shorts.html?v=${b.dataset.video}`; else window.openVideo(b.dataset.video, b.dataset.title); });
+
+  // Service Worker: קבצי האתר נשמרים במכשיר, כניסה חוזרת מיידית (כמו אפליקציה)
+  if ("serviceWorker" in navigator && location.protocol === "https:") addEventListener("load", () => { navigator.serviceWorker.register("/sw.js").catch(() => {}); });
 
   /* ---------- עזרי בלוג ---------- */
   const HE_MONTHS = ["ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני", "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"];

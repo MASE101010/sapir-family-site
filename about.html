@@ -5,12 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>מי אנחנו | משפחת ספיר</title>
   <meta name="description" content="הכירו את משפחת ספיר: מיכאל, שירן, אלין, אלרועי, אלאור ואריאל. יוצרי תוכן משפחתי, משחקים ותולי האריה.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="assets/img/icon-192.png">
+  <link rel="preconnect" href="https://i.ytimg.com">
+  <meta name="theme-color" content="#070a22">
   <link rel="icon" href="assets/img/logo-small.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202610311848">
+  <link rel="stylesheet" href="assets/css/style.css?v=202610311905">
   <style>
     .about-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; padding-top: 30px; }
     .about-hero .frame { border-radius: 28px; padding: 6px; background: var(--holo); background-size: 300% 100%; animation: holo-shift 9s linear infinite; transform: rotate(2deg); box-shadow: var(--shadow-ink); }
@@ -73,8 +80,8 @@
   </section>
 </main>
 
-<script src="assets/js/config.js?v=202610311848"></script>
-<script src="assets/js/site.js?v=202610311848"></script>
+<script src="assets/js/config.js?v=202610311905"></script>
+<script src="assets/js/site.js?v=202610311905"></script>
 <script>
   document.getElementById("social").innerHTML = window.SAPIR.social.map(s => `<a href="${s.url}" target="_blank" rel="noopener">${window.SAPIR_ICONS[s.id]}${s.label}</a>`).join("");
 </script>

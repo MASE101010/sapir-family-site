@@ -1,13 +1,18 @@
 /* ספריית הסרטונים: טעינה מ-/api/library, סיווג לקטגוריות, עזרים לשורטס ול-VOD */
 (function () {
-  let cache = null;
+  /* טעינה מהירה: קודם העותק השמור בדפדפן (מיידי), אחרת הקובץ הסטטי מה-CDN; ברקע מרעננים מה-API (RSS טרי) ושומרים. */
+  let cache = null, refreshing = null;
+  const KEY = "sapir-library-v1", MAX_AGE = 3 * 3600 * 1000;
+  const readLocal = () => { try { const d = JSON.parse(localStorage.getItem(KEY)); if (d && d.videos && d.videos.length) return d; } catch (e) {} return null; };
+  const writeLocal = (videos) => { try { localStorage.setItem(KEY, JSON.stringify({ t: Date.now(), videos })); } catch (e) {} };
+  const fetchJson = async (url) => { const r = await fetch(url, { cache: "no-store" }); if (!r.ok) throw new Error(url + " " + r.status); const d = await r.json(); if (!d.videos || !d.videos.length) throw new Error("empty"); return d.videos; };
+  const refresh = () => refreshing || (refreshing = fetchJson("/api/library").then(v => { cache = v; writeLocal(v); document.dispatchEvent(new CustomEvent("library:updated", { detail: v })); return v; }).catch(() => null));
   window.loadLibrary = async function () {
     if (cache) return cache;
-    const res = await fetch("/api/library", { cache: "no-store" });
-    if (!res.ok) throw new Error("library " + res.status);
-    const d = await res.json();
-    if (!d.videos || !d.videos.length) throw new Error("empty");
-    cache = d.videos;
+    const local = readLocal();
+    if (local) { cache = local.videos; if (Date.now() - local.t > MAX_AGE) refresh(); return cache; }
+    try { cache = await fetchJson("/data/library.json"); } catch (e) { cache = await fetchJson("/api/library"); writeLocal(cache); return cache; }
+    writeLocal(cache); refresh();
     return cache;
   };
 
