@@ -24,6 +24,7 @@
     ["games.html", "משחקים", "games"],
     ["blog.html", "הבלוג", "blog"],
     ["tuli.html", "תולי האריה", "tuli"],
+    ["shop.html", "החנות", "shop"],
     ["about.html", "מי אנחנו", "about"],
     ["brands.html", "למותגים", "brands"]
   ];

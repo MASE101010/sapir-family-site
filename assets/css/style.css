@@ -695,16 +695,18 @@ a.card.tilting::after, .game-row.tilting::after { opacity: 1; }
 .featured-post .body { padding: 22px 24px; }
 
 /* כרטיסי דמויות מתהפכים */
-.flip { perspective: 1000px; background: none; border: 0; cursor: pointer; }
-.flip-inner { position: relative; width: 100%; aspect-ratio: 3 / 4; transform-style: preserve-3d; transition: transform 0.8s var(--ease); }
+.flip { perspective: 1000px; background: none; border: 0; cursor: pointer; color: var(--ink); font: inherit; padding: 0; text-align: center; }
+.flip-inner { position: relative; width: 100%; height: 270px; transform-style: preserve-3d; transition: transform 0.8s var(--ease); }
+@media (max-width: 640px) { .flip-inner { height: 240px; } .grid-4.chars { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; } }
 .flip:hover .flip-inner, .flip:focus-within .flip-inner, .flip.flipped .flip-inner { transform: rotateY(180deg); }
-.flip-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: var(--radius-lg); border: 1px solid var(--line); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 22px; background: var(--glass); backdrop-filter: blur(12px); }
-.flip-back { transform: rotateY(180deg); }
-.flip-face .face { width: 110px; height: 110px; border-radius: 50%; display: grid; place-items: center; font-size: 3.4rem; margin-bottom: 14px; box-shadow: 0 0 36px -6px currentColor; }
-.flip-face h3 { margin: 0 0 4px; }
-.flip-face .power { display: inline-block; font-weight: 800; padding: 4px 14px; border-radius: 999px; background: var(--glass-2); border: 1px solid var(--line); font-size: 0.95rem; }
-.flip-back .power { background: var(--holo); color: #0b0d2e; border: 0; font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 10px; }
-.flip-hint { font-size: 0.78rem; color: var(--ink-soft); margin-top: 10px; }
+.flip-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: var(--radius-lg); border: 1px solid var(--line); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 14px 12px; background: var(--glass); backdrop-filter: blur(12px); color: var(--ink); }
+.flip-back { transform: rotateY(180deg); padding: 18px 16px; }
+.flip-back p { font-size: 0.92rem; line-height: 1.5; color: var(--ink-2) !important; }
+.flip-face .face { width: 130px; height: 130px; border-radius: 50%; display: grid; place-items: center; font-size: 3.2rem; margin-bottom: 10px; box-shadow: 0 0 36px -6px currentColor; }
+.flip-face h3 { margin: 0 0 6px; color: #fff; font-size: 1.25rem; }
+.flip-face .power { display: inline-block; font-weight: 800; padding: 3px 12px; border-radius: 999px; background: rgba(255,255,255,0.12); border: 1px solid var(--line-2); font-size: 0.88rem; color: #fff; }
+.flip-back .power { background: var(--holo); color: #0b0d2e; border: 0; font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 10px; }
+.flip-hint { font-size: 0.75rem; color: var(--ink-2); margin-top: 8px; }
 
 /* מקטע מספרים */
 .numbers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
@@ -732,7 +734,7 @@ a.card.tilting::after, .game-row.tilting::after { opacity: 1; }
 @media (max-width: 900px) { .tuli-hero-text { padding-bottom: 10px; } .tuli-hero-char { width: min(100%, 360px); } }
 
 .face-img { background: var(--glass-2); border: 1px solid var(--line); overflow: hidden; color: #ffe14d; }
-.face-img img { width: 86%; height: 86%; object-fit: contain; object-position: top; margin-top: 10%; filter: drop-shadow(0 6px 10px rgba(0,0,0,0.5)); }
+.face-img img { width: 92%; height: 92%; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(0,0,0,0.5)); }
 
 .tuli-stage { position: relative; border-radius: var(--radius-xl); overflow: hidden; border: 1px solid var(--line); box-shadow: var(--shadow-ink); aspect-ratio: 21 / 9; }
 .tuli-stage img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; transition: transform 8s ease; }
