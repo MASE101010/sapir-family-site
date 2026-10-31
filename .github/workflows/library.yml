@@ -15,11 +15,11 @@ jobs:
         with: { python-version: "3.12" }
       - run: pip install -U yt-dlp
       - name: בניית הספרייה מכל הערוצים
-        run: python3 scripts/build_library.py
+        run: python3 scripts/build_library.py 2>&1 | tee data/library.log
       - name: שמירה לריפו
         run: |
           git config user.name "sapir-library-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add data/library.json
+          git add data/library.json data/library.log
           git diff --cached --quiet || git commit -m "ספרייה: עדכון סרטונים $(date -u +%Y-%m-%dT%H:%M)"
           git push
