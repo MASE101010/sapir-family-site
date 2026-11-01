@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202611012134">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611012136">
   <style>
     .tuli-hero {
       margin-top: 18px; border-radius: var(--radius-xl); padding: clamp(36px, 6vw, 72px) clamp(24px, 5vw, 64px);
@@ -113,19 +113,24 @@
   </section>
 
   <section class="section container" style="padding-top:60px">
-    <div class="section-head"><div><h2 class="holo-title">הפרקים האחרונים</h2></div><a class="btn btn-ghost" href="videos.html#tuli">לכל הפרקים</a></div>
+    <div class="section-head"><div><h2 class="holo-title">הסדרה: תולי האריה וחבריו הנהדרים</h2><p>כל הפרקים לפי עונות, מהפרק הראשון. לחצו על פרק, ובסוף כל פרק מחכה הבא.</p></div><a class="btn btn-ghost" href="vod.html#tuli-series">לסדרה ב-VOD</a></div>
     <div class="vgrid" id="tuli-video"></div>
   </section>
 </main>
 
-<script src="assets/js/config.js?v=202611012134"></script>
-<script src="assets/js/site.js?v=202611012134"></script>
+<script src="assets/js/config.js?v=202611012136"></script>
+<script src="assets/js/site.js?v=202611012136"></script>
+<script src="assets/js/library.js?v=202611012136"></script>
 <script>
   document.getElementById("shop-link").href = "shop.html"; document.getElementById("shop-link").removeAttribute("target");
   const I = window.SAPIR_ICONS;
   const tc = window.SAPIR.channels.find(c => c.id === "tuli");
   const tv = document.getElementById("tuli-video");
-  window.fetchChannelVideos(window.channelIdOf(tc)).then(vs => { tv.innerHTML = vs.slice(0, 6).map(v => window.videoCard(v)).join(""); }).catch(() => {
+  const fromSeries = window.loadPlaylists().then(pls => {
+    const sr = pls.find(p => p.key === "tuli-series"); if (!sr || !sr.items.length) throw 0;
+    tv.innerHTML = sr.items.map(i => window.videoCard({ id: i.id, title: `${i.label}: ${i.title.replace(/^.*?\|\s*/, "")}`, thumb: `https://i.ytimg.com/vi/${i.id}/hqdefault.jpg`, duration: i.duration })).join("");
+  });
+  fromSeries.catch(() => window.fetchChannelVideos(window.channelIdOf(tc)).then(vs => { tv.innerHTML = vs.slice(0, 6).map(v => window.videoCard(v)).join(""); })).catch(() => {
     tv.innerHTML = `<div class="video-frame" style="grid-column:1/-1">${tc && tc.playlistId
       ? `<iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=${tc.playlistId}" title="הפרקים של תולי האריה" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`
       : `<div class="video-placeholder"><div><div class="play">${I.play}</div><strong>תולי האריה</strong></div></div>`}</div>`;
