@@ -27,7 +27,8 @@
         const m = /פרק(?:ים)?\s*(\d+)/.exec(it.title || ""), sm = /עונה\s*(\d+)/.exec(it.title || "");
         it.ep = m ? +m[1] : 0; it.season = sm ? +sm[1] : 1; it.movie = !m; // "הסרט המלא" וכדומה: בלי מספר פרק
         it.n = it.movie ? 999 : it.season * 100 + it.ep; it.order = i;
-        it.label = it.movie ? "הסרט המלא" : (p.items.some(x => /עונה\s*\d+/.test(x.title || "")) ? `עונה ${it.season} פרק ${it.ep}` : `פרק ${it.ep}`);
+        const dbl = /פרקים\s*(\d+)\s*\+\s*(\d+)/.exec(it.title || ""), epTxt = dbl ? `פרקים ${dbl[1]}+${dbl[2]}` : `פרק ${it.ep}`;
+        it.label = it.movie ? "הסרט המלא" : (p.items.some(x => /עונה\s*\d+/.test(x.title || "")) ? `עונה ${it.season} ${epTxt}` : epTxt);
       });
       p.items.sort((a, b) => a.n - b.n || a.order - b.order);
     }
