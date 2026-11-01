@@ -1,6 +1,6 @@
 /* Service Worker של משפחת ספיר: קבצי האתר נשמרים במכשיר, דפים נטענים מהרשת עם גיבוי מהמטמון.
    העלאת הגרסה כאן מנקה מטמונים ישנים. */
-const VERSION = "sapir-v10";
+const VERSION = "sapir-v11";
 const ASSETS = ["/assets/css/style.css", "/assets/js/config.js", "/assets/js/site.js", "/assets/js/library.js", "/assets/fonts/SapirPop.ttf", "/assets/img/logo-small.png", "/assets/img/logo.webp"];
 self.addEventListener("install", (e) => { self.skipWaiting(); e.waitUntil(caches.open(VERSION).then(c => c.addAll(ASSETS).catch(() => {}))); });
 self.addEventListener("activate", (e) => { e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== VERSION).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
@@ -25,4 +25,27 @@ self.addEventListener("fetch", (e) => {
     const net = fetch(req).then(r => { if (r.ok) c.put(req, r.clone()); return r; }).catch(() => hit);
     return hit || net;
   }));
+});
+
+/* התראות: הדחיפה מגיעה בלי תוכן; שולפים את הסרטון האחרון שהוכרז ומציגים הודעה */
+self.addEventListener("push", (e) => {
+  e.waitUntil((async () => {
+    let v = {};
+    try { v = await (await fetch("/api/push/latest", { cache: "no-store" })).json(); } catch (x) {}
+    const title = v.title ? "סרטון חדש: " + v.title : "סרטון חדש של משפחת ספיר";
+    await self.registration.showNotification(title, {
+      body: v.channel ? `עלה עכשיו בערוץ ${v.channel}. לחצו לצפייה` : "עלה עכשיו. לחצו לצפייה",
+      icon: "/assets/img/icon-192.png", badge: "/assets/img/icon-192.png", image: v.thumb || undefined,
+      tag: "sapir-new-video", renotify: true, dir: "rtl", lang: "he",
+      data: { url: v.url || (v.id ? `/vod.html?v=${v.id}` : "/") }
+    });
+  })());
+});
+self.addEventListener("notificationclick", (e) => {
+  e.notification.close();
+  const url = new URL((e.notification.data && e.notification.data.url) || "/", self.location.origin).href;
+  e.waitUntil(clients.matchAll({ type: "window", includeUncontrolled: true }).then(list => { for (const c of list) { if ("focus" in c) { c.navigate(url); return c.focus(); } } return clients.openWindow(url); }));
+});
+self.addEventListener("pushsubscriptionchange", (e) => {
+  e.waitUntil((async () => { try { const key = (await (await fetch("/api/push/key")).json()).key; const sub = await self.registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: key }); await fetch("/api/push/subscribe", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ subscription: sub }) }); } catch (x) {} })());
 });

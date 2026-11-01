@@ -614,6 +614,7 @@ a.card:hover .game-tile svg, .game-row:hover .game-tile svg { transform: transla
 .fav-pill::after { content: "שמירה"; }
 .fav-pill.on::after { content: "נשמר"; }
 .fav-pill svg { width: 18px; height: 18px; }
+.push-btn.on { border-color: #7dffd6; color: #7dffd6; }
 .install-bar { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); z-index: 70; width: min(520px, calc(100% - 24px)); display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 18px; background: rgba(14,17,64,0.96); border: 1px solid var(--line-2); box-shadow: var(--shadow-ink); color: #fff; animation: page-in 0.5s var(--ease); }
 .install-bar img { width: 44px; height: 44px; border-radius: 12px; }
 .install-bar > div { flex: 1; min-width: 0; display: grid; } .install-bar b { font-size: 0.98rem; } .install-bar small { color: var(--ink-soft); font-size: 0.8rem; }

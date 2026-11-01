@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202611011240">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611011243">
 </head>
 <body data-page="home">
 <main id="main">
@@ -62,6 +62,7 @@
   <section class="section container" id="today">
     <div class="section-head">
       <div><h2 class="holo-title">חדש היום</h2><p>הסרטון האחרון שעלה והפוסט של היום בבלוג. מתעדכן לבד, כל יום.</p></div>
+      <button class="btn btn-ghost push-btn" type="button" data-push-btn aria-pressed="false">🔔 התראה על סרטון חדש</button>
     </div>
     <div class="today">
       <div class="video-frame" id="featured-video"></div>
@@ -184,9 +185,10 @@
 
 </main>
 
-<script src="assets/js/config.js?v=202611011240"></script>
-<script src="assets/js/site.js?v=202611011240"></script>
-<script src="assets/js/library.js?v=202611011240"></script>
+<script src="assets/js/config.js?v=202611011243"></script>
+<script src="assets/js/site.js?v=202611011243"></script>
+<script src="assets/js/push.js?v=202611011243"></script>
+<script src="assets/js/library.js?v=202611011243"></script>
 <script>
 (async () => {
   const S = window.SAPIR, I = window.SAPIR_ICONS;
