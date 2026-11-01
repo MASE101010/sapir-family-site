@@ -37,11 +37,17 @@ window.SAPIR = {
 
   /* הסרטון שמוצג בבית ב"חדש היום" - מזהה סרטון יוטיוב (ריק = כרטיס דמה) */
   featuredVideoId: "",
+  /* פלייליסטים ביוטיוב שהופכים לשורות ב-VOD: סדרות (לפי סדר הפרקים) ושירים. התוכן נמשך אוטומטית. */
+  playlists: [
+    { id: "PLJEL3F91QLY0", key: "family-series", title: "המשפחה שלנו, הסדרה", kind: "series" },
+    { id: "PLEaiHPi_qoX0", key: "tuli-series", title: "תולי האריה וחבריו הנהדרים", kind: "series" },
+    { id: "PLxwc9VGoFHq13HiTsDK_zbMCD1_BwLByZ", key: "songs", title: "השירים שלנו", kind: "songs" }
+  ],
   /* משחקים. playUrl = כתובת גרסת הדפדפן (חיצונית או תיקייה באתר: games/<id>/index.html).
      playReady = האם גרסת הדפדפן כבר קיימת. image = תמונה/אייקון של המשחק (ריק = אריח צבעוני). */
   games: [
     {
-      id: "mini-fighter", name: "מיני פייטר", kind: "משחק לחימה", tile: "tile-fighter", status: "live", icon: "fist", image: "",
+      id: "mini-fighter", name: "מיני פייטר", kind: "משחק לחימה", tile: "tile-fighter", status: "live", icon: "fist", image: "assets/img/games/mini-fighter.jpg", banner: "assets/img/games/mini-fighter-banner.jpg",
       blurb: "משחק לחימה 2.5D עם יותר מעשרים לוחמים, עשר זירות, מצב סיפור, קרבות אחד על אחד ומולטיפלייר אונליין. מיכאל, שירן, הילדים ותולי בתוך המשחק.",
       play: "https://play.google.com/store/apps/details?id=com.sapirproductions.minifighter",
       playUrl: "https://minifighter.co.il/play/", playReady: true, orientation: "landscape"

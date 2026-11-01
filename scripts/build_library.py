@@ -113,7 +113,37 @@ def date_shorts(videos, limit=150):
         print(f"  dating failed: {ex}")
     for v in todo: v["dateChecked"] = True
 
+PLAYLISTS_OUT = OUT.parent / "playlists.json"
+
+def build_playlists():
+    """הפלייליסטים שמוגדרים ב-config.js (סדרות ושירים): סדר הפרקים כפי שהוא ביוטיוב."""
+    cfg = (OUT.parent.parent / "assets" / "js" / "config.js").read_text(encoding="utf-8")
+    block = re.search(r"playlists:\s*\[(.*?)\n\s*\],", cfg, re.S)
+    if not block: return
+    entries = re.findall(r'id:\s*"([^"]+)",\s*key:\s*"([^"]+)",\s*title:\s*"([^"]+)",\s*kind:\s*"([^"]+)"', block.group(1))
+    old = {}
+    if PLAYLISTS_OUT.exists():
+        try: old = {p["id"]: p for p in json.loads(PLAYLISTS_OUT.read_text(encoding="utf-8")).get("playlists", [])}
+        except Exception: old = {}
+    out = []
+    for pid, key, title, kind in entries:
+        cmd = ["yt-dlp", "--flat-playlist", "--dump-single-json", "--no-warnings", "--ignore-errors", "--extractor-args", "youtube:lang=iw", f"https://www.youtube.com/playlist?list={pid}"]
+        items = []
+        try:
+            r = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
+            data = json.loads(r.stdout) if r.stdout.strip() else {}
+            for i, e in enumerate(data.get("entries") or []):
+                if e.get("id"): items.append({"id": e["id"], "title": e.get("title") or "", "n": i + 1, "duration": int(e.get("duration") or 0)})
+            print(f"playlist {key}: {len(items)} items ({data.get('title','')})")
+        except Exception as ex:
+            print(f"playlist {key} failed: {ex}")
+        if not items and pid in old: items = old[pid].get("items", [])
+        out.append({"id": pid, "key": key, "title": title, "kind": kind, "items": items})
+    PLAYLISTS_OUT.write_text(json.dumps({"built": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "playlists": out}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    print(f"wrote {PLAYLISTS_OUT}")
+
 def main():
+    build_playlists()
     old = {}
     if OUT.exists():
         try: old = {v["id"]: v for v in json.loads(OUT.read_text(encoding="utf-8")).get("videos", [])}

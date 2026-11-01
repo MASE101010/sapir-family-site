@@ -444,6 +444,11 @@ a.card:hover, .card.lift:hover { transform: translateY(-6px); box-shadow: var(--
 .game-tile svg { width: clamp(54px, 7vw, 84px); height: auto; margin-bottom: 8px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4)); position: relative; z-index: 1; transition: transform 0.4s var(--ease); }
 a.card:hover .game-tile svg, .game-row:hover .game-tile svg { transform: translateY(-8px) scale(1.1) rotate(-6deg); }
 .tile-fighter { background: linear-gradient(135deg, #ff3d6e, #ff8a3d); }
+.game-tile .gimg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; transition: transform 0.6s var(--ease); }
+a.card:hover .game-tile .gimg, .game-row:hover .game-tile .gimg { transform: scale(1.05); }
+.game-tile:has(.gimg)::before, .game-tile:has(.gimg)::after { display: none; }
+.featured-post .cover.game-banner { height: auto; aspect-ratio: 1024 / 500; }
+.featured-post .cover.game-banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .tile-tower { background: linear-gradient(135deg, #28d7ff, #3d7bff); }
 .tile-run { background: linear-gradient(135deg, #22c55e, #0e9f6e); }
 .tile-word { background: linear-gradient(135deg, #7b5cff, #b23dff); }

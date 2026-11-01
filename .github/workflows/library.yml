@@ -20,7 +20,7 @@ jobs:
         run: |
           git config user.name "sapir-library-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add data/library.json data/library.log
+          git add data/library.json data/library.log data/playlists.json
           git diff --cached --quiet || git commit -m "ספרייה: עדכון סרטונים $(date -u +%Y-%m-%dT%H:%M)"
           git pull --rebase -X theirs origin main || true
           git push || (git pull --rebase -X theirs origin main && git push)

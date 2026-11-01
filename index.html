@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202611011243">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611012119">
 </head>
 <body data-page="home">
 <main id="main">
@@ -185,10 +185,10 @@
 
 </main>
 
-<script src="assets/js/config.js?v=202611011243"></script>
-<script src="assets/js/site.js?v=202611011243"></script>
-<script src="assets/js/push.js?v=202611011243"></script>
-<script src="assets/js/library.js?v=202611011243"></script>
+<script src="assets/js/config.js?v=202611012119"></script>
+<script src="assets/js/site.js?v=202611012119"></script>
+<script src="assets/js/push.js?v=202611012119"></script>
+<script src="assets/js/library.js?v=202611012119"></script>
 <script>
 (async () => {
   const S = window.SAPIR, I = window.SAPIR_ICONS;
@@ -223,7 +223,7 @@
   };
   const gameCard = g => `
     <a class="card" href="play.html?game=${g.id}">
-      <div class="game-tile ${g.tile}"><span class="kind">${g.kind}</span><div>${gameIcons[g.icon]}<div class="name">${g.name}</div></div></div>
+      <div class="game-tile ${g.tile}"><span class="kind">${g.kind}</span>${g.image ? `<img class="gimg" src="${g.image}" alt="${g.name}">` : `<div>${gameIcons[g.icon]}<div class="name">${g.name}</div></div>`}</div>
       <div class="card-body">
         <div>${g.playReady ? '<span class="badge badge-live">לשחק עכשיו בדפדפן</span>' : '<span class="badge badge-soon">גרסת דפדפן בקרוב</span>'}</div>
         <p>${g.blurb}</p>

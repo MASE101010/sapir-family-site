@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202611011243">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611012119">
   <style>
     .game-row { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 0; }
     .game-row .game-tile { aspect-ratio: auto; min-height: 260px; }
@@ -45,7 +45,7 @@
 
   <section class="container" style="margin-bottom:34px">
     <a class="card featured-post" href="play.html?game=mini-fighter" style="margin:0"><span class="tag">המשחק המוביל</span>
-      <div class="cover tile-fighter"><span>👊</span></div>
+      <div class="cover tile-fighter game-banner"><img src="assets/img/games/mini-fighter-banner.jpg" alt="מיני פייטר: הלוחמים של משפחת ספיר"></div>
       <div class="body"><span class="badge badge-live" style="align-self:flex-start">זמין עכשיו בגוגל פליי ובדפדפן</span><h2>מיני פייטר</h2><p class="muted" style="margin:0">יותר מעשרים לוחמים, עשר זירות, מולטיפלייר אונליין עם קוד חדר, ומצב סיפור "הדרך לפסגה". המשחק הכי גדול שבנינו.</p><span class="btn btn-ink btn-sm" style="align-self:flex-start">לשחק עכשיו</span></div>
     </a>
   </section>
@@ -71,8 +71,8 @@
   </section>
 </main>
 
-<script src="assets/js/config.js?v=202611011243"></script>
-<script src="assets/js/site.js?v=202611011243"></script>
+<script src="assets/js/config.js?v=202611012119"></script>
+<script src="assets/js/site.js?v=202611012119"></script>
 <script>
 (() => {
   const S = window.SAPIR, I = window.SAPIR_ICONS;
@@ -92,7 +92,7 @@
   };
   document.getElementById("games").innerHTML = S.games.map(g => `
     <article class="card game-row" id="${g.id}">
-      <div class="game-tile ${g.tile}" ${g.image ? `style="background-image:url(${g.image});background-size:cover;background-position:center"` : ""}><span class="kind">${g.kind}</span><div>${g.image ? "" : gameIcons[g.icon]}<div class="name">${g.name}</div></div></div>
+      <div class="game-tile ${g.tile}" ${g.image ? `style="background-image:url(${g.image});background-size:cover;background-position:center"` : ""}><span class="kind">${g.kind}</span>${g.image ? `<img class="gimg" src="${g.image}" alt="">` : `<div>${gameIcons[g.icon]}<div class="name">${g.name}</div></div>`}</div>
       <div class="card-body">
         <div>${g.status === "live" ? '<span class="badge badge-live">זמין עכשיו</span>' : '<span class="badge badge-soon">בקרוב</span>'}</div>
         <h3>${g.name}</h3>

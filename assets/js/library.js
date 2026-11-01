@@ -16,6 +16,15 @@
     return cache;
   };
 
+  /* פלייליסטים (סדרות ושירים) שנבנו ב-GitHub Actions; מתרעננים כל 6 שעות */
+  let plCache = null;
+  window.loadPlaylists = async function () {
+    if (plCache) return plCache;
+    try { const r = await fetch("/data/playlists.json", { cache: "no-store" }); const d = await r.json(); plCache = d.playlists || []; } catch (e) { plCache = []; }
+    return plCache;
+  };
+  window.seriesOf = (id) => (plCache || []).find(p => p.kind === "series" && p.items.some(i => i.id === id)) || null;
+
   const RX = {
     series:   /פרק|עונה|חלק \d|סדרה|סדרת|יום \d|חידון|תולי|הממלכה|ריינג|עיר החלומות/,
     edu:      /לומד|לימוד|אנגלית|האות |מלמד|למה |איך |ניסוי|טיפ|חינוכ|מדע|ספר|בית הספר|שיעור|צבעים|מספרים|אותיות/,

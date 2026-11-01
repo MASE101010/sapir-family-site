@@ -362,7 +362,7 @@
 
   // נגן צף
   const modal = document.createElement("div"); modal.className = "vmodal"; modal.setAttribute("role", "dialog"); modal.setAttribute("aria-modal", "true"); modal.setAttribute("aria-label", "נגן וידאו"); modal.hidden = true;
-  modal.innerHTML = `<div class="vmodal-box"><button class="vclose" aria-label="סגירה">✕</button><div class="video-frame" id="vmodal-frame"></div><div class="vmodal-bar"><div class="vmodal-title" id="vmodal-title"></div><div class="vmodal-acts"><span id="vmodal-fav"></span><button class="btn btn-ghost btn-sm" id="vmodal-share">שיתוף</button><a class="btn btn-ghost btn-sm" id="vmodal-yt" href="#" target="_blank" rel="noopener">${ICONS.youtube} ביוטיוב</a></div></div><div class="vmodal-more" id="vmodal-more"></div></div>`;
+  modal.innerHTML = `<div class="vmodal-box"><button class="vclose" aria-label="סגירה">✕</button><div class="video-frame" id="vmodal-frame"></div><div class="vmodal-bar"><div class="vmodal-title" id="vmodal-title"></div><div class="vmodal-acts"><button class="btn btn-ink btn-sm" id="vmodal-next" hidden>הפרק הבא ◀</button><span id="vmodal-fav"></span><button class="btn btn-ghost btn-sm" id="vmodal-share">שיתוף</button><a class="btn btn-ghost btn-sm" id="vmodal-yt" href="#" target="_blank" rel="noopener">${ICONS.youtube} ביוטיוב</a></div></div><div class="vmodal-more" id="vmodal-more"></div></div>`;
   document.body.append(modal);
   const closeV = () => { modal.hidden = true; document.getElementById("vmodal-frame").innerHTML = ""; document.body.style.overflow = ""; };
   window.openVideo = (id, title) => {
@@ -371,11 +371,21 @@
     document.getElementById("vmodal-title").textContent = title || "";
     document.getElementById("vmodal-yt").href = `https://www.youtube.com/watch?v=${id}`;
     document.getElementById("vmodal-fav").innerHTML = window.favButton(id, "fav-pill");
-    const more = document.getElementById("vmodal-more"); more.innerHTML = "";
+    const more = document.getElementById("vmodal-more"); more.innerHTML = ""; delete more.dataset.series;
+    const nextBtn = document.getElementById("vmodal-next"); nextBtn.hidden = true;
+    if (window.loadPlaylists) window.loadPlaylists().then(() => { // סדרה: כפתור לפרק הבא + שאר הפרקים
+      const sr = window.seriesOf && window.seriesOf(id); if (!sr) return;
+      const idx = sr.items.findIndex(i => i.id === id), nx = sr.items[idx + 1];
+      document.getElementById("vmodal-title").textContent = `${sr.title}, פרק ${idx + 1}: ${title || ""}`;
+      if (nx) { nextBtn.hidden = false; nextBtn.onclick = () => window.openVideo(nx.id, nx.title); }
+      const rest = sr.items.filter((_, k) => k !== idx).slice(Math.max(0, idx - 2), Math.max(0, idx - 2) + 8);
+      more.innerHTML = `<div class="vmodal-more-title">עוד פרקים מ${sr.title}</div><div class="vmodal-strip">${rest.map(i => window.videoCard({ id: i.id, title: `פרק ${i.n}: ${i.title}`, thumb: `https://i.ytimg.com/vi/${i.id}/hqdefault.jpg` }, "vmini")).join("")}</div>`;
+      more.dataset.series = "1";
+    });
     if (window.loadLibrary) window.loadLibrary().then(lib => { // עוד מאותו ערוץ
       const cur = lib.find(v => v.id === id); if (!cur) return;
       const rel = lib.filter(v => v.channel === cur.channel && !v.isShort && v.id !== id).slice(0, 6);
-      if (rel.length) more.innerHTML = `<div class="vmodal-more-title">עוד סרטונים</div><div class="vmodal-strip">${rel.map(v => window.videoCard(v, "vmini")).join("")}</div>`;
+      if (rel.length && !more.dataset.series) more.innerHTML = `<div class="vmodal-more-title">עוד סרטונים</div><div class="vmodal-strip">${rel.map(v => window.videoCard(v, "vmini")).join("")}</div>`;
       modal.querySelector(".vmodal-box").scrollTop = 0;
     }).catch(() => {});
     modal.hidden = false; document.body.style.overflow = "hidden"; modal.querySelector(".vclose").focus();
