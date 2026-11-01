@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>משפחת ספיר | הבית של המשפחה ברשת</title>
   <meta name="description" content="הבית הרשמי של משפחת ספיר: כל הסרטונים, המשחקים שלנו, תולי האריה ובלוג יומי עם טיפים להורים ולילדים.">
-  <meta property="og:title" content="משפחת ספיר | הבית של המשפחה ברשת">
-  <meta property="og:description" content="סרטונים, משחקים, תולי האריה ובלוג יומי להורים ולילדים.">
-  <meta property="og:image" content="assets/img/family.jpg">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
@@ -15,12 +12,20 @@
   <link rel="apple-touch-icon" href="assets/img/icon-192.png">
   <link rel="preconnect" href="https://i.ytimg.com">
   <meta name="theme-color" content="#070a22">
+  <link rel="canonical" href="https://sapir-family-site.pages.dev/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="משפחת ספיר">
+  <meta property="og:title" content="משפחת ספיר | הבית של המשפחה ברשת">
+  <meta property="og:description" content="הבית הרשמי של משפחת ספיר: כל הסרטונים, המשחקים שלנו, תולי האריה ובלוג יומי עם טיפים להורים ולילדים.">
+  <meta property="og:image" content="https://sapir-family-site.pages.dev/assets/img/family.jpg">
+  <meta property="og:url" content="https://sapir-family-site.pages.dev/">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/img/logo-small.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202611010024">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611010744">
 </head>
 <body data-page="home">
 <main id="main">
@@ -72,6 +77,15 @@
       <a class="btn btn-ghost" id="shorts-link" href="#" target="_blank" rel="noopener">לעוד שורטס</a>
     </div>
     <div class="shorts-row" id="shorts"></div>
+  </section>
+
+  <!-- שלי: המשך צפייה ומועדפים (רק אם יש) -->
+  <section class="section container" id="mine" hidden>
+    <div class="section-head">
+      <div><h2 class="holo-title" id="mine-title">המשך צפייה</h2><p>הסרטונים שהתחלתם לראות והמועדפים שלכם, שמורים במכשיר הזה.</p></div>
+      <a class="btn btn-ghost" href="vod.html#seen">לכל הרשימה</a>
+    </div>
+    <div class="vgrid" id="mine-grid"></div>
   </section>
 
   <!-- משחקים -->
@@ -169,9 +183,9 @@
 
 </main>
 
-<script src="assets/js/config.js?v=202611010024"></script>
-<script src="assets/js/site.js?v=202611010024"></script>
-<script src="assets/js/library.js?v=202611010024"></script>
+<script src="assets/js/config.js?v=202611010744"></script>
+<script src="assets/js/site.js?v=202611010744"></script>
+<script src="assets/js/library.js?v=202611010744"></script>
 <script>
 (async () => {
   const S = window.SAPIR, I = window.SAPIR_ICONS;
@@ -245,6 +259,14 @@
   window.fetchChannelVideos(window.channelIdOf(shortsCh)).then(vs => {
     document.getElementById("shorts").innerHTML = vs.slice(0, 6).map(v => window.videoCard(v, "vshort")).join("");
   }).catch(dummyShorts);
+  // המשך צפייה + מועדפים בדף הבית
+  try {
+    const lib = await window.loadLibrary();
+    let seen = []; try { seen = JSON.parse(localStorage.getItem("sapir-seen") || "[]"); } catch (e) {}
+    const ids = [...new Set([...seen, ...window.favs.list()])].slice(0, 6);
+    const items = ids.map(id => lib.find(v => v.id === id)).filter(v => v && !v.isShort);
+    if (items.length) { document.getElementById("mine-grid").innerHTML = items.map(v => window.videoCard(v)).join(""); document.getElementById("mine").hidden = false; if (!seen.length) document.getElementById("mine-title").textContent = "המועדפים שלי"; }
+  } catch (e) {}
   document.getElementById("shorts-link").href = "shorts.html"; document.getElementById("shorts-link").removeAttribute("target");
   document.getElementById("faq-shop").href = "shop.html"; document.getElementById("faq-shop").removeAttribute("target");
   document.getElementById("nl").addEventListener("submit", (e) => { e.preventDefault(); const f = e.target, m = document.getElementById("nl-msg"); if (!f.email.validity.valid) { m.textContent = "בדקו את כתובת האימייל."; return; } m.textContent = "נרשמתם! (דמה, הרישום יחובר בהשקה)"; f.reset(); });

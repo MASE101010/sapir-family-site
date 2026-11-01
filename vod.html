@@ -12,10 +12,18 @@
   <link rel="apple-touch-icon" href="assets/img/icon-192.png">
   <link rel="preconnect" href="https://i.ytimg.com">
   <meta name="theme-color" content="#070a22">
+  <link rel="canonical" href="https://sapir-family-site.pages.dev/vod.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="משפחת ספיר">
+  <meta property="og:title" content="VOD | משפחת ספיר">
+  <meta property="og:description" content="ה-VOD של משפחת ספיר: כל הוולוגים והסדרות, מסודרים לפי קטגוריות: הנצפים ביותר, טופ 10 החודש, קומדיה, אקשן, סדרות וחינוכי.">
+  <meta property="og:image" content="https://sapir-family-site.pages.dev/assets/img/family.jpg">
+  <meta property="og:url" content="https://sapir-family-site.pages.dev/vod.html">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/img/logo-small.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202611010024">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611010744">
   <style>
     .ticker-wrap { display: none; }
     /* בילבורד: תמונת 16:9 שלמה, בלי חיתוך, בכל גודל מסך */
@@ -85,6 +93,9 @@
     .vresults .cap { opacity: 1 !important; padding-bottom: 28px; }
     .vresults .none { grid-column: 1 / -1; color: var(--ink-soft); padding: 10px 0; }
     .row { scroll-margin-top: 90px; }
+    .tile .tfav { position: absolute; top: 6px; inset-inline-end: 6px; z-index: 3; opacity: 0; transition: opacity 0.2s; }
+    .tile:hover .tfav, .tile:focus-within .tfav, .tile .tfav:has(.on) { opacity: 1; }
+    @media (pointer: coarse) { .tile .tfav { opacity: 1; } .tile .tfav .fav-btn { width: 32px; height: 32px; } .tile .tfav .fav-btn svg { width: 17px; height: 17px; } }
     .top10 .track { padding-top: 10px; padding-inline-start: 4px; }
     .tile .pl { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; transition: opacity 0.3s; }
     .tile:hover .pl { opacity: 1; }
@@ -113,9 +124,9 @@
   <section class="container" id="rows"></section>
   <section class="container" style="margin-top:50px"><div class="ad-slot ad-leaderboard" data-ad-slot="vod-bottom"><div>פרסומת<small>(מקום שמור לדוגמה)</small></div></div></section>
 </main>
-<script src="assets/js/config.js?v=202611010024"></script>
-<script src="assets/js/site.js?v=202611010024"></script>
-<script src="assets/js/library.js?v=202611010024"></script>
+<script src="assets/js/config.js?v=202611010744"></script>
+<script src="assets/js/site.js?v=202611010744"></script>
+<script src="assets/js/library.js?v=202611010744"></script>
 <script>
 (async () => {
   const S = window.SAPIR, I = window.SAPIR_ICONS;
@@ -136,6 +147,7 @@
       ${v.duration ? `<span class="dur">${window.fmtDuration(v.duration)}</span>` : ""}
       ${v.views ? `<span class="vw">${window.fmtViews(v.views)}</span>` : ""}
       <span class="pl"><span>${I.play}</span></span>
+      <span class="tfav">${window.favButton(v.id)}</span>
       <span class="cap">${v.title}</span>
     </button>`;
   rows.forEach(r => r.items.slice(0, 7).forEach(v => { v.__eager = true; }));
@@ -143,6 +155,8 @@
   let seen = []; try { seen = JSON.parse(localStorage.getItem("sapir-seen") || "[]"); } catch (e) {}
   const seenItems = seen.map(id => videos.find(v => v.id === id)).filter(Boolean);
   if (seenItems.length >= 2) rows.splice(1, 0, { key: "seen", title: "המשך צפייה", items: seenItems });
+  const favItems = window.favs.list().map(id => videos.find(v => v.id === id)).filter(Boolean);
+  if (favItems.length) rows.splice(1, 0, { key: "favs", title: "המועדפים שלי", items: favItems });
   rowsEl.innerHTML = rows.map(r => `
     <div class="row ${r.kind === "top10" ? "top10" : ""}" data-row="${r.key}" id="${r.key}">
       <h2>${r.title}<small>${r.items.length} סרטונים</small></h2>

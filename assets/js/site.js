@@ -347,9 +347,22 @@
     const frame = b.parentElement;
     frame.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${b.dataset.video}?autoplay=1&rel=0&playsinline=1" title="${b.dataset.title}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
   });
+  /* מועדפים: נשמרים במכשיר (localStorage), בלי חשבון */
+  const FAV_KEY = "sapir-favs";
+  const readFavs = () => { try { return JSON.parse(localStorage.getItem(FAV_KEY) || "[]"); } catch (e) { return []; } };
+  window.favs = {
+    list: readFavs,
+    has: (id) => readFavs().includes(id),
+    toggle: (id) => { const f = readFavs().filter(x => x !== id); const on = !readFavs().includes(id); if (on) f.unshift(id); try { localStorage.setItem(FAV_KEY, JSON.stringify(f.slice(0, 200))); } catch (e) {} document.dispatchEvent(new CustomEvent("favs:changed", { detail: { id, on } })); return on; }
+  };
+  const HEART = '<svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.5-9A5.3 5.3 0 0 1 12 6.3 5.3 5.3 0 0 1 21.5 12c-2 4.4-9.5 9-9.5 9z"/></svg>';
+  window.favButton = (id, cls = "") => `<span class="fav-btn ${cls} ${window.favs.has(id) ? "on" : ""}" role="button" tabindex="0" data-fav="${id}" aria-label="${window.favs.has(id) ? "הסרה מהמועדפים" : "שמירה במועדפים"}" aria-pressed="${window.favs.has(id)}">${HEART}</span>`; // span ולא button: יושב גם בתוך כפתורי כרטיסים
+  document.addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && e.target.classList && e.target.classList.contains("fav-btn")) { e.preventDefault(); e.stopPropagation(); e.target.click(); } }, true);
+  document.addEventListener("click", (e) => { const b = e.target.closest(".fav-btn"); if (!b) return; e.preventDefault(); e.stopPropagation(); const on = window.favs.toggle(b.dataset.fav); b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); b.setAttribute("aria-label", on ? "הסרה מהמועדפים" : "שמירה במועדפים"); b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop"); }, true);
+
   // נגן צף
   const modal = document.createElement("div"); modal.className = "vmodal"; modal.setAttribute("role", "dialog"); modal.setAttribute("aria-modal", "true"); modal.setAttribute("aria-label", "נגן וידאו"); modal.hidden = true;
-  modal.innerHTML = `<div class="vmodal-box"><button class="vclose" aria-label="סגירה">✕</button><div class="video-frame" id="vmodal-frame"></div><div class="vmodal-bar"><div class="vmodal-title" id="vmodal-title"></div><div class="vmodal-acts"><button class="btn btn-ghost btn-sm" id="vmodal-share">שיתוף</button><a class="btn btn-ghost btn-sm" id="vmodal-yt" href="#" target="_blank" rel="noopener">${ICONS.youtube} ביוטיוב</a></div></div><div class="vmodal-more" id="vmodal-more"></div></div>`;
+  modal.innerHTML = `<div class="vmodal-box"><button class="vclose" aria-label="סגירה">✕</button><div class="video-frame" id="vmodal-frame"></div><div class="vmodal-bar"><div class="vmodal-title" id="vmodal-title"></div><div class="vmodal-acts"><span id="vmodal-fav"></span><button class="btn btn-ghost btn-sm" id="vmodal-share">שיתוף</button><a class="btn btn-ghost btn-sm" id="vmodal-yt" href="#" target="_blank" rel="noopener">${ICONS.youtube} ביוטיוב</a></div></div><div class="vmodal-more" id="vmodal-more"></div></div>`;
   document.body.append(modal);
   const closeV = () => { modal.hidden = true; document.getElementById("vmodal-frame").innerHTML = ""; document.body.style.overflow = ""; };
   window.openVideo = (id, title) => {
@@ -357,6 +370,7 @@
     document.getElementById("vmodal-frame").innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" title="${title || ""}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
     document.getElementById("vmodal-title").textContent = title || "";
     document.getElementById("vmodal-yt").href = `https://www.youtube.com/watch?v=${id}`;
+    document.getElementById("vmodal-fav").innerHTML = window.favButton(id, "fav-pill");
     const more = document.getElementById("vmodal-more"); more.innerHTML = "";
     if (window.loadLibrary) window.loadLibrary().then(lib => { // עוד מאותו ערוץ
       const cur = lib.find(v => v.id === id); if (!cur) return;
