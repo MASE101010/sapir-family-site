@@ -11,7 +11,6 @@
 - `data/posts.json` הפוסטים. מוצגים רק פוסטים עם `status: "published"` שתאריכם הגיע.
 - `blog/GUIDELINES.md` הכללים של הבלוג האוטומטי.
 - `scripts/generate_post.py` + `.github/workflows/daily-post.yml` הייצור היומי.
-- `ads` כל מקום עם `data-ad-slot` הוא מקום שמור לפרסומת.
 
 ## חלקים חיים (Cloudflare Pages Functions, בתיקיית `functions/`)
 - `functions/api/videos.js` מושך את ה-RSS הרשמי של כל ערוץ יוטיוב (15 הסרטונים האחרונים) ומחזיר JSON. האתר מציג מזה את רשתות הסרטונים, השורטס ו"חדש היום". בלי מפתח API ובלי פלייליסטים. אם ה-API לא זמין (למשל בתצוגה מקדימה), האתר נופל חזרה לנגן פלייליסט ההעלאות.

@@ -571,16 +571,6 @@ a.card:hover .game-tile .gimg, .game-row:hover .game-soon { filter: grayscale(0.
 .form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 @media (max-width: 640px) { .form .row { grid-template-columns: 1fr; } }
 
-/* פרסומות */
-.ad-slot {
-  margin: 36px auto 0; border: 2px dashed rgba(255,255,255,0.2); border-radius: 16px;
-  background: repeating-linear-gradient(45deg, rgba(255,255,255,0.02), rgba(255,255,255,0.02) 12px, rgba(255,255,255,0.05) 12px, rgba(255,255,255,0.05) 24px);
-  display: grid; place-items: center; color: var(--ink-soft); font-size: 0.9rem; text-align: center; padding: 10px;
-}
-.ad-leaderboard { max-width: 970px; min-height: 110px; }
-.ad-rect { max-width: 336px; min-height: 280px; }
-.ad-slot small { display: block; color: rgba(255,255,255,0.4); }
-
 .with-side { display: grid; grid-template-columns: 1fr 336px; gap: 36px; align-items: start; }
 @media (max-width: 1000px) { .with-side { grid-template-columns: 1fr; } }
 .side-sticky { position: sticky; top: 92px; }
