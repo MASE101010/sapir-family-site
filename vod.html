@@ -23,7 +23,7 @@
   <link rel="icon" href="assets/img/logo-small.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202611012350">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611020152">
   <style>
     .ticker-wrap { display: none; }
     /* בילבורד: תמונת 16:9 שלמה, בלי חיתוך, בכל גודל מסך */
@@ -119,9 +119,11 @@
     .row h2 { position: relative; z-index: 2; }
     .tile .ep { position: absolute; top: 6px; inset-inline-start: 6px; background: var(--magenta); color: #fff; padding: 1px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: 800; z-index: 2; }
     .vod-tools { margin-top: 18px; }
-    .vsearch { display: flex; align-items: center; gap: 10px; background: var(--glass); border: 1px solid var(--line-2); border-radius: 999px; padding: 6px 16px; max-width: 560px; }
+    .vtools-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .vtools-row .push-btn { white-space: nowrap; flex: none; }
+    .vsearch { display: flex; align-items: center; gap: 10px; background: var(--glass); border: 1px solid var(--line-2); border-radius: 999px; padding: 4px 14px; flex: 1 1 260px; max-width: 460px; }
     .vsearch svg { width: 22px; height: 22px; fill: var(--ink-soft); flex: none; }
-    .vsearch input { flex: 1; background: none; border: 0; color: #fff; font: inherit; font-size: 1rem; padding: 8px 0; outline: none; min-width: 0; }
+    .vsearch input { flex: 1; background: none; border: 0; color: #fff; font: inherit; font-size: 0.95rem; padding: 6px 0; outline: none; min-width: 0; }
     .vsearch input::placeholder { color: var(--ink-soft); }
     .vsearch:focus-within { border-color: #fff; }
     .vresults { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 16px; }
@@ -163,16 +165,18 @@
 <main id="main">
   <section class="billboard" id="billboard"><div class="blur" id="bb-blur"></div><div class="bb-media"><img id="bb-img" alt="" fetchpriority="high"><button class="bb-play" id="bb-play" aria-label="נגן"></button></div><div class="bb-inner"><div class="bb-text" id="bb"></div><div class="bb-dots" id="bb-dots"></div></div></section>
   <section class="container vod-tools">
-    <div class="vsearch"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.8l-.3-.3A6.5 6.5 0 1 0 14 15.5l.3.3v.8l5 5 1.5-1.5-5-5zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg><input id="vq" type="search" placeholder="חיפוש בכל הסרטונים..." aria-label="חיפוש סרטונים" autocomplete="off"></div>
+    <div class="vtools-row">
+      <div class="vsearch"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.8l-.3-.3A6.5 6.5 0 1 0 14 15.5l.3.3v.8l5 5 1.5-1.5-5-5zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg><input id="vq" type="search" placeholder="חיפוש בכל הסרטונים..." aria-label="חיפוש סרטונים" autocomplete="off"></div>
+      <button class="btn btn-ghost btn-sm push-btn" type="button" data-push-btn aria-pressed="false">🔔 התראה על סרטון חדש</button>
+    </div>
     <div class="vresults" id="vresults" hidden></div>
-    <div style="margin-top:12px"><button class="btn btn-ghost btn-sm push-btn" type="button" data-push-btn aria-pressed="false">🔔 התראה על סרטון חדש</button></div>
   </section>
   <section class="container" id="rows"></section>
 </main>
-<script src="assets/js/config.js?v=202611012350"></script>
-<script src="assets/js/site.js?v=202611012350"></script>
-<script src="assets/js/push.js?v=202611012350"></script>
-<script src="assets/js/library.js?v=202611012350"></script>
+<script src="assets/js/config.js?v=202611020152"></script>
+<script src="assets/js/site.js?v=202611020152"></script>
+<script src="assets/js/push.js?v=202611020152"></script>
+<script src="assets/js/library.js?v=202611020152"></script>
 <script>
 (async () => {
   const S = window.SAPIR, I = window.SAPIR_ICONS;
