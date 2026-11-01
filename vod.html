@@ -23,7 +23,7 @@
   <link rel="icon" href="assets/img/logo-small.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202611020152">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611020158">
   <style>
     .ticker-wrap { display: none; }
     /* בילבורד: תמונת 16:9 שלמה, בלי חיתוך, בכל גודל מסך */
@@ -56,7 +56,8 @@
     /* מסכים רחבים וטלוויזיות: תמונת 16:9 שלמה וממורכזת, נמסה בצדדים כמו ענן אל רקע מטושטש, הטקסט בצד */
     @media (min-width: 901px) {
       .billboard { height: clamp(520px, 76vh, 1100px); background: transparent; }
-      .billboard .blur { display: block; inset: -6% -6% -6% -6%; filter: blur(60px) brightness(0.45) saturate(1.2); transform: none;
+      /* הרקע המטושטש מצויר בקטן (רבע) ומוגדל: אותו מראה, רבע מהעבודה לכרטיס המסך (חשוב ב-4K) */
+      .billboard .blur { display: block; inset: auto; left: -3%; top: -3%; width: 26.5%; height: 26.5%; transform-origin: 0 0; transform: scale(4); will-change: transform; filter: blur(14px) brightness(0.45) saturate(1.2);
         -webkit-mask-image: linear-gradient(to top, transparent 10%, #000 48%); mask-image: linear-gradient(to top, transparent 10%, #000 48%); }
       .bb-media { position: relative; height: 100%; width: auto; aspect-ratio: 16 / 9; max-width: 100%; margin: 0 auto;
         -webkit-mask-image: radial-gradient(ellipse 60% 62% at 50% 50%, #000 40%, rgba(0,0,0,0.55) 66%, transparent 92%); mask-image: radial-gradient(ellipse 60% 62% at 50% 50%, #000 40%, rgba(0,0,0,0.55) 66%, transparent 92%); }
@@ -89,7 +90,7 @@
       .bb-actions .btn { font-size: 1.3rem; }
     }
     /* שורות */
-    .row { margin: 34px 0 0; position: relative; }
+    .row { margin: 34px 0 0; position: relative; content-visibility: auto; contain-intrinsic-size: auto 300px; }
     .row h2 { font-size: clamp(1.25rem, 2.2vw, 1.7rem); margin: 0 0 12px; display: flex; align-items: baseline; gap: 12px; }
     .row h2 small { font-size: 0.8rem; color: var(--ink-soft); font-family: var(--font-body); font-weight: 600; }
     .track { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 8px 2px 18px; scroll-behavior: smooth; }
@@ -173,10 +174,10 @@
   </section>
   <section class="container" id="rows"></section>
 </main>
-<script src="assets/js/config.js?v=202611020152"></script>
-<script src="assets/js/site.js?v=202611020152"></script>
-<script src="assets/js/push.js?v=202611020152"></script>
-<script src="assets/js/library.js?v=202611020152"></script>
+<script src="assets/js/config.js?v=202611020158"></script>
+<script src="assets/js/site.js?v=202611020158"></script>
+<script src="assets/js/push.js?v=202611020158"></script>
+<script src="assets/js/library.js?v=202611020158"></script>
 <script>
 (async () => {
   const S = window.SAPIR, I = window.SAPIR_ICONS;
