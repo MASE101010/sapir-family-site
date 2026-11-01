@@ -12,14 +12,23 @@ window.SAPIR = {
   stats: {
     total: "3M+",
     youtube: "1.3M",
-    instagram: "112K",
-    tiktok: "400K"
+    instagram: "1M+",
+    tiktok: "700K+"
   },
   social: [
     { id: "youtube",   label: "יוטיוב",   url: "https://www.youtube.com/@SapirFamily" },
-    { id: "instagram", label: "אינסטגרם", url: "https://instagram.com/israelisraeli" },
-    { id: "tiktok",    label: "טיקטוק",   url: "https://tiktok.com/@israelisraeli" },
-    { id: "facebook",  label: "פייסבוק",  url: "https://facebook.com/israelisraeli" }
+    { id: "instagram", label: "אינסטגרם", url: "https://www.instagram.com/michaelsapir/" },
+    { id: "tiktok",    label: "טיקטוק",   url: "https://www.tiktok.com/@sapir_family" }
+  ],
+  /* כל החשבונות ברשתות, לפי בן משפחה (לעמוד "מי אנחנו" ולצור קשר) */
+  socialAll: [
+    { who: "משפחת ספיר", net: "tiktok", url: "https://www.tiktok.com/@sapir_family" },
+    { who: "מיכאל", net: "instagram", url: "https://www.instagram.com/michaelsapir/" },
+    { who: "מיכאל", net: "tiktok", url: "https://www.tiktok.com/@michaelsapir" },
+    { who: "שירן", net: "instagram", url: "https://www.instagram.com/shiransapir1/" },
+    { who: "שירן", net: "tiktok", url: "https://www.tiktok.com/@shiransapir10" },
+    { who: "אלין", net: "instagram", url: "https://www.instagram.com/alinsapir1/" },
+    { who: "אלרועי", net: "instagram", url: "https://www.instagram.com/elroeysapir/" }
   ],
   /* ערוצי יוטיוב - לכל ערוץ מכניסים playlistId (פלייליסט של היוטיוב).
      כשהשדה ריק האתר מציג כרטיס "בקרוב" במקום הנגן. */
@@ -53,14 +62,14 @@ window.SAPIR = {
       playUrl: "https://minifighter.co.il/play/", playReady: true, orientation: "landscape"
     },
     {
-      id: "race-top", name: "המירוץ לפסגה", kind: "קפיצות עם תולי", tile: "tile-tower", status: "live", icon: "arrow-up", image: "",
+      id: "race-top", name: "המירוץ לפסגה", kind: "קפיצות עם תולי", tile: "tile-tower", status: "live", icon: "arrow-up", image: "assets/img/games/race-top.jpg",
       blurb: "קופצים כמה שיותר גבוה עם תולי וחבריו. פשוט ללמוד, קשה להפסיק. מי יגיע הכי גבוה במשפחה?",
       play: "https://play.google.com/store/apps/details?id=com.base69af0e012f86163366dab407.app", playUrl: "https://tulijump.base44.app", playReady: true, orientation: "portrait"
     },
     {
-      id: "race-kingdom", name: "המירוץ לממלכה", kind: "ריצה עם תולי", tile: "tile-run", status: "live", icon: "run", image: "",
+      id: "race-kingdom", name: "המירוץ לממלכה", kind: "ריצה עם תולי", tile: "tile-run", status: "live", icon: "run", image: "assets/img/games/race-kingdom.jpg",
       blurb: "תולי בורח מהוירוס דרך הממלכה האבודה. רצים, קופצים, אוספים מטבעות ונזהרים מהמלכודות.",
-      play: "", playUrl: "games/race-kingdom/index.html", playReady: false, orientation: "portrait"
+      play: "", playUrl: "games/race-kingdom/index.html", playReady: true, orientation: "portrait"
     },
     {
       id: "nahesh", name: "נחש את המילה", kind: "מילים", tile: "tile-word", status: "live", icon: "abc", image: "",
@@ -68,9 +77,9 @@ window.SAPIR = {
       play: "", playUrl: "games/nahesh/index.html", playReady: false, orientation: "portrait"
     },
     {
-      id: "virus", name: "פלישת הוירוסים", kind: "חלליות", tile: "tile-virus", status: "live", icon: "rocket", image: "",
+      id: "virus", name: "פלישת הוירוסים", kind: "חלליות", tile: "tile-virus", status: "live", icon: "rocket", image: "assets/img/games/virus.jpg",
       blurb: "מאה שלבים בכל כוכבי הלכת, בוסים, נשקים מיוחדים, וחלליות של כל בני המשפחה. הוירוס הגדול מחכה בסוף.",
-      play: "", playUrl: "games/virus/index.html", playReady: false, orientation: "portrait"
+      play: "", playUrl: "games/virus/index.html", playReady: true, orientation: "portrait"
     }
   ]
 };

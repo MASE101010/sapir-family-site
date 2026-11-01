@@ -444,8 +444,14 @@ a.card:hover, .card.lift:hover { transform: translateY(-6px); box-shadow: var(--
 .game-tile svg { width: clamp(54px, 7vw, 84px); height: auto; margin-bottom: 8px; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4)); position: relative; z-index: 1; transition: transform 0.4s var(--ease); }
 a.card:hover .game-tile svg, .game-row:hover .game-tile svg { transform: translateY(-8px) scale(1.1) rotate(-6deg); }
 .tile-fighter { background: linear-gradient(135deg, #ff3d6e, #ff8a3d); }
+.game-soon { filter: grayscale(0.85); opacity: 0.72; cursor: default; }
+.game-soon:hover { transform: none !important; }
+.soon-stamp { position: absolute; inset: auto 12px 12px auto; z-index: 2; background: rgba(0,0,0,0.7); color: #ffe88a; border: 1px solid rgba(255,225,77,0.45); padding: 4px 12px; border-radius: 999px; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.02em; }
 .game-tile .gimg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; transition: transform 0.6s var(--ease); }
-a.card:hover .game-tile .gimg, .game-row:hover .game-tile .gimg { transform: scale(1.05); }
+a.card:hover .game-tile .gimg, .game-row:hover .game-soon { filter: grayscale(0.85); opacity: 0.72; cursor: default; }
+.game-soon:hover { transform: none !important; }
+.soon-stamp { position: absolute; inset: auto 12px 12px auto; z-index: 2; background: rgba(0,0,0,0.7); color: #ffe88a; border: 1px solid rgba(255,225,77,0.45); padding: 4px 12px; border-radius: 999px; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.02em; }
+.game-tile .gimg { transform: scale(1.05); }
 .game-tile:has(.gimg)::before, .game-tile:has(.gimg)::after { display: none; }
 .featured-post .cover.game-banner { height: auto; aspect-ratio: 1024 / 500; }
 .featured-post .cover.game-banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -815,6 +821,10 @@ a.card.tilting::after, .game-row.tilting::after { opacity: 1; }
 .vclose { position: absolute; top: 4px; inset-inline-start: 0; background: var(--glass-2); border: 1px solid var(--line-2); color: #fff; width: 40px; height: 40px; border-radius: 50%; font-size: 1.1rem; }
 .vmodal-box { max-height: 100%; overflow-y: auto; scrollbar-width: none; padding-top: 52px; }
 .vmodal-box::-webkit-scrollbar { display: none; }
+.vmodal .video-frame #vmodal-yt, .vmodal .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.resume-tip { position: absolute; bottom: 14px; inset-inline-start: 14px; z-index: 3; background: rgba(0,0,0,0.75); color: #fff; padding: 8px 12px; border-radius: 999px; font-size: 0.9rem; font-weight: 700; display: flex; gap: 10px; align-items: center; animation: page-in 0.3s var(--ease); }
+.resume-tip button { background: #fff; color: #000; border: 0; border-radius: 999px; padding: 4px 10px; font: inherit; font-weight: 700; cursor: pointer; }
+.vprog { position: absolute; bottom: 0; inset-inline-start: 0; height: 4px; background: #ff3d6e; z-index: 2; border-radius: 0 2px 2px 0; }
 .vmodal-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
 .vmodal-title { font-weight: 700; font-size: 1.05rem; flex: 1 1 260px; }
 .vmodal-acts { display: flex; gap: 8px; }

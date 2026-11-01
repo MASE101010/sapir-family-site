@@ -331,7 +331,7 @@
   window.fmtViews = (n) => !n ? "" : n >= 1e6 ? (n / 1e6).toFixed(1).replace(/\.0$/, "") + "M צפיות" : n >= 1e3 ? Math.round(n / 1e3) + "K צפיות" : n + " צפיות";
   window.videoCard = (v, cls = "") => `
     <button class="vcard ${cls}" type="button" data-video="${v.id}" data-title="${(v.title || "").replace(/"/g, "&quot;")}" aria-label="נגן: ${(v.title || "").replace(/"/g, "&quot;")}">
-      <span class="vthumb">${cls.includes("vshort") ? `<img src="https://i.ytimg.com/vi/${v.id}/oardefault.jpg" onerror="this.onerror=null;this.src='${v.thumb}'" alt="" loading="lazy">` : `<img src="${v.thumb}" alt="" loading="lazy">`}<span class="vplay">${ICONS.play}</span>${v.views ? `<small>${window.fmtViews(v.views)}</small>` : ""}</span>
+      <span class="vthumb">${(() => { const p = window.videoPos && window.videoPos(v.id); return p ? `<span class="vprog" style="width:${Math.round(p.t / p.d * 100)}%"></span>` : ""; })()}${cls.includes("vshort") ? `<img src="https://i.ytimg.com/vi/${v.id}/oardefault.jpg" onerror="this.onerror=null;this.src='${v.thumb}'" alt="" loading="lazy">` : `<img src="${v.thumb}" alt="" loading="lazy">`}<span class="vplay">${ICONS.play}</span>${v.views ? `<small>${window.fmtViews(v.views)}</small>` : ""}</span>
       <span class="vtitle">${v.title || ""}</span>
       ${v.published ? `<span class="vdate">${window.fmtDate(v.published.slice(0, 10))}</span>` : ""}
     </button>`;
@@ -364,10 +364,30 @@
   const modal = document.createElement("div"); modal.className = "vmodal"; modal.setAttribute("role", "dialog"); modal.setAttribute("aria-modal", "true"); modal.setAttribute("aria-label", "נגן וידאו"); modal.hidden = true;
   modal.innerHTML = `<div class="vmodal-box"><button class="vclose" aria-label="סגירה">✕</button><div class="video-frame" id="vmodal-frame"></div><div class="vmodal-bar"><div class="vmodal-title" id="vmodal-title"></div><div class="vmodal-acts"><button class="btn btn-ink btn-sm" id="vmodal-next" hidden>הפרק הבא ◀</button><span id="vmodal-fav"></span><button class="btn btn-ghost btn-sm" id="vmodal-share">שיתוף</button><a class="btn btn-ghost btn-sm" id="vmodal-yt" href="#" target="_blank" rel="noopener">${ICONS.youtube} ביוטיוב</a></div></div><div class="vmodal-more" id="vmodal-more"></div></div>`;
   document.body.append(modal);
-  const closeV = () => { modal.hidden = true; document.getElementById("vmodal-frame").innerHTML = ""; document.body.style.overflow = ""; };
+  /* המשך מאותה נקודה: הזמן נשמר במכשיר כל 5 שניות, ומתחילים ממנו בפעם הבאה (לא בשורטס) */
+  const POS_KEY = "sapir-pos";
+  const readPos = () => { try { return JSON.parse(localStorage.getItem(POS_KEY) || "{}"); } catch (e) { return {}; } };
+  window.videoPos = (id) => { const p = readPos()[id]; return p && p.d ? p : null; };
+  const savePos = (id, t, d) => { try { const all = readPos(); if (!d) return; if (t > d - 20 || t < 8) delete all[id]; else all[id] = { t: Math.floor(t), d: Math.floor(d) }; const keys = Object.keys(all); if (keys.length > 60) delete all[keys[0]]; localStorage.setItem(POS_KEY, JSON.stringify(all)); } catch (e) {} };
+  let ytApi = null;
+  const ensureYT = () => ytApi || (ytApi = new Promise(res => { if (window.YT && YT.Player) return res(); const prev = window.onYouTubeIframeAPIReady; window.onYouTubeIframeAPIReady = () => { prev && prev(); res(); }; if (!document.querySelector('script[src*="iframe_api"]')) { const sc = document.createElement("script"); sc.src = "https://www.youtube.com/iframe_api"; sc.async = true; document.head.append(sc); } const poll = setInterval(() => { if (window.YT && YT.Player) { clearInterval(poll); res(); } }, 300); }));
+  let mPlayer = null, mId = null, mTimer = 0;
+  const flushPos = () => { if (!mPlayer || !mId) return; try { savePos(mId, mPlayer.getCurrentTime(), mPlayer.getDuration()); } catch (e) {} };
+  const closeV = () => { flushPos(); clearInterval(mTimer); mTimer = 0; try { mPlayer && mPlayer.destroy(); } catch (e) {} mPlayer = null; mId = null; modal.hidden = true; document.getElementById("vmodal-frame").innerHTML = ""; document.body.style.overflow = ""; };
+  const fmtT = (sec) => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, "0")}`;
   window.openVideo = (id, title) => {
+    if (mPlayer) { flushPos(); clearInterval(mTimer); try { mPlayer.destroy(); } catch (e) {} mPlayer = null; }
     try { const seen = JSON.parse(localStorage.getItem("sapir-seen") || "[]").filter(x => x !== id); seen.unshift(id); localStorage.setItem("sapir-seen", JSON.stringify(seen.slice(0, 12))); } catch (e) {}
-    document.getElementById("vmodal-frame").innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" title="${title || ""}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    const frame = document.getElementById("vmodal-frame"); frame.innerHTML = `<div id="vmodal-yt"></div>`;
+    const pos = window.videoPos(id); mId = id;
+    ensureYT().then(() => {
+      if (mId !== id) return;
+      mPlayer = new YT.Player("vmodal-yt", { host: "https://www.youtube.com", videoId: id, width: "100%", height: "100%",
+        playerVars: { autoplay: 1, rel: 0, playsinline: 1, modestbranding: 1, start: pos ? pos.t : 0, origin: location.origin },
+        events: { onReady: () => { try { mPlayer.playVideo(); } catch (e) {} }, onStateChange: (e) => { if (e.data === 0) savePos(id, 1e9, 1e9 + 1); } } });
+      clearInterval(mTimer); mTimer = setInterval(flushPos, 5000);
+      if (pos) { const tip = document.createElement("div"); tip.className = "resume-tip"; tip.innerHTML = `ממשיכים מ-${fmtT(pos.t)} <button type="button">מההתחלה</button>`; frame.append(tip); tip.querySelector("button").addEventListener("click", () => { try { mPlayer.seekTo(0, true); } catch (e) {} tip.remove(); }); setTimeout(() => tip.remove(), 6000); }
+    });
     document.getElementById("vmodal-title").textContent = title || "";
     document.getElementById("vmodal-yt").href = `https://www.youtube.com/watch?v=${id}`;
     document.getElementById("vmodal-fav").innerHTML = window.favButton(id, "fav-pill");
@@ -392,11 +412,12 @@
   };
   modal.addEventListener("click", (e) => { if (e.target === modal || e.target.closest(".vclose")) closeV(); });
   document.getElementById("vmodal-share").addEventListener("click", async () => {
-    const id = (document.getElementById("vmodal-frame").querySelector("iframe") || {}).src || ""; const vid = (id.match(/embed\/([^?]+)/) || [])[1]; if (!vid) return;
+    const vid = mId; if (!vid) return;
     const url = `${location.origin}${location.pathname.replace(/[^/]*$/, "")}vod.html?v=${vid}`, title = document.getElementById("vmodal-title").textContent;
     try { if (navigator.share) await navigator.share({ title, url }); else { await navigator.clipboard.writeText(url); const b = document.getElementById("vmodal-share"); b.textContent = "הקישור הועתק"; setTimeout(() => b.textContent = "שיתוף", 1500); } } catch (e) {}
   });
   addEventListener("keydown", (e) => { if (e.key === "Escape" && !modal.hidden) closeV(); });
+  addEventListener("pagehide", flushPos); document.addEventListener("visibilitychange", () => { if (document.hidden) flushPos(); });
   document.addEventListener("click", (e) => { const b = e.target.closest(".vcard"); if (!b) return; if (b.classList.contains("vshort")) location.href = `shorts.html?v=${b.dataset.video}`; else window.openVideo(b.dataset.video, b.dataset.title); });
 
   // "הוסיפו למסך הבית": הצעה עדינה פעם אחת, אחרי שני ביקורים, רק כשהדפדפן מאפשר התקנה

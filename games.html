@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202611012123">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611012134">
   <style>
     .game-row { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 0; }
     .game-row .game-tile { aspect-ratio: auto; min-height: 260px; }
@@ -71,8 +71,8 @@
   </section>
 </main>
 
-<script src="assets/js/config.js?v=202611012123"></script>
-<script src="assets/js/site.js?v=202611012123"></script>
+<script src="assets/js/config.js?v=202611012134"></script>
+<script src="assets/js/site.js?v=202611012134"></script>
 <script>
 (() => {
   const S = window.SAPIR, I = window.SAPIR_ICONS;
@@ -91,15 +91,15 @@
     "virus": ["100 שלבים דרך כל מערכת השמש", "חלליות של תולי, מיכאל, שירן, אלין, אלרועי ואלאור", "בוסים, נשקים מיוחדים וכוח נדיר אחד לעשרה שלבים"]
   };
   document.getElementById("games").innerHTML = S.games.map(g => `
-    <article class="card game-row" id="${g.id}">
-      <div class="game-tile ${g.tile}" ${g.image ? `style="background-image:url(${g.image});background-size:cover;background-position:center"` : ""}><span class="kind">${g.kind}</span>${g.image ? `<img class="gimg" src="${g.image}" alt="">` : `<div>${gameIcons[g.icon]}<div class="name">${g.name}</div></div>`}</div>
+    <article class="card game-row ${g.playReady ? "" : "game-soon"}" id="${g.id}">
+      <div class="game-tile ${g.tile}" ${g.image ? `style="background-image:url(${g.image});background-size:cover;background-position:center"` : ""}><span class="kind">${g.kind}</span>${g.image ? `<img class="gimg" src="${g.image}" alt="">` : `<div>${gameIcons[g.icon]}<div class="name">${g.name}</div></div>`}${g.playReady ? "" : '<span class="soon-stamp">בקרוב</span>'}</div>
       <div class="card-body">
-        <div>${g.status === "live" ? '<span class="badge badge-live">זמין עכשיו</span>' : '<span class="badge badge-soon">בקרוב</span>'}</div>
+        <div>${g.playReady ? '<span class="badge badge-live">זמין עכשיו בדפדפן</span>' : '<span class="badge badge-soon">בעבודה, בקרוב</span>'}</div>
         <h3>${g.name}</h3>
         <p>${g.blurb}</p>
         <ul>${(details[g.id] || []).map(d => `<li>${d}</li>`).join("")}</ul>
         <div class="card-foot">
-          ${g.playReady ? `<a class="btn btn-holo btn-sm" href="play.html?game=${g.id}">${I.play} לשחק עכשיו בדפדפן</a>` : `<a class="btn btn-ghost btn-sm" href="play.html?game=${g.id}">${I.play} גרסת דפדפן בקרוב</a>`}
+          ${g.playReady ? `<a class="btn btn-holo btn-sm" href="play.html?game=${g.id}">${I.play} לשחק עכשיו בדפדפן</a>` : `<span class="btn btn-ghost btn-sm" aria-disabled="true" style="opacity:.6;pointer-events:none">${I.play} בקרוב</span>`}
           ${g.play ? `<a class="btn btn-ink btn-sm" href="${g.play}" target="_blank" rel="noopener">${I.store} להורדה בגוגל פליי</a>` : ""}
         </div>
       </div>

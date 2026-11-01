@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202611012123">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611012134">
 </head>
 <body data-page="home">
 <main id="main">
@@ -185,10 +185,10 @@
 
 </main>
 
-<script src="assets/js/config.js?v=202611012123"></script>
-<script src="assets/js/site.js?v=202611012123"></script>
-<script src="assets/js/push.js?v=202611012123"></script>
-<script src="assets/js/library.js?v=202611012123"></script>
+<script src="assets/js/config.js?v=202611012134"></script>
+<script src="assets/js/site.js?v=202611012134"></script>
+<script src="assets/js/push.js?v=202611012134"></script>
+<script src="assets/js/library.js?v=202611012134"></script>
 <script>
 (async () => {
   const S = window.SAPIR, I = window.SAPIR_ICONS;
@@ -221,14 +221,21 @@
     abc: '<svg viewBox="0 0 64 64" fill="#fff"><rect x="6" y="14" width="16" height="16" rx="3"/><rect x="24" y="14" width="16" height="16" rx="3" opacity=".8"/><rect x="42" y="14" width="16" height="16" rx="3" opacity=".6"/><rect x="6" y="34" width="16" height="16" rx="3" opacity=".6"/><rect x="24" y="34" width="16" height="16" rx="3"/><rect x="42" y="34" width="16" height="16" rx="3" opacity=".8"/></svg>',
     rocket: '<svg viewBox="0 0 64 64" fill="#fff"><path d="M32 4c8 6 12 16 12 28l6 8-8 2-2 6-8-4-8 4-2-6-8-2 6-8C20 20 24 10 32 4zm0 14a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM26 54l6 8 6-8z"/></svg>'
   };
-  const gameCard = g => `
+  const gameCard = g => g.playReady ? `
     <a class="card" href="play.html?game=${g.id}">
       <div class="game-tile ${g.tile}"><span class="kind">${g.kind}</span>${g.image ? `<img class="gimg" src="${g.image}" alt="${g.name}">` : `<div>${gameIcons[g.icon]}<div class="name">${g.name}</div></div>`}</div>
       <div class="card-body">
         <div>${g.playReady ? '<span class="badge badge-live">לשחק עכשיו בדפדפן</span>' : '<span class="badge badge-soon">גרסת דפדפן בקרוב</span>'}</div>
         <p>${g.blurb}</p>
       </div>
-    </a>`;
+    </a>` : `
+    <div class="card game-soon" aria-label="${g.name}, בקרוב">
+      <div class="game-tile ${g.tile}"><span class="kind">${g.kind}</span>${g.image ? `<img class="gimg" src="${g.image}" alt="${g.name}">` : `<div>${gameIcons[g.icon]}<div class="name">${g.name}</div></div>`}<span class="soon-stamp">בקרוב</span></div>
+      <div class="card-body">
+        <div><span class="badge badge-soon">בעבודה, בקרוב בדפדפן</span></div>
+        <p>${g.blurb}</p>
+      </div>
+    </div>`;
   document.getElementById("home-games").innerHTML = S.games.map(gameCard).join("");
 
   // ערוצים
