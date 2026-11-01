@@ -23,7 +23,7 @@
   <link rel="icon" href="assets/img/logo-small.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202611012320">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611012331">
   <style>
     .ticker-wrap { display: none; }
     /* בילבורד: תמונת 16:9 שלמה, בלי חיתוך, בכל גודל מסך */
@@ -53,40 +53,38 @@
       .bb-inner > .bb-text { padding: 16px 18px 22px; }
       .bb-play { width: 64px; height: 64px; } .bb-play svg { width: 28px; height: 28px; }
     }
-    /* מסכים רחבים וטלוויזיות: בילבורד ברוחב מלא בסגנון נטפליקס, הטקסט בצד והתמונה נושמת */
+    /* מסכים רחבים וטלוויזיות: תמונת 16:9 שלמה וממורכזת, נמסה בצדדים כמו ענן אל רקע מטושטש, הטקסט בצד */
     @media (min-width: 901px) {
       .billboard { height: clamp(520px, 76vh, 1100px); background: transparent; }
-      .bb-media { -webkit-mask-image: linear-gradient(to top, transparent 0, #000 22%); mask-image: linear-gradient(to top, transparent 0, #000 22%); }
-      .billboard .blur { display: none; }
-      .bb-media { position: absolute; inset: 0; width: auto; margin: 0; aspect-ratio: auto; }
-      .bb-media img { object-position: center 30%; transform-origin: 50% 40%; animation: bb-zoom 14s ease-out forwards; }
-      @keyframes bb-zoom { from { transform: scale(1); } to { transform: scale(1.07); } }
-      @media (prefers-reduced-motion: reduce) { .bb-media img { animation: none; } }
-      .bb-media::after { background:
-        linear-gradient(to left, rgba(7,10,34,0.92) 0%, rgba(7,10,34,0.78) 22%, rgba(7,10,34,0.25) 48%, transparent 66%),
-        linear-gradient(to top, rgba(7,10,34,0.7) 0%, rgba(7,10,34,0.35) 18%, transparent 45%),
-        linear-gradient(to bottom, rgba(7,10,34,0.55), transparent 22%); }
+      .billboard .blur { display: block; inset: -6%; filter: blur(60px) brightness(0.45) saturate(1.2); transform: scale(1.08);
+        -webkit-mask-image: linear-gradient(to top, transparent 0, #000 30%); mask-image: linear-gradient(to top, transparent 0, #000 30%); }
+      .bb-media { position: relative; height: 100%; width: auto; aspect-ratio: 16 / 9; max-width: 100%; margin: 0 auto;
+        -webkit-mask-image: radial-gradient(ellipse 78% 80% at 50% 50%, #000 52%, rgba(0,0,0,0.6) 72%, transparent 100%); mask-image: radial-gradient(ellipse 78% 80% at 50% 50%, #000 52%, rgba(0,0,0,0.6) 72%, transparent 100%); }
+      .bb-media img { object-fit: contain; object-position: center; }
+      .bb-media::after { background: none; }
+      .billboard::after { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 1; background:
+        linear-gradient(to left, rgba(7,10,34,0.82) 0%, rgba(7,10,34,0.5) 22%, rgba(7,10,34,0.1) 42%, transparent 55%),
+        linear-gradient(to top, rgba(7,10,34,0.55) 0%, transparent 30%); }
       .bb-play { inset: auto; position: absolute; width: 0; height: 0; opacity: 0; pointer-events: none; }
-      .bb-inner { position: absolute; inset: 0; width: auto; max-width: none; margin: 0; padding: 0; display: flex; flex-direction: column; justify-content: flex-end; }
-      .bb-inner > .bb-text { padding: 0 max(4vw, 28px) 4.5vh; max-width: min(46vw, 820px); animation: page-in 0.7s var(--ease); }
+      .bb-inner { position: absolute; inset: 0; width: auto; max-width: none; margin: 0; padding: 0; display: flex; flex-direction: column; justify-content: flex-end; z-index: 2; pointer-events: none; }
+      .bb-inner > .bb-text { padding: 0 max(4vw, 28px) 5vh; max-width: min(42vw, 760px); animation: page-in 0.7s var(--ease); pointer-events: auto; }
       .bb-tag { font-size: 0.95rem; padding: 6px 16px; }
-      .bb-title { font-size: clamp(2.4rem, 4vw, 4.6rem); line-height: 1.08; margin-bottom: 14px; text-shadow: 0 8px 36px rgba(0,0,0,0.9); }
+      .bb-title { font-size: clamp(2.2rem, 3.6vw, 4.2rem); line-height: 1.08; margin-bottom: 14px; text-shadow: 0 8px 36px rgba(0,0,0,0.9); }
       .bb-meta { font-size: 1.05rem; gap: 18px; margin-bottom: 22px; color: #e8ebff; }
       .bb-actions { gap: 14px; }
       .bb-actions .btn { padding: 0.8em 1.8em; font-size: 1.15rem; }
-      .bb-dots { position: absolute; bottom: 2.6vh; inset-inline-start: max(4vw, 28px); padding: 0; justify-content: flex-start; }
+      .bb-dots { position: absolute; bottom: 2.6vh; inset-inline-start: max(4vw, 28px); padding: 0; justify-content: flex-start; pointer-events: auto; }
       .bb-dots i { width: 28px; height: 5px; }
-      .rows-start { margin-top: -2vh; position: relative; z-index: 2; }
     }
     @media (min-width: 1900px) {
       .billboard { height: min(78vh, 1200px); }
-      .bb-inner > .bb-text { padding-bottom: 6vh; max-width: 46vw; }
-      .bb-title { font-size: clamp(3rem, 3.4vw, 5rem); }
+      .bb-inner > .bb-text { padding-bottom: 6vh; max-width: 40vw; }
+      .bb-title { font-size: clamp(3rem, 3.2vw, 4.8rem); }
     }
     @media (min-width: 2500px) {
       .billboard { height: min(80vh, 1700px); }
-      .bb-inner > .bb-text { max-width: 44vw; }
-      .bb-title { font-size: 3.2vw; }
+      .bb-inner > .bb-text { max-width: 38vw; }
+      .bb-title { font-size: 3vw; }
       .bb-meta { font-size: 1.15rem; }
       .bb-actions .btn { font-size: 1.3rem; }
     }
@@ -171,10 +169,10 @@
   </section>
   <section class="container" id="rows"></section>
 </main>
-<script src="assets/js/config.js?v=202611012320"></script>
-<script src="assets/js/site.js?v=202611012320"></script>
-<script src="assets/js/push.js?v=202611012320"></script>
-<script src="assets/js/library.js?v=202611012320"></script>
+<script src="assets/js/config.js?v=202611012331"></script>
+<script src="assets/js/site.js?v=202611012331"></script>
+<script src="assets/js/push.js?v=202611012331"></script>
+<script src="assets/js/library.js?v=202611012331"></script>
 <script>
 (async () => {
   const S = window.SAPIR, I = window.SAPIR_ICONS;
