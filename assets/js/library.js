@@ -23,8 +23,13 @@
     try { const r = await fetch("/data/playlists.json", { cache: "no-store" }); const d = await r.json(); plCache = d.playlists || []; } catch (e) { plCache = []; }
     // סדרות: מספר הפרק מתוך הכותרת ("פרק 3", "פרקים 1 + 2"), ומיון מהפרק הראשון לאחרון גם אם הפלייליסט הפוך
     for (const p of plCache) if (p.kind === "series") {
-      p.items.forEach((it, i) => { const m = /פרק(?:ים)?\s*(\d+)/.exec(it.title || ""); it.n = m ? +m[1] : (it.n || i + 1); });
-      p.items.sort((a, b) => a.n - b.n);
+      p.items.forEach((it, i) => {
+        const m = /פרק(?:ים)?\s*(\d+)/.exec(it.title || ""), sm = /עונה\s*(\d+)/.exec(it.title || "");
+        it.ep = m ? +m[1] : 0; it.season = sm ? +sm[1] : 1; it.movie = !m; // "הסרט המלא" וכדומה: בלי מספר פרק
+        it.n = it.movie ? 999 : it.season * 100 + it.ep; it.order = i;
+        it.label = it.movie ? "הסרט המלא" : (p.items.some(x => /עונה\s*\d+/.test(x.title || "")) ? `עונה ${it.season} פרק ${it.ep}` : `פרק ${it.ep}`);
+      });
+      p.items.sort((a, b) => a.n - b.n || a.order - b.order);
     }
     return plCache;
   };

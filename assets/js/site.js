@@ -376,10 +376,10 @@
     if (window.loadPlaylists) window.loadPlaylists().then(() => { // סדרה: כפתור לפרק הבא + שאר הפרקים
       const sr = window.seriesOf && window.seriesOf(id); if (!sr) return;
       const idx = sr.items.findIndex(i => i.id === id), nx = sr.items[idx + 1];
-      document.getElementById("vmodal-title").textContent = `${sr.title}, פרק ${idx + 1}: ${title || ""}`;
+      document.getElementById("vmodal-title").textContent = `${sr.title}, ${sr.items[idx].label}: ${title || ""}`;
       if (nx) { nextBtn.hidden = false; nextBtn.onclick = () => window.openVideo(nx.id, nx.title); }
       const rest = sr.items.filter((_, k) => k !== idx).slice(Math.max(0, idx - 2), Math.max(0, idx - 2) + 8);
-      more.innerHTML = `<div class="vmodal-more-title">עוד פרקים מ${sr.title}</div><div class="vmodal-strip">${rest.map(i => window.videoCard({ id: i.id, title: `פרק ${i.n}: ${i.title}`, thumb: `https://i.ytimg.com/vi/${i.id}/hqdefault.jpg` }, "vmini")).join("")}</div>`;
+      more.innerHTML = `<div class="vmodal-more-title">עוד פרקים מ${sr.title}</div><div class="vmodal-strip">${rest.map(i => window.videoCard({ id: i.id, title: `${i.label}: ${i.title}`, thumb: `https://i.ytimg.com/vi/${i.id}/hqdefault.jpg` }, "vmini")).join("")}</div>`;
       more.dataset.series = "1";
     });
     if (window.loadLibrary) window.loadLibrary().then(lib => { // עוד מאותו ערוץ
