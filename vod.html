@@ -23,7 +23,7 @@
   <link rel="icon" href="assets/img/logo-small.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202611010744">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611011240">
   <style>
     .ticker-wrap { display: none; }
     /* בילבורד: תמונת 16:9 שלמה, בלי חיתוך, בכל גודל מסך */
@@ -73,7 +73,7 @@
       .tile .dur { inset-inline-end: 4px; } .tile .vw { inset-inline-start: 4px; }
       .tile .cap { opacity: 0; } /* בנייד התמונה נקייה; הכותרת מופיעה בנגן */
       .top10 .tile { flex-basis: clamp(170px, 46vw, 240px); margin-inline-start: 22px; }
-      .top10 .num { font-size: 2.6rem; -webkit-text-stroke-width: 1.5px; inset-inline-start: calc(100% - 12px); bottom: -6px; }
+      .top10 .num { font-size: 2.6rem; -webkit-text-stroke-width: 1.5px; inset-inline-end: calc(100% - 10px); bottom: -6px; }
       .row { margin-top: 22px; }
       .bb-actions { flex-wrap: nowrap; gap: 8px; }
       .bb-actions .btn { flex: 1 1 0; min-width: 0; padding: 0.7em 0.6em !important; font-size: 0.95rem !important; white-space: nowrap; justify-content: center; }
@@ -93,9 +93,18 @@
     .vresults .cap { opacity: 1 !important; padding-bottom: 28px; }
     .vresults .none { grid-column: 1 / -1; color: var(--ink-soft); padding: 10px 0; }
     .row { scroll-margin-top: 90px; }
-    .tile .tfav { position: absolute; top: 6px; inset-inline-end: 6px; z-index: 3; opacity: 0; transition: opacity 0.2s; }
-    .tile:hover .tfav, .tile:focus-within .tfav, .tile .tfav:has(.on) { opacity: 1; }
-    @media (pointer: coarse) { .tile .tfav { opacity: 1; } .tile .tfav .fav-btn { width: 32px; height: 32px; } .tile .tfav .fav-btn svg { width: 17px; height: 17px; } }
+    .tilewrap { position: relative; flex: 0 0 clamp(200px, 22vw, 300px); scroll-snap-align: start; }
+    .tilewrap .tile { width: 100%; flex: none; }
+    .top10 .tilewrap { flex-basis: clamp(230px, 24vw, 330px); margin-inline-start: 62px; scroll-margin-inline-start: 62px; }
+    .top10 .tilewrap .tile { margin-inline-start: 0; }
+    .top10 .tile { overflow: visible; }
+    .top10 .tile img, .top10 .tile .cap, .top10 .tile .pl { border-radius: 12px; }
+    .tilewrap:hover .tile { z-index: 3; }
+    .tilewrap .tfav { position: absolute; top: 6px; inset-inline-end: 6px; z-index: 4; opacity: 0; transition: opacity 0.2s; }
+    .tilewrap:hover .tfav, .tilewrap:focus-within .tfav, .tilewrap .tfav:has(.on) { opacity: 1; }
+    .vresults .tilewrap { flex: none; width: 100%; }
+    @media (pointer: coarse) { .tilewrap .tfav { opacity: 1; } .tilewrap .tfav .fav-btn { width: 32px; height: 32px; } .tilewrap .tfav .fav-btn svg { width: 17px; height: 17px; } }
+    @media (max-width: 900px) { .tilewrap { flex-basis: clamp(150px, 42vw, 220px); } .top10 .tilewrap { flex-basis: clamp(170px, 46vw, 240px); margin-inline-start: 40px; scroll-margin-inline-start: 40px; } }
     .top10 .track { padding-top: 10px; padding-inline-start: 4px; }
     .tile .pl { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; transition: opacity 0.3s; }
     .tile:hover .pl { opacity: 1; }
@@ -105,7 +114,7 @@
     .top10 .tile { flex-basis: clamp(230px, 24vw, 330px); margin-inline-start: 30px; overflow: visible; border-radius: 12px; }
     .top10 .tile img { border-radius: 12px; }
     /* המספר: לבן עם קו מתאר שחור, קטן, יושב לפני התמונה (מימין) ומעליה */
-    .top10 .num { position: absolute; inset-inline-start: calc(100% - 18px); bottom: -8px; font-family: var(--font-display); font-size: clamp(3rem, 4.5vw, 4.2rem); line-height: 0.85; color: #fff; -webkit-text-stroke: 2px #000; paint-order: stroke fill; text-shadow: 0 4px 14px rgba(0,0,0,0.6); z-index: 3; pointer-events: none; }
+    .top10 .num { position: absolute; inset-inline-end: calc(100% - 8px); bottom: -8px; font-family: var(--font-display); font-size: clamp(3rem, 4.5vw, 4.2rem); line-height: 0.85; color: #fff; -webkit-text-stroke: 2px #000; paint-order: stroke fill; text-shadow: 0 4px 14px rgba(0,0,0,0.6); z-index: 3; pointer-events: none; }
     .arrow { position: absolute; top: 50%; z-index: 4; width: 44px; height: 70px; border: 0; background: rgba(7,10,34,0.7); color: #fff; font-size: 1.6rem; backdrop-filter: blur(6px); display: grid; place-items: center; transform: translateY(-30%); opacity: 0; transition: opacity 0.3s; }
     .row:hover .arrow { opacity: 1; }
     .arrow.r { inset-inline-start: -10px; border-radius: 0 12px 12px 0; } .arrow.l { inset-inline-end: -10px; border-radius: 12px 0 0 12px; }
@@ -124,9 +133,9 @@
   <section class="container" id="rows"></section>
   <section class="container" style="margin-top:50px"><div class="ad-slot ad-leaderboard" data-ad-slot="vod-bottom"><div>פרסומת<small>(מקום שמור לדוגמה)</small></div></div></section>
 </main>
-<script src="assets/js/config.js?v=202611010744"></script>
-<script src="assets/js/site.js?v=202611010744"></script>
-<script src="assets/js/library.js?v=202611010744"></script>
+<script src="assets/js/config.js?v=202611011240"></script>
+<script src="assets/js/site.js?v=202611011240"></script>
+<script src="assets/js/library.js?v=202611011240"></script>
 <script>
 (async () => {
   const S = window.SAPIR, I = window.SAPIR_ICONS;
@@ -141,15 +150,17 @@
   const rows = window.buildRows(videos, S.channels);
   const chName = id => (S.channels.find(c => c.id === id) || {}).name || "";
   const tile = (v, n) => `
+    <div class="tilewrap">
     <button class="tile" type="button" data-video="${v.id}" data-title="${v.title.replace(/"/g, "&quot;")}" aria-label="נגן: ${v.title.replace(/"/g, "&quot;")}">
       ${n ? `<span class="num" aria-hidden="true">${n}</span>` : ""}
       <img src="${v.thumb}" alt="" loading="${(v.__eager) ? "eager" : "lazy"}" decoding="async">
       ${v.duration ? `<span class="dur">${window.fmtDuration(v.duration)}</span>` : ""}
       ${v.views ? `<span class="vw">${window.fmtViews(v.views)}</span>` : ""}
       <span class="pl"><span>${I.play}</span></span>
-      <span class="tfav">${window.favButton(v.id)}</span>
       <span class="cap">${v.title}</span>
-    </button>`;
+    </button>
+    <span class="tfav">${window.favButton(v.id)}</span>
+    </div>`;
   rows.forEach(r => r.items.slice(0, 7).forEach(v => { v.__eager = true; }));
   // המשך צפייה: הסרטונים האחרונים שנפתחו במכשיר הזה
   let seen = []; try { seen = JSON.parse(localStorage.getItem("sapir-seen") || "[]"); } catch (e) {}

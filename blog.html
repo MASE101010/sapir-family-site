@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202611010744">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611011240">
 </head>
 <body data-page="blog">
 <main id="main">
@@ -33,9 +33,9 @@
     <h1 class="holo-title">הבלוג היומי</h1>
     <p class="lead">כל יום פוסט אחד: טיפ קצר להורים או משהו כיפי לילדים. בלי הרצאות, רק דברים שבאמת עבדו לנו בבית.</p>
     <div class="tabs" role="group" aria-label="סינון פוסטים">
-      <button class="tab" data-f="all" aria-selected="true">הכול</button>
-      <button class="tab" data-f="parents" aria-selected="false">להורים</button>
-      <button class="tab" data-f="kids" aria-selected="false">לילדים</button>
+      <button class="tab" data-f="all" aria-pressed="true">הכול</button>
+      <button class="tab" data-f="parents" aria-pressed="false">להורים</button>
+      <button class="tab" data-f="kids" aria-pressed="false">לילדים</button>
     </div>
   </section>
 
@@ -55,8 +55,8 @@
   </section>
 </main>
 
-<script src="assets/js/config.js?v=202611010744"></script>
-<script src="assets/js/site.js?v=202611010744"></script>
+<script src="assets/js/config.js?v=202611011240"></script>
+<script src="assets/js/site.js?v=202611011240"></script>
 <script>
 (async () => {
   let posts = [];
@@ -72,7 +72,7 @@
   };
   render("all");
   document.querySelectorAll(".tab").forEach(b => b.addEventListener("click", () => {
-    document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", x === b));
+    document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-pressed", x === b));
     render(b.dataset.f);
   }));
 })();

@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>שורטס | משפחת ספיר</title>
   <meta name="description" content="כל השורטס של משפחת ספיר במקום אחד: גוללים ורואים, בלי סוף.">
   <meta name="theme-color" content="#000000">
@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preload" href="/data/library.json" as="fetch" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=202611010744">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611011240">
   <style>
     /* ---- עמוד השורטס: מסך מלא, גלילה אנכית בלבד, נגן יוטיוב בשליטה מלאה ---- */
     html, body { height: 100%; overflow: hidden !important; overscroll-behavior: none; background: #000; }
@@ -143,6 +143,7 @@
 </head>
 <body data-page="shorts">
 <main id="main">
+  <h1 class="sr-only">שורטס של משפחת ספיר</h1>
   <div class="mini-top">
     <a href="index.html" aria-label="חזרה לדף הבית"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7-1.4-1.4L13.2 12 7.6 6.4z"/></svg></a>
     <div class="t"><img src="assets/img/logo-small.png" alt="">שורטס</div>
@@ -171,9 +172,9 @@
     setTimeout(check, 5000);
   })();
 </script>
-<script src="assets/js/config.js?v=202611010744"></script>
-<script src="assets/js/site.js?v=202611010744"></script>
-<script src="assets/js/library.js?v=202611010744"></script>
+<script src="assets/js/config.js?v=202611011240"></script>
+<script src="assets/js/site.js?v=202611011240"></script>
+<script src="assets/js/library.js?v=202611011240"></script>
 <script>
 (async () => {
   const feed = document.getElementById("feed"), stage = document.getElementById("stage"), S = window.SAPIR;
@@ -224,7 +225,7 @@
           <button class="b-share" aria-label="שיתוף">${SVG.share}</button><span class="lbl">שיתוף</span>
           <a class="b-yt" href="#" target="_blank" rel="noopener" aria-label="ביוטיוב">${SVG.yt}</a><span class="lbl">יוטיוב</span>
         </div>
-        <div class="bar" aria-label="מיקום בסרטון"><div class="track"><div class="fill"></div></div><div class="knob"></div></div>
+        <div class="bar" role="slider" aria-label="מיקום בסרטון" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="-1"><div class="track"><div class="fill"></div></div><div class="knob"></div></div>
         <div class="time">0:00</div>
       </div>
     </section>`;
@@ -433,7 +434,7 @@
     const s = curSlot(); if (!s || !s.ready) return;
     try { const st0 = s.p.getPlayerState(); if (st0 === 1) { s.el.classList.add("playing"); s.el.classList.remove("loading"); } } catch (e) {}
     if (barDrag) return;
-    try { const d = s.p.getDuration() || 0, t = s.p.getCurrentTime() || 0; if (d) { const pct = Math.min(100, t / d * 100); s.el.querySelector(".fill").style.width = pct + "%"; s.el.querySelector(".knob").style.insetInlineStart = pct + "%"; s.el.querySelector(".time").textContent = `${fmt(t)} / ${fmt(d)}`; } } catch (e) {}
+    try { const d = s.p.getDuration() || 0, t = s.p.getCurrentTime() || 0; if (d) { const pct = Math.min(100, t / d * 100); s.el.querySelector(".fill").style.width = pct + "%"; s.el.querySelector(".knob").style.insetInlineStart = pct + "%"; s.el.querySelector(".bar").setAttribute("aria-valuenow", Math.round(pct)); s.el.querySelector(".time").textContent = `${fmt(t)} / ${fmt(d)}`; } } catch (e) {}
   }, 250);
   const barPct = (bar, x) => { const r = bar.getBoundingClientRect(); return Math.max(0, Math.min(1, (r.right - x) / r.width)); }; // RTL: ההתחלה מימין
   feed.addEventListener("pointerdown", (e) => {

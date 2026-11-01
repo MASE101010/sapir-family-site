@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202611010744">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611011240">
 </head>
 <body data-page="home">
 <main id="main">
@@ -176,6 +176,7 @@
       <form id="nl" novalidate>
         <input type="email" name="email" placeholder="האימייל שלכם" aria-label="אימייל" required>
         <button class="btn btn-ink" type="submit">הרשמה</button>
+        <label class="muted" style="flex-basis:100%;font-size:.85rem;display:flex;gap:8px;align-items:flex-start"><input type="checkbox" name="agree" required style="margin-top:4px"> אני מאשר/ת קבלת דיוור במייל ממשפחת ספיר. אפשר להסיר את עצמכם בכל הודעה. <a href="privacy.html">מדיניות הפרטיות</a></label>
         <p class="muted" id="nl-msg" style="margin:0;flex-basis:100%;font-size:.95rem"></p>
       </form>
     </div>
@@ -183,9 +184,9 @@
 
 </main>
 
-<script src="assets/js/config.js?v=202611010744"></script>
-<script src="assets/js/site.js?v=202611010744"></script>
-<script src="assets/js/library.js?v=202611010744"></script>
+<script src="assets/js/config.js?v=202611011240"></script>
+<script src="assets/js/site.js?v=202611011240"></script>
+<script src="assets/js/library.js?v=202611011240"></script>
 <script>
 (async () => {
   const S = window.SAPIR, I = window.SAPIR_ICONS;
@@ -269,7 +270,7 @@
   } catch (e) {}
   document.getElementById("shorts-link").href = "shorts.html"; document.getElementById("shorts-link").removeAttribute("target");
   document.getElementById("faq-shop").href = "shop.html"; document.getElementById("faq-shop").removeAttribute("target");
-  document.getElementById("nl").addEventListener("submit", (e) => { e.preventDefault(); const f = e.target, m = document.getElementById("nl-msg"); if (!f.email.validity.valid) { m.textContent = "בדקו את כתובת האימייל."; return; } m.textContent = "נרשמתם! (דמה, הרישום יחובר בהשקה)"; f.reset(); });
+  document.getElementById("nl").addEventListener("submit", (e) => { e.preventDefault(); const f = e.target, m = document.getElementById("nl-msg"); if (!f.email.validity.valid) { m.textContent = "בדקו את כתובת האימייל."; return; } if (!f.agree.checked) { m.textContent = "צריך לאשר קבלת דיוור כדי להירשם."; return; } m.textContent = "נרשמתם! (דמה, הרישום יחובר בהשקה)"; f.reset(); });
 
   // פס רץ
   const items = ["10 מיליון צפיות בחודש", "מעל 3 מיליון עוקבים", "7 ערוצי יוטיוב", "תוכן ערכי ומותאם לילדים"];

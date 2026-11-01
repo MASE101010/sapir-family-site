@@ -483,7 +483,7 @@ a.card:hover .game-tile svg, .game-row:hover .game-tile svg { transform: transla
 .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
 .tab { border: 1px solid var(--line-2); background: var(--glass); color: var(--ink-2); padding: 0.5em 1.1em; border-radius: 999px; font-weight: 600; text-decoration: none; transition: all 0.25s var(--ease); }
 .tab:hover { background: var(--glass-2); color: #fff; transform: translateY(-2px); }
-.tab[aria-selected="true"] { background: #fff; color: #0b0d2e; border-color: #fff; box-shadow: 0 0 24px rgba(255,255,255,0.35); }
+.tab[aria-pressed="true"], .tab[aria-current="page"] { background: #fff; color: #0b0d2e; border-color: #fff; box-shadow: 0 0 24px rgba(255,255,255,0.35); }
 
 .channel-card { display: flex; align-items: center; gap: 10px; padding: 10px 12px; flex-direction: row; }
 .channel-card .avatar { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-display); font-size: 1.4rem; color: #fff; flex: none; box-shadow: 0 0 22px -4px currentColor; overflow: hidden; border: 2px solid rgba(255,255,255,0.2); }
