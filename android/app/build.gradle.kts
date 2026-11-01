@@ -34,3 +34,9 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.webkit:webkit:1.12.1")
 }
+
+configurations.all {
+    resolutionStrategy {
+        force("org.jetbrains.kotlin:kotlin-stdlib:1.9.24", "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.24", "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.24")
+    }
+}
