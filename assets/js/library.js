@@ -21,6 +21,11 @@
   window.loadPlaylists = async function () {
     if (plCache) return plCache;
     try { const r = await fetch("/data/playlists.json", { cache: "no-store" }); const d = await r.json(); plCache = d.playlists || []; } catch (e) { plCache = []; }
+    // סדרות: מספר הפרק מתוך הכותרת ("פרק 3", "פרקים 1 + 2"), ומיון מהפרק הראשון לאחרון גם אם הפלייליסט הפוך
+    for (const p of plCache) if (p.kind === "series") {
+      p.items.forEach((it, i) => { const m = /פרק(?:ים)?\s*(\d+)/.exec(it.title || ""); it.n = m ? +m[1] : (it.n || i + 1); });
+      p.items.sort((a, b) => a.n - b.n);
+    }
     return plCache;
   };
   window.seriesOf = (id) => (plCache || []).find(p => p.kind === "series" && p.items.some(i => i.id === id)) || null;
