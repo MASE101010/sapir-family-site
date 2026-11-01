@@ -31,9 +31,11 @@
     .about-hero .frame { border-radius: 28px; padding: 6px; background: var(--holo); background-size: 300% 100%; animation: holo-shift 9s linear infinite; transform: rotate(2deg); box-shadow: var(--shadow-ink); }
     .about-hero .frame img { border-radius: 23px; }
     @media (max-width: 900px) { .about-hero { grid-template-columns: 1fr; } }
-    .member { padding: 24px; display: flex; gap: 16px; align-items: flex-start; }
+    .member { padding: 18px; display: flex; gap: 14px; align-items: center; }
+    .members { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 720px) { .members { grid-template-columns: repeat(2, 1fr); } .member { padding: 14px; gap: 10px; } .member .av { width: 48px; height: 48px; font-size: 1.4rem; } }
     .member .av { width: 64px; height: 64px; border-radius: 20px; display: grid; place-items: center; font-family: var(--font-display); font-size: 1.8rem; color: #fff; flex: none; }
-    .member h3 { margin: 0 0 2px; font-size: 1.3rem; }
+    .member h3 { margin: 0; font-size: 1.3rem; }
     .member .role { color: var(--ink-soft); font-size: 0.92rem; margin-bottom: 6px; }
     .member p { margin: 0; }
     .timeline { display: grid; gap: 0; max-width: 760px; }
@@ -65,13 +67,13 @@
 
   <section class="section container">
     <div class="section-head"><div><h2 class="holo-title">המשפחה</h2></div></div>
-    <div class="grid grid-2">
-      <div class="card member"><div class="av" style="background:#28d7ff">מ</div><div><h3>מיכאל</h3><div class="role">אבא, יוצר, מפיק ועורך</div><p>האיש שמאחורי המצלמה ומאחורי המקלדת. מצלם, עורך, כותב, מלחין, בונה משחקים, ומדבב את תולי.</p></div></div>
-      <div class="card member"><div class="av" style="background:#ff4fd1">ש</div><div><h3>שירן</h3><div class="role">אמא, הלב של הערוץ</div><p>האישה שמחזיקה את כל הבלאגן ביחד, מול המצלמה ומאחוריה. הערוץ שלה הוא המקום להורים.</p></div></div>
-      <div class="card member"><div class="av" style="background:#ffb84d">א</div><div><h3>אלין</h3><div class="role">הבכורה, 12</div><p>יוצרת בזכות עצמה, עם ערוץ משלה, סגנון משלה, ועין לעיצוב שכולנו מקנאים בה.</p></div></div>
-      <div class="card member"><div class="av" style="background:#4df5c3">א</div><div><h3>אלרועי</h3><div class="role">הבן האמצעי, 11</div><p>הגיימר של המשפחה והבודק הראשי של כל המשחקים שלנו. אם הוא אומר שזה קשה מדי, זה קשה מדי.</p></div></div>
-      <div class="card member"><div class="av" style="background:#7b5cff">א</div><div><h3>אלאור</h3><div class="role">הקטן מבין הגדולים, 5</div><p>המעריץ מספר אחת של תולי, ומקור לרוב הציטוטים הכי מצחיקים בסרטונים.</p></div></div>
-      <div class="card member"><div class="av" style="background:#ffe14d;color:#0b0d2e">א</div><div><h3>אריאל</h3><div class="role">התינוק</div><p>החדש בחבורה. בינתיים בעיקר ישן, אוכל, ומקבל את כל תשומת הלב.</p></div></div>
+    <div class="grid grid-3 members">
+      <div class="card member"><div class="av" style="background:#28d7ff">מ</div><div><h3>מיכאל</h3></div></div>
+      <div class="card member"><div class="av" style="background:#ff4fd1">ש</div><div><h3>שירן</h3></div></div>
+      <div class="card member"><div class="av" style="background:#ffb84d">א</div><div><h3>אלין</h3></div></div>
+      <div class="card member"><div class="av" style="background:#4df5c3">א</div><div><h3>אלרועי</h3></div></div>
+      <div class="card member"><div class="av" style="background:#7b5cff">א</div><div><h3>אלאור</h3></div></div>
+      <div class="card member"><div class="av" style="background:#ffe14d;color:#0b0d2e">א</div><div><h3>אריאל</h3></div></div>
     </div>
   </section>
 
