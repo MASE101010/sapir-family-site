@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preload" href="/data/library.json" as="fetch" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=202611012136">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611012150">
   <style>
     /* ---- עמוד השורטס: מסך מלא, גלילה אנכית בלבד, נגן יוטיוב בשליטה מלאה ---- */
     html, body { height: 100%; overflow: hidden !important; overscroll-behavior: none; background: #000; }
@@ -172,9 +172,9 @@
     setTimeout(check, 5000);
   })();
 </script>
-<script src="assets/js/config.js?v=202611012136"></script>
-<script src="assets/js/site.js?v=202611012136"></script>
-<script src="assets/js/library.js?v=202611012136"></script>
+<script src="assets/js/config.js?v=202611012150"></script>
+<script src="assets/js/site.js?v=202611012150"></script>
+<script src="assets/js/library.js?v=202611012150"></script>
 <script>
 (async () => {
   const feed = document.getElementById("feed"), stage = document.getElementById("stage"), S = window.SAPIR;
@@ -333,6 +333,8 @@
   const gridList = () => gsort === "views" ? [...shorts].sort((a, b) => (b.views || 0) - (a.views || 0)) : [...shorts].sort((a, b) => (b.published || "").localeCompare(a.published || "") || 0); // בקובץ השורטס כבר מסודרים מהחדש לישן; תאריך מדויק כשיש
   const gridMore = () => { const chunk = gList.slice(gRendered, gRendered + 45); sbody.insertAdjacentHTML("beforeend", chunk.map(v => window.videoCard(v, "vshort")).join("")); gRendered += chunk.length; };
   const openGrid = () => { gList = gridList(); gRendered = 0; sbody.innerHTML = ""; gridMore(); document.getElementById("sgrid-count").textContent = `${shorts.length} שורטס`; sgrid.hidden = false; const c = curSlot(); if (c && c.ready) { try { c.p.pauseVideo(); } catch (e) {} } };
+  window.__sapirBack = () => { if (!sgrid.hidden) { closeGrid(); return true; } return false; };
+  window.__sapirMedia = (w) => { if (w === "toggle") togglePause(); else go(w === "ff" ? 1 : -1); return true; };
   const closeGrid = () => { sgrid.hidden = true; const c = curSlot(); if (c && c.ready && c.user !== "pause") { try { c.p.playVideo(); } catch (e) {} } };
   sbody.addEventListener("scroll", () => { if (sbody.scrollTop + sbody.clientHeight > sbody.scrollHeight - 900 && gRendered < gList.length) gridMore(); }, { passive: true });
   document.getElementById("grid-open").addEventListener("click", openGrid);

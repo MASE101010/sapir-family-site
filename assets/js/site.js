@@ -3,6 +3,18 @@
   const S = window.SAPIR;
   const page = document.body.dataset.page || "";
 
+  /* ---------- האפליקציה (Android TV / טלפון): ?app=tv או User-Agent של SapirApp ---------- */
+  (function () {
+    const q = new URLSearchParams(location.search).get("app");
+    const ua = navigator.userAgent;
+    let mode = q || (/SapirApp\/\S+ tv/.test(ua) ? "tv" : /SapirApp\//.test(ua) ? "phone" : "");
+    try { if (q) sessionStorage.setItem("sapir-app", q); else if (!mode) mode = sessionStorage.getItem("sapir-app") || ""; } catch (e) {}
+    if (!mode) return;
+    window.SAPIR_APP = mode;
+    document.body.classList.add("in-app", mode === "tv" ? "tv-app" : "phone-app");
+    if (mode === "tv") document.body.classList.add("tv-nav");
+  })();
+
   const ICONS = {
     youtube: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 7.1a3 3 0 0 0-2.1-2.1C19 4.5 12 4.5 12 4.5s-7 0-8.9.5A3 3 0 0 0 1 7.1 31 31 0 0 0 .5 12 31 31 0 0 0 1 16.9 3 3 0 0 0 3.1 19c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1c.4-1.6.5-3.3.5-4.9s-.1-3.3-.5-4.9zM9.8 15.5v-7l6 3.5-6 3.5z"/></svg>',
     instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>',
@@ -373,6 +385,8 @@
   const ensureYT = () => ytApi || (ytApi = new Promise(res => { if (window.YT && YT.Player) return res(); const prev = window.onYouTubeIframeAPIReady; window.onYouTubeIframeAPIReady = () => { prev && prev(); res(); }; if (!document.querySelector('script[src*="iframe_api"]')) { const sc = document.createElement("script"); sc.src = "https://www.youtube.com/iframe_api"; sc.async = true; document.head.append(sc); } const poll = setInterval(() => { if (window.YT && YT.Player) { clearInterval(poll); res(); } }, 300); }));
   let mPlayer = null, mId = null, mTimer = 0;
   const flushPos = () => { if (!mPlayer || !mId) return; try { savePos(mId, mPlayer.getCurrentTime(), mPlayer.getDuration()); } catch (e) {} };
+  window.__sapirBack = () => { if (!modal.hidden) { closeV(); return true; } const g = document.getElementById("sgrid"); if (g && !g.hidden && window.__closeGrid) { window.__closeGrid(); return true; } return false; };
+  window.__sapirMedia = (what) => { if (!mPlayer || modal.hidden) return false; try { const st = mPlayer.getPlayerState(); if (what === "toggle") st === 1 ? mPlayer.pauseVideo() : mPlayer.playVideo(); else if (what === "ff") mPlayer.seekTo(mPlayer.getCurrentTime() + 10, true); else if (what === "rw") mPlayer.seekTo(Math.max(0, mPlayer.getCurrentTime() - 10), true); } catch (e) {} return true; };
   const closeV = () => { flushPos(); clearInterval(mTimer); mTimer = 0; try { mPlayer && mPlayer.destroy(); } catch (e) {} mPlayer = null; mId = null; modal.hidden = true; document.getElementById("vmodal-frame").innerHTML = ""; document.body.style.overflow = ""; };
   const fmtT = (sec) => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, "0")}`;
   window.openVideo = (id, title) => {
@@ -426,7 +440,7 @@
     e.preventDefault(); installEvt = e;
     try {
       const visits = (+localStorage.getItem("sapir-visits") || 0) + 1; localStorage.setItem("sapir-visits", visits);
-      if (visits < 2 || localStorage.getItem("sapir-install-dismissed") || page === "shorts") return;
+      if (visits < 2 || localStorage.getItem("sapir-install-dismissed") || page === "shorts" || window.SAPIR_APP) return;
     } catch (x) { return; }
     const bar = document.createElement("div"); bar.className = "install-bar"; bar.setAttribute("role", "dialog"); bar.setAttribute("aria-label", "התקנת האפליקציה");
     bar.innerHTML = `<img src="assets/img/icon-192.png" alt=""><div><b>משפחת ספיר כאפליקציה</b><small>מסך מלא, פתיחה מהירה, בלי חנות</small></div><button class="btn btn-ink btn-sm" id="install-yes">הוספה</button><button class="install-x" id="install-no" aria-label="לא עכשיו">✕</button>`;
@@ -470,7 +484,8 @@
       } else if (e.key === "Enter" && document.activeElement && document.activeElement.matches(FOCUSABLE)) { if (document.activeElement.tagName !== "A") { e.preventDefault(); document.activeElement.click(); } }
       else if (e.key === "Backspace" && modal) { e.preventDefault(); modal.querySelector(".vclose").click(); }
     });
-    addEventListener("pointerdown", () => { if (tv) { tv = false; document.body.classList.remove("tv-nav"); } }, { passive: true });
+    if (window.SAPIR_APP === "tv") { enableTv(); addEventListener("DOMContentLoaded", () => { const f = items()[0]; if (f && document.activeElement === document.body) f.focus({ preventScroll: true }); }); }
+    else addEventListener("pointerdown", () => { if (tv) { tv = false; document.body.classList.remove("tv-nav"); } }, { passive: true });
   })();
 
   /* ---------- עזרי בלוג ---------- */

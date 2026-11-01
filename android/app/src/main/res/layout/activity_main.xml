@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/bg">
+    <WebView android:id="@+id/web" android:layout_width="match_parent" android:layout_height="match_parent" />
+    <FrameLayout android:id="@+id/fullscreen" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#000" android:visibility="gone" />
+    <LinearLayout android:id="@+id/offline" android:layout_width="match_parent" android:layout_height="match_parent"
+        android:orientation="vertical" android:gravity="center" android:background="@color/bg" android:visibility="gone" android:padding="48dp">
+        <ImageView android:layout_width="120dp" android:layout_height="120dp" android:src="@mipmap/ic_launcher" android:contentDescription="@string/app_name" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="24dp"
+            android:text="@string/offline_title" android:textColor="#FFFFFF" android:textSize="28sp" android:textStyle="bold" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp"
+            android:text="@string/offline_sub" android:textColor="#B8BEDC" android:textSize="18sp" android:gravity="center" />
+        <Button android:id="@+id/retry" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="24dp"
+            android:text="@string/retry" android:textSize="18sp" android:paddingStart="32dp" android:paddingEnd="32dp"
+            android:backgroundTint="@color/accent" android:textColor="#0B0D2E" />
+    </LinearLayout>
+</FrameLayout>
