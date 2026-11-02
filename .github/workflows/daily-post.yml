@@ -19,6 +19,7 @@ jobs:
           python-version: "3.12"
       - run: pip install anthropic
       - name: ייצור הפוסט
+        if: ${{ secrets.ANTHROPIC_API_KEY != '' }}   # בלי מפתח: הבלוג רץ על הפוסטים שנכתבו מראש (scripts/posts_*.py)
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           AUTO_PUBLISH: "true"     # false = הפוסט נשמר כטיוטה עד אישור ידני

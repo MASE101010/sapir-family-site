@@ -25,7 +25,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parent.parent
 POSTS = ROOT / "data" / "posts.json"
 GUIDE = ROOT / "blog" / "GUIDELINES.md"
-MODEL = os.environ.get("BLOG_MODEL", "claude-sonnet-4-5")
+MODEL = os.environ.get("BLOG_MODEL", "claude-sonnet-5-5")
 BUFFER_DAYS = int(os.environ.get("BUFFER_DAYS", "3"))
 AUTO_PUBLISH = os.environ.get("AUTO_PUBLISH", "true").lower() == "true"
 ALLOWED_TAGS = {"p", "h2", "ul", "ol", "li", "blockquote", "strong", "em"}
