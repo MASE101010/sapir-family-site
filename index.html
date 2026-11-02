@@ -25,7 +25,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202611020209">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611020816">
 </head>
 <body data-page="home">
 <main id="main">
@@ -184,10 +184,10 @@
 
 </main>
 
-<script src="assets/js/config.js?v=202611020209"></script>
-<script src="assets/js/site.js?v=202611020209"></script>
-<script src="assets/js/push.js?v=202611020209"></script>
-<script src="assets/js/library.js?v=202611020209"></script>
+<script src="assets/js/config.js?v=202611020816"></script>
+<script src="assets/js/site.js?v=202611020816"></script>
+<script src="assets/js/push.js?v=202611020816"></script>
+<script src="assets/js/library.js?v=202611020816"></script>
 <script>
 (async () => {
   const S = window.SAPIR, I = window.SAPIR_ICONS;
@@ -260,14 +260,16 @@
     document.getElementById("today-post").innerHTML = '<div class="empty">הבלוג ייטען אחרי העלאה לשרת</div>';
   }
 
-  // שורטס: הסרטונים האחרונים מערוץ Sapir TV (RSS), עם גיבוי לכרטיסי דמה
-  const shortsCh = S.channels.find(c => c.id === "sapirtv");
-  const shortsData = [["🎢","היום בלונה פארק","2.1M"],["🦁","תולי מלמד את האות E","880K"],["🍕","מי מכין פיצה יותר טוב?","1.4M"],["🎮","אלרועי מנצח את אבא","3.2M"]];
-  const grads = ["linear-gradient(160deg,#ff3d6e,#7b2bd6)","linear-gradient(160deg,#ffb84d,#ff4fd1)","linear-gradient(160deg,#28d7ff,#3d2bd6)","linear-gradient(160deg,#4df5c3,#1b4a8a)"];
-  const dummyShorts = () => { document.getElementById("shorts").innerHTML = shortsData.map(([e, t, v], i) => `<a class="short" href="videos.html#sapirtv" style="background:${grads[i]}"><small>${v} צפיות</small><div class="play"><span>${I.play}</span></div><span style="font-size:4rem;position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);opacity:.9">${e}</span><b>${t}</b></a>`).join(""); };
-  window.fetchChannelVideos(window.channelIdOf(shortsCh)).then(vs => {
-    document.getElementById("shorts").innerHTML = vs.slice(0, 6).map(v => window.videoCard(v, "vshort")).join("");
-  }).catch(dummyShorts);
+  // שורטס: שלושה בשורה אחת, החדשים מהספרייה (בלי כרטיסי דמה)
+  const shortsN = () => matchMedia("(min-width: 901px)").matches ? 6 : 3;
+  const renderShorts = (vs) => { document.getElementById("shorts").innerHTML = vs.slice(0, shortsN()).map(v => window.videoCard(v, "vshort")).join(""); };
+  let shortsList = [];
+  window.loadLibrary().then(videos => {
+    shortsList = window.shortsOf(videos).sort((a, b) => (b.published || "").localeCompare(a.published || ""));
+    if (shortsList.length) renderShorts(shortsList);
+    else return window.fetchChannelVideos(window.channelIdOf(S.channels.find(c => c.id === "sapirtv"))).then(vs => { shortsList = vs; renderShorts(vs); });
+  }).catch(() => { document.getElementById("shorts").closest("section").hidden = true; });
+  matchMedia("(min-width: 901px)").addEventListener("change", () => { if (shortsList.length) renderShorts(shortsList); });
   // המשך צפייה + מועדפים בדף הבית
   try {
     const lib = await window.loadLibrary();
