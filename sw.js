@@ -1,6 +1,6 @@
 /* Service Worker של משפחת ספיר: קבצי האתר נשמרים במכשיר, דפים נטענים מהרשת עם גיבוי מהמטמון.
    העלאת הגרסה כאן מנקה מטמונים ישנים. */
-const VERSION = "sapir-v13";
+const VERSION = "sapir-v14";
 const ASSETS = ["/assets/css/style.css", "/assets/js/config.js", "/assets/js/site.js", "/assets/js/library.js", "/assets/fonts/SapirPop.ttf", "/assets/img/logo-small.png", "/assets/img/logo.webp"];
 self.addEventListener("install", (e) => { self.skipWaiting(); e.waitUntil(caches.open(VERSION).then(c => c.addAll(ASSETS).catch(() => {}))); });
 self.addEventListener("activate", (e) => { e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== VERSION).map(k => caches.delete(k)))).then(() => self.clients.claim())); });

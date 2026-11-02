@@ -184,7 +184,7 @@
     let stars = [], w, h;
     const resize = () => {
       w = canvas.width = innerWidth; h = canvas.height = innerHeight;
-      stars = Array.from({ length: Math.min(160, Math.floor(w * h / 9000)) }, () => ({
+      stars = Array.from({ length: Math.min(110, Math.floor(w * h / 14000)) }, () => ({
         x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.4 + 0.3,
         t: Math.random() * Math.PI * 2, s: Math.random() * 0.02 + 0.005, v: Math.random() * 0.15 + 0.03
       }));
@@ -193,7 +193,7 @@
     let last = 0;
     const tick = (now) => {
       requestAnimationFrame(tick);
-      if (document.hidden || now - last < (lowPower ? 50 : 16)) return; last = now; // 20fps בנייד, 60 במחשב
+      if (document.hidden || now - last < (lowPower ? 66 : 33)) return; last = now; // 15fps בנייד, 30 במחשב: הבהוב כוכבים לא צריך יותר
       ctx.clearRect(0, 0, w, h);
       for (const s of stars) {
         s.t += s.s; s.y -= s.v; if (s.y < -4) { s.y = h + 4; s.x = Math.random() * w; }
