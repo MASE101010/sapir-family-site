@@ -25,14 +25,21 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="preload" href="assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/css/style.css?v=202611020204">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611020209">
   <style>
     .game-row { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 0; }
     .game-row .game-tile { aspect-ratio: auto; min-height: 260px; }
     .game-row .card-body { padding: 30px 32px; gap: 14px; }
     .game-row h3 { font-size: 2rem; }
     .game-row ul { margin: 0; padding-inline-start: 1.2em; color: var(--ink-soft); }
-    @media (max-width: 760px) { .game-row { grid-template-columns: 1fr; } .game-row .game-tile { min-height: 200px; } }
+    @media (max-width: 760px) {
+      .game-row { grid-template-columns: 1fr; }
+      .game-row .game-tile { min-height: 0; aspect-ratio: 16 / 9; }
+      .game-row .card-body { padding: 14px 16px 16px; gap: 8px; }
+      .game-row h3 { font-size: 1.4rem; }
+      .game-row ul { font-size: 0.9rem; }
+      .games-list { gap: 14px; }
+    }
     .games-list { display: grid; gap: 24px; }
   </style>
 </head>
@@ -70,8 +77,8 @@
   </section>
 </main>
 
-<script src="assets/js/config.js?v=202611020204"></script>
-<script src="assets/js/site.js?v=202611020204"></script>
+<script src="assets/js/config.js?v=202611020209"></script>
+<script src="assets/js/site.js?v=202611020209"></script>
 <script>
 (() => {
   const S = window.SAPIR, I = window.SAPIR_ICONS;
