@@ -5,11 +5,11 @@ val ksPass = System.getenv("ANDROID_KEYSTORE_PASSWORD")
 
 android {
     namespace = "il.co.sapirfamily.app"
-    compileSdk = 35
+    compileSdk = 36
     defaultConfig {
         applicationId = "il.co.sapirfamily.app"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = (System.getenv("APP_VERSION_CODE") ?: "1").toInt()
         versionName = System.getenv("APP_VERSION_NAME") ?: "1.0"
     }

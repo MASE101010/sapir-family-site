@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: "17" }
       - uses: gradle/actions/setup-gradle@v4
-        with: { gradle-version: "8.10.2" }
+        with: { gradle-version: "8.11.1" }
       - name: מפתח החתימה (מהסוד ANDROID_KEYSTORE_B64)
         env: { KS: "${{ secrets.ANDROID_KEYSTORE_B64 }}" }
         run: |
