@@ -114,7 +114,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        String url = HOME + "?app=" + (isTv ? "tv" : "phone");
+        // בטלוויזיה נפתחים ישר על ה-VOD (הנוח ביותר בשלט); בטלפון על דף הבית
+        String url = HOME + (isTv ? "vod.html?app=tv" : "?app=phone");
         Uri data = getIntent() == null ? null : getIntent().getData();
         if (data != null && "https".equals(data.getScheme())) url = data.toString() + (data.getQuery() == null ? "?" : "&") + "app=" + (isTv ? "tv" : "phone");
         if (savedInstanceState != null) web.restoreState(savedInstanceState); else web.loadUrl(url);

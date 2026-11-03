@@ -484,7 +484,7 @@
       } else if (e.key === "Enter" && document.activeElement && document.activeElement.matches(FOCUSABLE)) { if (document.activeElement.tagName !== "A") { e.preventDefault(); document.activeElement.click(); } }
       else if (e.key === "Backspace" && modal) { e.preventDefault(); modal.querySelector(".vclose").click(); }
     });
-    if (window.SAPIR_APP === "tv") { enableTv(); addEventListener("DOMContentLoaded", () => { const f = items()[0]; if (f && document.activeElement === document.body) f.focus({ preventScroll: true }); }); }
+    if (window.SAPIR_APP === "tv") { enableTv(); const firstFocus = () => { if (document.activeElement !== document.body) return; const f = document.querySelector(".bb-actions .btn, .hero-actions .btn") || items().find(el => !el.closest(".site-header")) || items()[0]; if (f) f.focus({ preventScroll: true }); }; addEventListener("DOMContentLoaded", firstFocus); setTimeout(firstFocus, 1500); }
     else addEventListener("pointerdown", () => { if (tv) { tv = false; document.body.classList.remove("tv-nav"); } }, { passive: true });
   })();
 

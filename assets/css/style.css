@@ -859,6 +859,15 @@ a.card.tilting::after, .game-row.tilting::after { opacity: 1; }
 .tv-app .tabbar { display: none !important; }
 .tv-app main { padding-bottom: 6vh; }
 .tv-app .vmodal-box { max-width: 92vw; }
+.tv-app { scroll-behavior: smooth; }
+.tv-app main { animation-duration: 0.45s; }
+.tv-app .site-header { padding-block: 6px; }
+.tv-app .nav-links a { font-size: 1.15rem; padding: 8px 14px; border-radius: 999px; }
+.tv-app .nav-links a:focus { background: #fff; color: #0b0d2e; outline: none; box-shadow: 0 0 0 6px rgba(40,215,255,0.45); }
+.tv-app .billboard { height: clamp(520px, 70vh, 1000px); }
+.tv-app .vtools-row { display: none; }
+.tv-app .track { scroll-padding-inline: 4vw; padding-block: 14px 22px; }
+.tv-app .tile:focus, .tv-app .vcard:focus { transform: scale(1.06); }
 .tv-app :focus { outline: none; }
 .tv-app :focus-visible, .tv-app .tile:focus, .tv-app .vcard:focus, .tv-app .card:focus, .tv-app .btn:focus, .tv-app a:focus { outline: 5px solid #fff; outline-offset: 5px; box-shadow: 0 0 0 10px rgba(40,215,255,0.45); }
 .in-app .footer-legal a[href^="http"] { pointer-events: auto; }
