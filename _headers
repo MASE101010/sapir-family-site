@@ -8,3 +8,6 @@
   Cache-Control: public, max-age=600
 /data/posts.json
   Cache-Control: no-cache
+/store/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: no-cache
