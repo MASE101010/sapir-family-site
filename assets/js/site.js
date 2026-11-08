@@ -8,11 +8,15 @@
     const q = new URLSearchParams(location.search).get("app");
     const ua = navigator.userAgent;
     let mode = q || (/SapirApp\/\S+ tv/.test(ua) ? "tv" : /SapirApp\//.test(ua) ? "phone" : "");
+    const ios = /SapirApp\/\S+ ios/.test(ua) || q === "ios";
+    if (q === "ios") mode = "phone";
     try { if (q) sessionStorage.setItem("sapir-app", q); else if (!mode) mode = sessionStorage.getItem("sapir-app") || ""; } catch (e) {}
     if (!mode) return;
     window.SAPIR_APP = mode;
     document.body.classList.add("in-app", mode === "tv" ? "tv-app" : "phone-app");
     if (mode === "tv") document.body.classList.add("tv-nav");
+    // iOS: סרגל הטאבים הוא נייטיב (SwiftUI), אז מסתירים את זה של האתר
+    if (ios) { window.SAPIR_IOS = true; document.body.classList.add("ios-app"); }
   })();
 
   const ICONS = {

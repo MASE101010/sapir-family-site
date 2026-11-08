@@ -871,6 +871,10 @@ a.card.tilting::after, .game-row.tilting::after { opacity: 1; }
 .tv-app :focus { outline: none; }
 .tv-app :focus-visible, .tv-app .tile:focus, .tv-app .vcard:focus, .tv-app .card:focus, .tv-app .btn:focus, .tv-app a:focus { outline: 5px solid #fff; outline-offset: 5px; box-shadow: 0 0 0 10px rgba(40,215,255,0.45); }
 .in-app .footer-legal a[href^="http"] { pointer-events: auto; }
+/* אפליקציית iOS: הטאבים נייטיב, אין צורך בסרגל של האתר ולא בהצעת ההתקנה */
+.ios-app .tabbar, .ios-app .install-bar, .ios-app .to-top { display: none !important; }
+.ios-app body, body.ios-app { padding-bottom: 12px; }
+.ios-app .site-header { padding-top: max(6px, env(safe-area-inset-top)); }
 
 /* משחקים: משבצות, 2 בשורה בנייד, 3 במחשב */
 .games-grid { grid-template-columns: repeat(3, 1fr); }
