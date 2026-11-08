@@ -70,7 +70,7 @@ def main():
     ver = next((v for v in vers if v["attributes"].get("appVersionState", v["attributes"].get("appStoreState")) in
                 ("PREPARE_FOR_SUBMISSION", "DEVELOPER_REJECTED", "REJECTED", "METADATA_REJECTED", "INVALID_BINARY")), vers[0])
     vid = ver["id"]; print("version", ver["attributes"]["versionString"], ver["attributes"].get("appVersionState"))
-    patch_attrs(f"/appStoreVersions/{vid}", "appStoreVersions", vid, {"versionString": L["version"], "releaseType": L["releaseType"]})
+    patch_attrs(f"/appStoreVersions/{vid}", "appStoreVersions", vid, {"versionString": L["version"], "releaseType": L["releaseType"], "copyright": L.get("copyright", "")})
     vlocs = {x["attributes"]["locale"]: x for x in call("GET", f"/appStoreVersions/{vid}/appStoreVersionLocalizations")["data"]}
     for loc, t in L["locales"].items():
         attrs = {k: t[k] for k in ("description", "keywords", "promotionalText", "supportUrl", "marketingUrl", "whatsNew") if t.get(k)}
