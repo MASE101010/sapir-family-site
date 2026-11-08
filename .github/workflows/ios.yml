@@ -10,7 +10,7 @@ on:
         type: boolean
         default: true
   push:
-    paths: ["ios/**", ".github/workflows/ios.yml"]
+    paths: ["ios/**", ".github/workflows/ios.yml", "!ios/tools/**", "!ios/store/**", "!ios/signing/**"]
 permissions:
   contents: write
 concurrency: { group: ios, cancel-in-progress: true }
