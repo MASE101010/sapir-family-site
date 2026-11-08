@@ -27,7 +27,7 @@ def call(method, path, data=None):
     try:
         with urllib.request.urlopen(req) as r: return json.load(r) if r.status != 204 else {}
     except urllib.error.HTTPError as e:
-        sys.stderr.write(e.read().decode()); raise
+        e.body = e.read().decode(); sys.stderr.write(e.body + "\n"); raise
 
 def team():
     d = call("GET", "/bundleIds?limit=200")

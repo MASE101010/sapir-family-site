@@ -1,0 +1,66 @@
+{
+  "bundleId": "il.co.sapirfamily.app",
+  "version": "1.0",
+  "primaryCategory": "ENTERTAINMENT",
+  "releaseType": "AFTER_APPROVAL",
+  "contentRightsDeclaration": "DOES_NOT_USE_THIRD_PARTY_CONTENT",
+  "locales": {
+    "he": {
+      "name": "משפחת ספיר",
+      "subtitle": "סרטונים, שורטס, משחקים ובלוג",
+      "privacyPolicyUrl": "https://sapirfamily.co.il/privacy.html",
+      "description": "ברוכים הבאים הביתה! האפליקציה הרשמית של משפחת ספיר: מיכאל, שירן, אלין, אלרועי, אלאור ואריאל, עם כל מה שאנחנו יוצרים, במקום אחד, בחינם.\n\nמה יש בפנים:\n• VOD: כל הסרטונים הארוכים שלנו, מסודרים בקטגוריות: וולוגים, אתגרים, טיולים, הפתעות ועוד. חיפוש מהיר, רשימת המשך צפייה והתראה כשעולה סרטון חדש.\n• שורטס: מאות סרטונים קצרים, גלילה אנכית נוחה, שמירה למועדפים ושיתוף בלחיצה.\n• משחקים: המשחקים שבנינו בעצמנו, ישר מהאפליקציה, בלי התקנות: מיני פייטר, המירוץ לפסגה, פלישת הוירוסים ועוד.\n• תולי האריה: הסדרה, השירים והחברים של תולי, במיוחד לילדים הקטנים.\n• הבלוג היומי: כל יום פוסט קצר להורים או לילדים, טיפ, סיפור או רעיון למשפחה.\n\nלמה כדאי:\n• מהיר ונוח: טאבים בתחתית המסך, מעברים חלקים, מסך מלא בכל סרטון, תמונה בתוך תמונה ו-AirPlay לטלוויזיה.\n• מתעדכן לבד: כל סרטון או פוסט חדש מופיע מיד, בלי לחכות לעדכון בחנות.\n• נגיש: תפריט נגישות, טקסט ברור, תמיכה מלאה בעברית ובאייפד.\n\nמעל 3 מיליון עוקבים כבר חלק מהמשפחה. בואו גם אתם!\n\nיש לכם רעיון, שאלה או הצעה לשיתוף פעולה? כתבו לנו דרך דף \"צרו קשר\" באפליקציה.",
+      "keywords": "משפחת ספיר,תולי האריה,סרטונים,שורטס,משחקים,ילדים,משפחה,וולוג,בלוג,הורים,אתגרים,ספיר",
+      "promotionalText": "חדש: כל סרטון, שורט ומשחק של משפחת ספיר באפליקציה אחת, עם בלוג יומי להורים ולילדים.",
+      "supportUrl": "https://sapirfamily.co.il/contact.html",
+      "marketingUrl": "https://sapirfamily.co.il",
+      "whatsNew": "הגרסה הראשונה של האפליקציה של משפחת ספיר: VOD, שורטס, משחקים, תולי האריה והבלוג היומי."
+    },
+    "en-US": {
+      "name": "Sapir Family",
+      "subtitle": "Videos, Shorts, Games & Blog",
+      "privacyPolicyUrl": "https://sapirfamily.co.il/privacy.html",
+      "description": "The official app of the Sapir Family, one of Israel's most loved family creators with over 3 million followers.\n\nInside:\n• VOD: all our full-length videos, sorted by category, with fast search and new-video alerts.\n• Shorts: hundreds of short videos in a smooth vertical feed.\n• Games: the games we built ourselves, playable right inside the app.\n• Tuli the Lion: the series and songs for the little ones.\n• Daily blog: a short post every day for parents or kids.\n\nFast, accessible, fully in Hebrew, built for iPhone and iPad, with full-screen video, Picture in Picture and AirPlay.",
+      "keywords": "sapir family,tuli,hebrew,kids videos,shorts,family vlog,games,israel",
+      "promotionalText": "Every Sapir Family video, short and game in one app, plus a daily blog.",
+      "supportUrl": "https://sapirfamily.co.il/contact.html",
+      "marketingUrl": "https://sapirfamily.co.il",
+      "whatsNew": "First release: VOD, Shorts, Games, Tuli the Lion and the daily blog."
+    }
+  },
+  "screenshots": {
+    "APP_IPHONE_67": ["iphone-1-home.png", "iphone-2-vod.png", "iphone-3-shorts.png", "iphone-4-games.png", "iphone-5-tuli.png", "iphone-6-blog.png"],
+    "APP_IPAD_PRO_3GEN_129": ["ipad-1-home.png", "ipad-2-vod.png", "ipad-3-shorts.png", "ipad-4-games.png", "ipad-5-tuli.png", "ipad-6-blog.png"]
+  },
+  "review": {
+    "contactFirstName": "Michael",
+    "contactLastName": "Sapir",
+    "contactEmail": "social@sapirfamily.co.il",
+    "contactPhone": "",
+    "demoAccountRequired": false,
+    "notes": "Sapir Family is the official app of an Israeli family of content creators (3M+ followers). The app wraps our own website (sapirfamily.co.il) with native tabs, offline screen, pull to refresh and Picture in Picture. All videos are our own YouTube channels, embedded with the official YouTube player; the games are our own HTML5 games. No login is needed. Ads are served by Google AdMob (banner and occasional interstitial, never during video playback). The app is in Hebrew (right to left)."
+  },
+  "ageRating": {
+    "alcoholTobaccoOrDrugUseOrReferences": "NONE",
+    "contests": "NONE",
+    "gamblingSimulated": "NONE",
+    "horrorOrFearThemes": "NONE",
+    "matureOrSuggestiveThemes": "NONE",
+    "medicalOrTreatmentInformation": "NONE",
+    "profanityOrCrudeHumor": "NONE",
+    "sexualContentGraphicAndNudity": "NONE",
+    "sexualContentOrNudity": "NONE",
+    "violenceCartoonOrFantasy": "NONE",
+    "violenceRealistic": "NONE",
+    "violenceRealisticProlongedGraphicOrSadistic": "NONE",
+    "gambling": false,
+    "unrestrictedWebAccess": false,
+    "advertising": true,
+    "ageAssurance": false,
+    "lootBox": false,
+    "messagingAndChat": false,
+    "userGeneratedContent": false,
+    "parentalControls": false,
+    "healthOrWellnessTopics": false
+  }
+}
