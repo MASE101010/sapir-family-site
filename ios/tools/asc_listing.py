@@ -132,10 +132,10 @@ def main():
         terrs = []; nxt = "/territories?limit=200"
         while nxt:
             d = call("GET", nxt); terrs += [t["id"] for t in d["data"]]; nxt = d.get("links", {}).get("next"); nxt = nxt.replace(API, "") if nxt else None
-        call("POST", "/appAvailabilitiesV2", {"data": {"type": "appAvailabilities", "attributes": {"availableInNewTerritories": True},
+        try_call("POST", "https://api.appstoreconnect.apple.com/v2/appAvailabilities", {"data": {"type": "appAvailabilities", "attributes": {"availableInNewTerritories": True},
             "relationships": {"app": {"data": {"type": "apps", "id": app_id}}, "territoryAvailabilities": {"data": [{"type": "territoryAvailabilities", "id": f"t{i}"} for i in range(len(terrs))]}}},
             "included": [{"type": "territoryAvailabilities", "id": f"t{i}", "attributes": {"available": True}, "relationships": {"territory": {"data": {"type": "territories", "id": t}}}} for i, t in enumerate(terrs)]})
-        print("availability:", len(terrs), "territories")
+        print("availability:", len(terrs), "territories (אם נכשל, ברירת המחדל של אפל היא כל המדינות)")
 
     # --- הבילד האחרון שעבר עיבוד
     builds = call("GET", f"/builds?filter[app]={app_id}&filter[processingState]=VALID&sort=-uploadedDate&limit=1")["data"]

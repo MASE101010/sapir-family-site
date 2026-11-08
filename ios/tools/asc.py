@@ -22,7 +22,7 @@ def token():
     return f"{head}.{body}." + b64(r.to_bytes(32, "big") + s.to_bytes(32, "big"))
 
 def call(method, path, data=None):
-    req = urllib.request.Request(API + path, method=method, data=json.dumps(data).encode() if data else None,
+    req = urllib.request.Request(path if path.startswith("http") else API + path, method=method, data=json.dumps(data).encode() if data else None,
                                  headers={"Authorization": "Bearer " + token(), "Content-Type": "application/json"})
     try:
         with urllib.request.urlopen(req) as r: return json.load(r) if r.status != 204 else {}
