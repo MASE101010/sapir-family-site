@@ -61,6 +61,8 @@
     "messagingAndChat": false,
     "userGeneratedContent": false,
     "parentalControls": false,
-    "healthOrWellnessTopics": false
+    "healthOrWellnessTopics": false,
+    "socialMedia": false,
+    "gunsOrOtherWeapons": "NONE"
   }
 }

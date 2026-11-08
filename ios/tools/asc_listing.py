@@ -25,6 +25,7 @@ def patch_attrs(path, typ, ident, attrs):
             body = getattr(e, "body", ""); bad = None
             try:
                 for err in json.loads(body)["errors"]:
+                    if "REQUIRED" in err.get("code", ""): sys.stderr.write(body + "\n"); raise
                     p = err.get("source", {}).get("pointer", "")
                     if "/attributes/" in p: bad = p.split("/attributes/")[1].split("/")[0]; break
                     for k in attrs:
