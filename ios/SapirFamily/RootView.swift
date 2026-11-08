@@ -18,23 +18,25 @@ let TABS: [Tab] = [
 struct RootView: View {
     @State private var selected = "home"
     @StateObject private var models = TabModels()
+    @StateObject private var ads = AdsManager.shared
 
     var body: some View {
         TabView(selection: Binding(
             get: { selected },
             set: { new in
                 // לחיצה חוזרת על הטאב הפעיל: חזרה לראש הדף שלו
-                if new == selected { models.model(for: new).home() }
+                if new == selected { models.model(for: new).home() } else { ads.maybeShowInterstitial() }
                 selected = new
             }
         )) {
             ForEach(TABS) { tab in
-                WebScreen(model: models.model(for: tab.id))
+                WebScreen(model: models.model(for: tab.id), showAd: selected == tab.id)
                     .tabItem { Label(tab.title, systemImage: tab.icon) }
                     .tag(tab.id)
             }
         }
         .ignoresSafeArea(.keyboard)
+        .onAppear { ads.start() }
         .onOpenURL { url in
             // קישור עמוק (https://sapirfamily.co.il/...): נפתח בטאב המתאים
             let file = url.lastPathComponent

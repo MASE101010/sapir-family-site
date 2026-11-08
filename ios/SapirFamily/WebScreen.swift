@@ -4,6 +4,8 @@ import SafariServices
 
 struct WebScreen: View {
     @ObservedObject var model: WebModel
+    var showAd = false
+    @ObservedObject private var ads = AdsManager.shared
 
     var body: some View {
         ZStack {
@@ -13,6 +15,16 @@ struct WebScreen: View {
                 VStack { ProgressBar(); Spacer() }
             }
             if model.offline { OfflineView(retry: model.reload) }
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            if showAd && ads.ready {
+                GeometryReader { g in
+                    AdBanner(width: g.size.width)
+                        .frame(width: g.size.width, height: ads.bannerHeight)
+                }
+                .frame(height: ads.bannerHeight)
+                .background(Color(red: 0.03, green: 0.04, blue: 0.13))
+            }
         }
         .sheet(item: $model.externalURL) { url in
             SafariView(url: url).ignoresSafeArea()
