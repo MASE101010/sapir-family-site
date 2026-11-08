@@ -117,13 +117,14 @@ def main():
         print("review details ok")
 
     # --- מחיר: חינם
-    sched = try_call("GET", f"/apps/{app_id}/appPriceSchedule")
+    sched = try_call("GET", f"/apps/{app_id}/appPriceSchedule/manualPrices")
+    print("price schedule:", "exists" if sched and sched.get("data") else "none")
     if not (sched and sched.get("data")):
         pts = call("GET", f"/apps/{app_id}/appPricePoints?filter[territory]=USA&limit=200")["data"]
         free = next(p for p in pts if float(p["attributes"]["customerPrice"]) == 0)
         call("POST", "/appPriceSchedules", {"data": {"type": "appPriceSchedules", "relationships": {"app": {"data": {"type": "apps", "id": app_id}},
-            "baseTerritory": {"data": {"type": "territories", "id": "USA"}}, "manualPrices": {"data": [{"type": "appPrices", "id": "p0"}]}}},
-            "included": [{"type": "appPrices", "id": "p0", "attributes": {"startDate": None}, "relationships": {"appPricePoint": {"data": {"type": "appPricePoints", "id": free["id"]}}}}]})
+            "baseTerritory": {"data": {"type": "territories", "id": "USA"}}, "manualPrices": {"data": [{"type": "appPrices", "id": "${p0}"}]}}},
+            "included": [{"type": "appPrices", "id": "${p0}", "attributes": {"startDate": None}, "relationships": {"appPricePoint": {"data": {"type": "appPricePoints", "id": free["id"]}}}}]})
         print("price: free")
 
     # --- זמינות בכל המדינות
@@ -132,10 +133,10 @@ def main():
         terrs = []; nxt = "/territories?limit=200"
         while nxt:
             d = call("GET", nxt); terrs += [t["id"] for t in d["data"]]; nxt = d.get("links", {}).get("next"); nxt = nxt.replace(API, "") if nxt else None
-        try_call("POST", "https://api.appstoreconnect.apple.com/v2/appAvailabilities", {"data": {"type": "appAvailabilities", "attributes": {"availableInNewTerritories": True},
-            "relationships": {"app": {"data": {"type": "apps", "id": app_id}}, "territoryAvailabilities": {"data": [{"type": "territoryAvailabilities", "id": f"t{i}"} for i in range(len(terrs))]}}},
-            "included": [{"type": "territoryAvailabilities", "id": f"t{i}", "attributes": {"available": True}, "relationships": {"territory": {"data": {"type": "territories", "id": t}}}} for i, t in enumerate(terrs)]})
-        print("availability:", len(terrs), "territories (אם נכשל, ברירת המחדל של אפל היא כל המדינות)")
+        r = try_call("POST", "https://api.appstoreconnect.apple.com/v2/appAvailabilities", {"data": {"type": "appAvailabilities", "attributes": {"availableInNewTerritories": True},
+            "relationships": {"app": {"data": {"type": "apps", "id": app_id}}, "territoryAvailabilities": {"data": [{"type": "territoryAvailabilities", "id": f"${{t{i}}}"} for i in range(len(terrs))]}}},
+            "included": [{"type": "territoryAvailabilities", "id": f"${{t{i}}}", "attributes": {"available": True}, "relationships": {"territory": {"data": {"type": "territories", "id": t}}}} for i, t in enumerate(terrs)]})
+        print("availability:", len(terrs), "territories", "ok" if r else "FAILED")
 
     # --- הבילד האחרון שעבר עיבוד
     builds = call("GET", f"/builds?filter[app]={app_id}&filter[processingState]=VALID&sort=-uploadedDate&limit=1")["data"]
