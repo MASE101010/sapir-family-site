@@ -70,8 +70,8 @@ targets:
         UIApplicationSupportsIndirectInputEvents: true
         NSAppTransportSecurity:
           NSAllowsArbitraryLoads: false
-        # AdMob: מזהה האפליקציה (עד להחלפה: מזהה הבדיקה של גוגל) ורשתות SKAdNetwork
-        GADApplicationIdentifier: ca-app-pub-3940256099942544~1458002511
+        # AdMob: מזהה האפליקציה ורשתות SKAdNetwork
+        GADApplicationIdentifier: ca-app-pub-4952145100186285~2459889137
         GADDelayAppMeasurementInit: true
         NSUserTrackingUsageDescription: ההרשאה משמשת להצגת פרסומות שמתאימות לכם יותר ועוזרת לנו להמשיך ליצור תוכן בחינם
         SKAdNetworkItems:

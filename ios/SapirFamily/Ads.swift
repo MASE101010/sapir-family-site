@@ -4,11 +4,11 @@ import GoogleMobileAds
 import UserMessagingPlatform
 import AppTrackingTransparency
 
-/// מזהי AdMob. עד שמחליפים למזהים האמיתיים מחשבון 7msapsap7 משתמשים במזהי הבדיקה של גוגל
+/// מזהי AdMob של האפליקציה "משפחת ספיר iOS" בחשבון 7msapsap7 (אפליקציה 2459889137)
 /// (מזהה האפליקציה עצמו יושב ב-Info.plist תחת GADApplicationIdentifier, ראו project.yml).
 enum AdConfig {
-    static let banner = "ca-app-pub-3940256099942544/2435281174"
-    static let interstitial = "ca-app-pub-3940256099942544/4411468910"
+    static let banner = "ca-app-pub-4952145100186285/8504608644"
+    static let interstitial = "ca-app-pub-4952145100186285/3026865348"
     static let isTest = banner.contains("3940256099942544")
     /// כמה זמן לפחות בין מודעות מסך מלא, ולא לפני שהמשתמש היה דקה באפליקציה
     static let interstitialGap: TimeInterval = 180
