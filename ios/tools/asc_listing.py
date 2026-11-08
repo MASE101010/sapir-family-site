@@ -148,6 +148,21 @@ def main():
     else:
         print("::warning::אין עדיין בילד מעובד, הגרסה נשארת בלי בילד")
 
+    # --- TestFlight: קבוצה פנימית עם כל חברי הצוות, שמקבלת כל בילד אוטומטית
+    groups = call("GET", f"/apps/{app_id}/betaGroups")["data"]
+    g = next((x for x in groups if x["attributes"].get("isInternalGroup")), None)
+    if not g:
+        g = call("POST", "/betaGroups", {"data": {"type": "betaGroups", "attributes": {"name": "המשפחה", "isInternalGroup": True, "hasAccessToAllBuilds": True},
+             "relationships": {"app": {"data": {"type": "apps", "id": app_id}}}}})["data"]
+    have = {t["attributes"].get("email") for t in call("GET", f"/betaGroups/{g['id']}/betaTesters")["data"]}
+    for u in call("GET", "/users?limit=50")["data"]:
+        a = u["attributes"]
+        if a.get("username") and a["username"] not in have:
+            try_call("POST", "/betaTesters", {"data": {"type": "betaTesters", "attributes": {"email": a["username"], "firstName": a.get("firstName") or "", "lastName": a.get("lastName") or ""},
+                     "relationships": {"betaGroups": {"data": [{"type": "betaGroups", "id": g["id"]}]}}}})
+            print("testflight tester", a["username"])
+    print("testflight group ok")
+
     if SUBMIT:
         if not builds: sys.exit("אי אפשר לשלוח בלי בילד")
         rs = call("POST", "/reviewSubmissions", {"data": {"type": "reviewSubmissions", "attributes": {"platform": "IOS"}, "relationships": {"app": {"data": {"type": "apps", "id": app_id}}}}})["data"]["id"]
