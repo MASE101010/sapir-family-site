@@ -77,7 +77,7 @@ jobs:
           fi
           CERT_ID=$(cat $SIGN/cert-id.txt); echo "cert $CERT_ID"
           openssl x509 -inform DER -in "$RUNNER_TEMP/sign/cert.cer" -out "$RUNNER_TEMP/sign/cert.pem"
-          openssl pkcs12 -export -inkey "$RUNNER_TEMP/sign/key.pem" -in "$RUNNER_TEMP/sign/cert.pem" -out "$RUNNER_TEMP/sign/cert.p12" -passout pass:ci -name "Apple Distribution"
+          openssl pkcs12 -export -inkey "$RUNNER_TEMP/sign/key.pem" -in "$RUNNER_TEMP/sign/cert.pem" -out "$RUNNER_TEMP/sign/cert.p12" -passout pass:ci -name "Apple Distribution" -certpbe PBE-SHA1-3DES -keypbe PBE-SHA1-3DES -macalg sha1
           # מחזיק מפתחות זמני
           KC="$RUNNER_TEMP/build.keychain-db"
           security create-keychain -p ci "$KC"; security set-keychain-settings -lut 21600 "$KC"; security unlock-keychain -p ci "$KC"
