@@ -62,7 +62,7 @@ jobs:
             -allowProvisioningUpdates -allowProvisioningDeviceRegistration \
             -authenticationKeyPath ~/private_keys/AuthKey_$ASC_KEY_ID.p8 -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
             DEVELOPMENT_TEAM="$TEAM_ID" MARKETING_VERSION="$VERSION_NAME" CURRENT_PROJECT_VERSION="${{ github.run_number }}" \
-            CODE_SIGN_STYLE=Automatic -quiet
+            CODE_SIGN_STYLE=Automatic CODE_SIGN_IDENTITY="Apple Distribution" -quiet
           test -d "$RUNNER_TEMP/SapirFamily.xcarchive" || { echo "::error::הארכיון לא נוצר"; exit 1; }
       - name: ייצוא IPA
         working-directory: ios
