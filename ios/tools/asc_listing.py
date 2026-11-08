@@ -109,11 +109,12 @@ def main():
 
     # --- פרטי קשר לביקורת
     rv = dict(L["review"]); rv["contactPhone"] = os.environ.get("ASC_REVIEW_PHONE") or rv["contactPhone"]
-    if not rv["contactPhone"]: print("::warning::אין טלפון לפרטי הביקורת (ASC_REVIEW_PHONE), אפל דורשת אותו לפני השליחה"); rv.pop("contactPhone")
-    det = try_call("GET", f"/appStoreVersions/{vid}/appStoreReviewDetail")
-    if det and det.get("data"): patch_attrs(f"/appStoreReviewDetails/{det['data']['id']}", "appStoreReviewDetails", det["data"]["id"], rv)
-    else: call("POST", "/appStoreReviewDetails", {"data": {"type": "appStoreReviewDetails", "attributes": rv, "relationships": {"appStoreVersion": {"data": {"type": "appStoreVersions", "id": vid}}}}})
-    print("review details ok")
+    if not rv["contactPhone"]: print("::warning::אין טלפון לפרטי הביקורת (הסוד ASC_REVIEW_PHONE), אפל דורשת אותו לפני השליחה, מדלגים")
+    else:
+        det = try_call("GET", f"/appStoreVersions/{vid}/appStoreReviewDetail")
+        if det and det.get("data"): patch_attrs(f"/appStoreReviewDetails/{det['data']['id']}", "appStoreReviewDetails", det["data"]["id"], rv)
+        else: call("POST", "/appStoreReviewDetails", {"data": {"type": "appStoreReviewDetails", "attributes": rv, "relationships": {"appStoreVersion": {"data": {"type": "appStoreVersions", "id": vid}}}}})
+        print("review details ok")
 
     # --- מחיר: חינם
     sched = try_call("GET", f"/apps/{app_id}/appPriceSchedule")
