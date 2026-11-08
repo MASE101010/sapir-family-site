@@ -92,7 +92,10 @@ def main():
             for dtype, files in L["screenshots"].items():
                 if dtype in sets:
                     sid = sets[dtype]["id"]
-                    for old in call("GET", f"/appScreenshotSets/{sid}/appScreenshots")["data"]: call("DELETE", f"/appScreenshots/{old['id']}")
+                    olds = call("GET", f"/appScreenshotSets/{sid}/appScreenshots")["data"]
+                    if [o["attributes"]["fileName"] for o in olds] == files and all(o["attributes"].get("assetDeliveryState", {}).get("state") != "FAILED" for o in olds):
+                        print("screenshots", loc, dtype, "(כבר שם)"); continue
+                    for old in olds: call("DELETE", f"/appScreenshots/{old['id']}")
                 else:
                     sid = call("POST", "/appScreenshotSets", {"data": {"type": "appScreenshotSets", "attributes": {"screenshotDisplayType": dtype},
                           "relationships": {"appStoreVersionLocalization": {"data": {"type": "appStoreVersionLocalizations", "id": vl["id"]}}}}})["data"]["id"]
@@ -100,7 +103,7 @@ def main():
                 for f in files: upload(os.path.join(ROOT, "screenshots", f), sid)
 
     # --- דירוג גיל
-    ar = call("GET", f"/appStoreVersions/{vid}/ageRatingDeclaration")["data"]
+    ar = call("GET", f"/appInfos/{info['id']}/ageRatingDeclaration")["data"]
     patch_attrs(f"/ageRatingDeclarations/{ar['id']}", "ageRatingDeclarations", ar["id"], L["ageRating"]); print("age rating ok")
 
     # --- פרטי קשר לביקורת
