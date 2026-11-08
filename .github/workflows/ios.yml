@@ -49,6 +49,48 @@ jobs:
           python3 ios/tools/asc.py ensure-bundle "$BUNDLE_ID" "Sapir Family"
           APP=$(python3 ios/tools/asc.py app "$BUNDLE_ID"); echo "ASC_APP_ID=$APP" >> "$GITHUB_ENV"
           if [ -z "$APP" ]; then echo "::warning::אין עדיין אפליקציה ב-App Store Connect עם $BUNDLE_ID, ההעלאה תידלג. יוצרים אותה פעם אחת ב-appstoreconnect.apple.com → My Apps → +"; fi
+      - name: חתימה (תעודת Apple Distribution ופרופיל App Store דרך ה-API)
+        env:
+          ASC_KEY_P8: ${{ secrets.APPSTORE_KEY_P8 }}
+        run: |
+          set -e
+          SIGN=ios/signing; mkdir -p "$SIGN" "$RUNNER_TEMP/sign"
+          # התעודה נשמרת בריפו מוצפנת במפתח שנגזר מהסוד, כך שלא צריך להוסיף עוד סודות
+          PASS=$(printf '%s' "$ASC_KEY_P8" | shasum -a 256 | cut -c1-64)
+          dec() { openssl enc -d -aes-256-cbc -pbkdf2 -pass pass:"$PASS" -in "$1" -out "$2"; }
+          enc() { openssl enc -aes-256-cbc -pbkdf2 -salt -pass pass:"$PASS" -in "$1" -out "$2"; }
+          NEED=yes
+          if [ -f "$SIGN/dist-key.pem.enc" ] && [ -f "$SIGN/cert-id.txt" ]; then
+            if python3 ios/tools/asc.py cert-ok "$(cat $SIGN/cert-id.txt)"; then
+              dec "$SIGN/dist-key.pem.enc" "$RUNNER_TEMP/sign/key.pem"; dec "$SIGN/dist-cert.cer.enc" "$RUNNER_TEMP/sign/cert.cer"; NEED=no
+            fi
+          fi
+          if [ "$NEED" = yes ]; then
+            echo "יוצרים תעודת הפצה חדשה"
+            openssl genrsa -out "$RUNNER_TEMP/sign/key.pem" 2048 2>/dev/null
+            openssl req -new -key "$RUNNER_TEMP/sign/key.pem" -out "$RUNNER_TEMP/sign/req.csr" -subj "/CN=Sapir Family CI/O=Michael Sapir/C=IL"
+            python3 ios/tools/asc.py cert "$RUNNER_TEMP/sign/req.csr" "$RUNNER_TEMP/sign/cert.cer" > "$SIGN/cert-id.txt"
+            enc "$RUNNER_TEMP/sign/key.pem" "$SIGN/dist-key.pem.enc"; enc "$RUNNER_TEMP/sign/cert.cer" "$SIGN/dist-cert.cer.enc"
+            git config user.name "sapir-ci"; git config user.email "ci@sapirfamily.co.il"
+            git add "$SIGN" && git commit -qm "ios: תעודת הפצה (מוצפנת)" && git push -q || echo "::warning::לא הצלחנו לשמור את התעודה בריפו"
+          fi
+          CERT_ID=$(cat $SIGN/cert-id.txt); echo "cert $CERT_ID"
+          openssl x509 -inform DER -in "$RUNNER_TEMP/sign/cert.cer" -out "$RUNNER_TEMP/sign/cert.pem"
+          openssl pkcs12 -export -inkey "$RUNNER_TEMP/sign/key.pem" -in "$RUNNER_TEMP/sign/cert.pem" -out "$RUNNER_TEMP/sign/cert.p12" -passout pass:ci -name "Apple Distribution"
+          # מחזיק מפתחות זמני
+          KC="$RUNNER_TEMP/build.keychain-db"
+          security create-keychain -p ci "$KC"; security set-keychain-settings -lut 21600 "$KC"; security unlock-keychain -p ci "$KC"
+          security list-keychains -d user -s "$KC" $(security list-keychains -d user | tr -d '"')
+          security default-keychain -s "$KC"
+          curl -fsSL https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer -o "$RUNNER_TEMP/sign/wwdr.cer" && security import "$RUNNER_TEMP/sign/wwdr.cer" -k "$KC" -T /usr/bin/codesign >/dev/null || true
+          security import "$RUNNER_TEMP/sign/cert.p12" -k "$KC" -P ci -T /usr/bin/codesign -T /usr/bin/security >/dev/null
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k ci "$KC" >/dev/null
+          security find-identity -v -p codesigning "$KC"
+          # פרופיל App Store טרי בכל בנייה
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          UUID=$(python3 ios/tools/asc.py profile "$BUNDLE_ID" "$CERT_ID" "Sapir Family AppStore" "$RUNNER_TEMP/sign/appstore.mobileprovision")
+          cp "$RUNNER_TEMP/sign/appstore.mobileprovision" ~/Library/MobileDevice/Provisioning\ Profiles/"$UUID".mobileprovision
+          echo "PROFILE_UUID=$UUID" >> "$GITHUB_ENV"; echo "profile $UUID"
       - name: יצירת הפרויקט
         working-directory: ios
         run: xcodegen generate
@@ -59,17 +101,15 @@ jobs:
         run: |
           xcodebuild -project SapirFamily.xcodeproj -scheme SapirFamily -configuration Release \
             -destination 'generic/platform=iOS' -archivePath "$RUNNER_TEMP/SapirFamily.xcarchive" archive \
-            -allowProvisioningUpdates -allowProvisioningDeviceRegistration \
-            -authenticationKeyPath ~/private_keys/AuthKey_$ASC_KEY_ID.p8 -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
             DEVELOPMENT_TEAM="$TEAM_ID" MARKETING_VERSION="$VERSION_NAME" CURRENT_PROJECT_VERSION="${{ github.run_number }}" \
-            CODE_SIGN_STYLE=Automatic CODE_SIGN_IDENTITY="Apple Distribution" -quiet
+            CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY="Apple Distribution" PROVISIONING_PROFILE_SPECIFIER="$PROFILE_UUID" -quiet
           test -d "$RUNNER_TEMP/SapirFamily.xcarchive" || { echo "::error::הארכיון לא נוצר"; exit 1; }
       - name: ייצוא IPA
         working-directory: ios
         run: |
-          /usr/libexec/PlistBuddy -c "Add :teamID string $TEAM_ID" ExportOptions.plist
-          xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/SapirFamily.xcarchive" -exportOptionsPlist ExportOptions.plist -exportPath "$RUNNER_TEMP/out" \
-            -allowProvisioningUpdates -authenticationKeyPath ~/private_keys/AuthKey_$ASC_KEY_ID.p8 -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+          /usr/libexec/PlistBuddy -c "Add :teamID string $TEAM_ID" -c "Add :signingCertificate string Apple Distribution" \
+            -c "Add :provisioningProfiles dict" -c "Add :provisioningProfiles:$BUNDLE_ID string $PROFILE_UUID" ExportOptions.plist
+          xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/SapirFamily.xcarchive" -exportOptionsPlist ExportOptions.plist -exportPath "$RUNNER_TEMP/out" -quiet
           mkdir -p ../out && cp "$RUNNER_TEMP"/out/*.ipa ../out/sapir-family-ios.ipa && ls -la ../out
       - uses: actions/upload-artifact@v4
         with: { name: sapir-family-ios, path: out/* }

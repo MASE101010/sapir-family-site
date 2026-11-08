@@ -2,7 +2,7 @@
 """עזר קטן ל-App Store Connect API: מפתח JWT מהמפתח של הצוות ומבצע כמה פעולות.
 שימוש: asc.py team | ensure-bundle <id> <name> | app <bundle-id> | status <bundle-id>
 משתני סביבה: ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_P8 (תוכן הקובץ .p8)."""
-import base64, json, os, sys, time, urllib.request, urllib.error
+import base64, json, os, sys, time, urllib.request, urllib.error, urllib.parse
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives.asymmetric.utils import decode_dss_signature
@@ -53,6 +53,34 @@ def status(bundle):
     b = call("GET", f"/builds?filter[app]={d['data'][0]['id']}&sort=-uploadedDate&limit=3") if d.get("data") else {"data": []}
     for x in b["data"]: print("build", x["attributes"]["version"], x["attributes"]["processingState"])
 
+def cert(csr_path, out_cer):
+    """יוצר תעודת Apple Distribution מ-CSR, כותב את ה-DER ומדפיס את המזהה"""
+    csr = open(csr_path).read()
+    r = call("POST", "/certificates", {"data": {"type": "certificates", "attributes": {"certificateType": "DISTRIBUTION", "csrContent": csr}}})
+    open(out_cer, "wb").write(base64.b64decode(r["data"]["attributes"]["certificateContent"]))
+    print(r["data"]["id"])
+
+def cert_ok(cert_id):
+    """0 אם התעודה קיימת ובתוקף, אחרת 1"""
+    try:
+        d = call("GET", f"/certificates/{cert_id}")
+        exp = d["data"]["attributes"].get("expirationDate", "")
+        ok = exp > time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime(time.time() + 7 * 86400))
+        print("valid until", exp); sys.exit(0 if ok else 1)
+    except urllib.error.HTTPError:
+        sys.exit(1)
+
+def profile(bundle, cert_id, name, out_path):
+    """מוחק פרופיל ישן באותו שם ויוצר פרופיל App Store חדש עם התעודה"""
+    b = call("GET", f"/bundleIds?filter[identifier]={bundle}")["data"]
+    bid = next(x["id"] for x in b if x["attributes"]["identifier"] == bundle)
+    for p in call("GET", f"/profiles?filter[name]={urllib.parse.quote(name)}")["data"]:
+        if p["attributes"]["name"] == name: call("DELETE", f"/profiles/{p['id']}")
+    r = call("POST", "/profiles", {"data": {"type": "profiles", "attributes": {"name": name, "profileType": "IOS_APP_STORE"},
+        "relationships": {"bundleId": {"data": {"type": "bundleIds", "id": bid}}, "certificates": {"data": [{"type": "certificates", "id": cert_id}]}}}})
+    open(out_path, "wb").write(base64.b64decode(r["data"]["attributes"]["profileContent"]))
+    print(r["data"]["attributes"]["uuid"])
+
 if __name__ == "__main__":
     cmd, *args = sys.argv[1:]
-    {"team": team, "ensure-bundle": ensure_bundle, "app": app, "status": status}[cmd](*args)
+    {"team": team, "ensure-bundle": ensure_bundle, "app": app, "status": status, "cert": cert, "cert-ok": cert_ok, "profile": profile}[cmd](*args)
