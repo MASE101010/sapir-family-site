@@ -10,6 +10,9 @@ on:
         description: "להעלות צילומי מסך מחדש"
         type: boolean
         default: true
+      require_build:
+        description: "לעצור אם הבילד הזה עוד לא מוכן (מספר בילד, רשות)"
+        default: ""
 jobs:
   listing:
     runs-on: ubuntu-latest
@@ -24,6 +27,7 @@ jobs:
           ASC_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID || '1702e21a-d07f-49a7-9c39-40d65aea7f65' }}
           ASC_KEY_P8: ${{ secrets.APPSTORE_KEY_P8 }}
           ASC_REVIEW_PHONE: ${{ secrets.ASC_REVIEW_PHONE }}
+          REQUIRE_BUILD: ${{ github.event.inputs.require_build }}
         run: |
           ARGS=""
           [ "${{ github.event.inputs.submit }}" = "true" ] && ARGS="$ARGS --submit"

@@ -140,6 +140,9 @@ def main():
 
     # --- הבילד האחרון שעבר עיבוד
     builds = call("GET", f"/builds?filter[app]={app_id}&filter[processingState]=VALID&sort=-uploadedDate&limit=1")["data"]
+    want = os.environ.get("REQUIRE_BUILD")
+    if want and (not builds or builds[0]["attributes"]["version"] != want):
+        sys.exit(f"הבילד {want} עדיין לא סיים עיבוד (האחרון שמוכן: {builds[0]['attributes']['version'] if builds else 'אין'})")
     if builds:
         b = builds[0]
         call("PATCH", f"/appStoreVersions/{vid}/relationships/build", {"data": {"type": "builds", "id": b["id"]}})
