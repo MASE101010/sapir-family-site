@@ -30,8 +30,22 @@
     }
   },
   "screenshots": {
-    "APP_IPHONE_67": ["iphone-1-home.png", "iphone-2-vod.png", "iphone-3-shorts.png", "iphone-4-games.png", "iphone-5-tuli.png", "iphone-6-blog.png"],
-    "APP_IPAD_PRO_3GEN_129": ["ipad-1-home.png", "ipad-2-vod.png", "ipad-3-shorts.png", "ipad-4-games.png", "ipad-5-tuli.png", "ipad-6-blog.png"]
+    "APP_IPHONE_67": [
+      "iphone-1-home.png",
+      "iphone-2-vod.png",
+      "iphone-3-shorts.png",
+      "iphone-4-games.png",
+      "iphone-5-tuli.png",
+      "iphone-6-blog.png"
+    ],
+    "APP_IPAD_PRO_3GEN_129": [
+      "ipad-1-home.png",
+      "ipad-2-vod.png",
+      "ipad-3-shorts.png",
+      "ipad-4-games.png",
+      "ipad-5-tuli.png",
+      "ipad-6-blog.png"
+    ]
   },
   "review": {
     "contactFirstName": "Michael",
@@ -39,7 +53,7 @@
     "contactEmail": "social@sapirfamily.co.il",
     "contactPhone": "",
     "demoAccountRequired": false,
-    "notes": "Sapir Family is the official app of an Israeli family of content creators (3M+ followers). The app wraps our own website (sapirfamily.co.il) with native tabs, offline screen, pull to refresh and Picture in Picture. All videos are our own YouTube channels, embedded with the official YouTube player; the games are our own HTML5 games. No login is needed. Ads are served by Google AdMob (banner and occasional interstitial, never during video playback). The app is in Hebrew (right to left)."
+    "notes": "SCREEN RECORDING (physical iPhone, latest iOS, from app launch through the typical flow): https://sapirfamily.co.il/store/ios-review.mp4\n\n1. PURPOSE AND AUDIENCE\nSapir Family (משפחת ספיר) is the official app of an Israeli family of content creators with over 3 million followers on YouTube, TikTok and Instagram. The app gives fans one fast, native place to watch the family's own videos (long-form \"VOD\" and short-form \"Shorts\"), play the family's own HTML5 games, follow the Tuli the Lion children's series and read the family's daily blog for parents and kids. Target audience: families in Israel and Hebrew speakers worldwide, teens and adults; the content is family friendly. The App Store age rating is 13+ because the app shows third-party ads (AdMob) and embeds a video player.\n\n2. HOW TO USE / SETUP\nNo account, login or purchase of any kind. Launch the app: it opens on the Home tab. Bottom native tabs: Home (בית), VOD, Shorts (שורטס), Games (משחקים), Blog (הבלוג). Tap any video to play it inline, tap the fullscreen control for fullscreen, rotate for landscape. Tap a game tile to play it inside the app. Pull down to refresh. Tapping the active tab again returns to the top of that section. Links to our social profiles open in an in-app Safari view. The app language is Hebrew (right to left).\n\n3. TECHNICAL DESCRIPTION\nThe app is a native SwiftUI shell (tab bar, loading indicator, offline screen with retry, pull to refresh, Picture in Picture, AirPlay, deep links) around our own website sapirfamily.co.il, which we built and host specifically for this purpose (Cloudflare Pages). The content (videos, games, blog) is our own.\n\n4. EXTERNAL SERVICES\n- YouTube embedded player (youtube-nocookie.com) to stream the family's own YouTube channels. We own the channels and the videos.\n- Google AdMob for a bottom adaptive banner and an occasional interstitial shown only when switching tabs (never during video playback, never more than once every 3 minutes, never in the first minute). Google UMP consent is shown where required (EEA/UK); App Tracking Transparency prompt is requested before any tracking.\n- Cloudflare Pages hosts the website. No authentication service, no payment processor, no AI service, no user generated content, no messaging.\n\n5. REGIONAL DIFFERENCES\nNone. The app functions identically in all regions; the content is in Hebrew everywhere.\n\n6. REGULATED INDUSTRY / THIRD-PARTY MATERIAL\nNot a regulated industry. All videos, music, games, characters (including Tuli the Lion) and texts are created and owned by the Sapir family / Sapir Productions Ltd. The games are our own HTML5 games (Mini Fighter is also published by us on Google Play under com.sapirproductions.minifighter). No protected third-party material.\n\nContact for any question during review: Michael Sapir, social@sapirfamily.co.il."
   },
   "ageRating": {
     "alcoholTobaccoOrDrugUseOrReferences": "NONE",
