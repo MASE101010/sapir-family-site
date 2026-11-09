@@ -168,9 +168,15 @@ def main():
 
     if SUBMIT:
         if not builds: sys.exit("אי אפשר לשלוח בלי בילד")
-        rs = call("POST", "/reviewSubmissions", {"data": {"type": "reviewSubmissions", "attributes": {"platform": "IOS"}, "relationships": {"app": {"data": {"type": "apps", "id": app_id}}}}})["data"]["id"]
-        call("POST", "/reviewSubmissionItems", {"data": {"type": "reviewSubmissionItems", "relationships": {"reviewSubmission": {"data": {"type": "reviewSubmissions", "id": rs}},
-             "appStoreVersion": {"data": {"type": "appStoreVersions", "id": vid}}}}})
+        # הגשה קיימת עם בעיות פתוחות (דחייה): מגישים אותה מחדש; אחרת פותחים הגשה חדשה
+        open_subs = [x for x in call("GET", f"/reviewSubmissions?filter[app]={app_id}&filter[platform]=IOS&limit=20")["data"]
+                     if x["attributes"]["state"] in ("UNRESOLVED_ISSUES", "READY_FOR_REVIEW")]
+        if open_subs:
+            rs = open_subs[0]["id"]; print("resubmitting", rs, open_subs[0]["attributes"]["state"])
+        else:
+            rs = call("POST", "/reviewSubmissions", {"data": {"type": "reviewSubmissions", "attributes": {"platform": "IOS"}, "relationships": {"app": {"data": {"type": "apps", "id": app_id}}}}})["data"]["id"]
+            call("POST", "/reviewSubmissionItems", {"data": {"type": "reviewSubmissionItems", "relationships": {"reviewSubmission": {"data": {"type": "reviewSubmissions", "id": rs}},
+                 "appStoreVersion": {"data": {"type": "appStoreVersions", "id": vid}}}}})
         call("PATCH", f"/reviewSubmissions/{rs}", {"data": {"type": "reviewSubmissions", "id": rs, "attributes": {"submitted": True}}})
         print("נשלח לביקורת!")
 
