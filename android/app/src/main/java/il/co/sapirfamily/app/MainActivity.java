@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private View customView;
     private WebChromeClient.CustomViewCallback customCallback;
     private boolean isTv;
+    private Ads ads;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -56,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         offline = findViewById(R.id.offline);
         fullscreen = findViewById(R.id.fullscreen);
         findViewById(R.id.retry).setOnClickListener(v -> { offline.setVisibility(View.GONE); web.reload(); });
+        ads = new Ads(this, isTv, findViewById(R.id.ad_host));
+        ads.start();
 
         WebSettings s = web.getSettings();
         s.setJavaScriptEnabled(true);
@@ -85,6 +88,11 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) { if (url.startsWith(HOME) || url.contains("pages.dev")) offline.setVisibility(View.GONE); }
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                // מעבר בין דפים באתר: הזדמנות למודעת ביניים (לא בדקה הראשונה, לא בזמן וידאו במסך מלא)
+                if (url != null && (url.startsWith(HOME) || url.contains("pages.dev"))) ads.maybeShowInterstitial(customView != null);
+            }
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 if (request.isForMainFrame()) offline.setVisibility(View.VISIBLE);
@@ -155,9 +163,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() { super.onPause(); web.onPause(); }
+    protected void onPause() { super.onPause(); web.onPause(); if (ads != null) ads.onPause(); }
     @Override
-    protected void onResume() { super.onResume(); web.onResume(); hideSystemBars(); }
+    protected void onResume() { super.onResume(); web.onResume(); if (ads != null) ads.onResume(); hideSystemBars(); }
     @Override
-    protected void onDestroy() { if (web != null) web.destroy(); super.onDestroy(); }
+    protected void onDestroy() { if (ads != null) ads.onDestroy(); if (web != null) web.destroy(); super.onDestroy(); }
 }
