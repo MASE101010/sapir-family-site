@@ -1,0 +1,37 @@
+{
+  "app": "il.co.sapirfamily.app",
+  "updated": "2026-11-13",
+  "developer": "Sapir Productions Ltd (Michael Sapir)",
+  "games": [
+    {
+      "title": "מיני פייטר (Mini Fighter)",
+      "developer": "Sapir Productions Ltd (Michael Sapir)",
+      "url": "https://minifighter.co.il/play/",
+      "playable_in_app": "opens in SFSafariViewController"
+    },
+    {
+      "title": "המירוץ לפסגה (Tuli Jump)",
+      "developer": "Sapir Productions Ltd (Michael Sapir)",
+      "url": "https://tulijump.base44.app",
+      "playable_in_app": "opens in SFSafariViewController"
+    },
+    {
+      "title": "המירוץ לממלכה (Kingdom Run)",
+      "developer": "Sapir Productions Ltd (Michael Sapir)",
+      "url": "https://sapirfamily.co.il/games/race-kingdom/index.html",
+      "playable_in_app": true
+    },
+    {
+      "title": "פלישת הוירוסים (Virus Invasion)",
+      "developer": "Sapir Productions Ltd (Michael Sapir)",
+      "url": "https://sapirfamily.co.il/games/virus/index.html",
+      "playable_in_app": true
+    },
+    {
+      "title": "נחש את המילה (Word Guess)",
+      "developer": "Sapir Productions Ltd (Michael Sapir)",
+      "url": "https://sapirfamily.co.il/games/nahesh/index.html",
+      "playable_in_app": false
+    }
+  ]
+}
