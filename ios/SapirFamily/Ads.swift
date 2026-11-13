@@ -44,15 +44,23 @@ final class AdsManager: NSObject, ObservableObject {
     private func initSDK() {
         guard !ready, ConsentInformation.shared.canRequestAds || ConsentInformation.shared.consentStatus == .notRequired else { return }
         ready = true
+        applyTrackingChoice()
         MobileAds.shared.start { [weak self] _ in
             self?.loadInterstitial()
             // בקשת מעקב (ATT) רק אחרי שהמשתמש כבר ראה את האפליקציה, לא בשנייה הראשונה
             DispatchQueue.main.asyncAfter(deadline: .now() + 20) {
                 if #available(iOS 14, *), ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
-                    ATTrackingManager.requestTrackingAuthorization { _ in }
+                    ATTrackingManager.requestTrackingAuthorization { _ in DispatchQueue.main.async { self?.applyTrackingChoice() } }
                 }
             }
         }
+    }
+
+    /// בלי אישור מעקב (ATT) המודעות לא מותאמות אישית ואין שום איסוף למעקב, גם לא דרך ה-SDK
+    func applyTrackingChoice() {
+        var allowed = false
+        if #available(iOS 14, *) { allowed = ATTrackingManager.trackingAuthorizationStatus == .authorized }
+        MobileAds.shared.requestConfiguration.publisherPrivacyPersonalizationState = allowed ? .default : .disabled
     }
 
     // MARK: מודעת ביניים
