@@ -456,7 +456,14 @@
   // Service Worker: קבצי האתר נשמרים במכשיר, כניסה חוזרת מיידית (כמו אפליקציה)
   if ("serviceWorker" in navigator && location.protocol === "https:") addEventListener("load", () => {
     if (location.search.includes("nosw")) { navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister())); return; } // לאבחון
-    navigator.serviceWorker.register("/sw.js").catch(() => {});
+    navigator.serviceWorker.register("/sw.js").then(r => r.update().catch(() => {})).catch(() => {});
+    navigator.serviceWorker.addEventListener("message", (ev) => {
+      // ה-Service Worker התעדכן: טוענים מחדש פעם אחת (לא באמצע סרטון)
+      if (ev.data && ev.data.type === "sapir-reload" && !document.querySelector("iframe[src*='youtube']") && sessionStorage.getItem("sapir-reloaded") !== ev.data.version) {
+        try { sessionStorage.setItem("sapir-reloaded", ev.data.version); } catch (e) {}
+        location.reload();
+      }
+    });
   });
 
   /* ---------- ניווט בשלט / מקלדת (טלוויזיות חכמות): חצים בין כרטיסים, Enter פותח ---------- */
