@@ -403,7 +403,7 @@
     const pos = window.videoPos(id); mId = id;
     ensureYT().then(() => {
       if (mId !== id) return;
-      mPlayer = new YT.Player("vmodal-yt", { host: "https://www.youtube.com", videoId: id, width: "100%", height: "100%",
+      mPlayer = new YT.Player("vmodal-yt", { host: "https://www.youtube-nocookie.com", videoId: id, width: "100%", height: "100%",
         playerVars: { autoplay: 1, rel: 0, playsinline: 1, modestbranding: 1, start: pos ? pos.t : 0, origin: location.origin },
         events: { onReady: () => { try { mPlayer.playVideo(); } catch (e) {} }, onStateChange: (e) => { if (e.data === 0) savePos(id, 1e9, 1e9 + 1); } } });
       clearInterval(mTimer); mTimer = setInterval(flushPos, 5000);
