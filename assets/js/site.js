@@ -160,8 +160,11 @@
   /* ---------- הסכמה לעוגיות (חוק הגנת הפרטיות, תיקון 13 + פרסומות) ---------- */
   let consent = null;
   try { consent = JSON.parse(localStorage.getItem("sapir-consent") || "null"); } catch (e) {}
+  // בתוך האפליקציות (iOS / Android / TV) אין עוגיות מעקב ואין פרסומות אתר בכלל: הפרסומות הן נייטיב (AdMob) ומכבדות
+  // את בחירת המשתמש במערכת (ATT), ולכן גם לא מציגים את חלונית העוגיות (דרישת אפל 5.1.1)
+  if (document.body.classList.contains("in-app")) consent = { ads: false, media: false, app: true };
   window.SAPIR_CONSENT = consent;
-  const loadAds = () => { if (window.SAPIR_CONSENT && window.SAPIR_CONSENT.ads && typeof window.SAPIR_LOAD_ADS === "function") window.SAPIR_LOAD_ADS(); };
+  const loadAds = () => { if (window.SAPIR_CONSENT && window.SAPIR_CONSENT.ads && !window.SAPIR_CONSENT.app && typeof window.SAPIR_LOAD_ADS === "function") window.SAPIR_LOAD_ADS(); };
   if (!consent) {
     const cb = document.createElement("div"); cb.className = "cookie-bar"; cb.setAttribute("role", "region"); cb.setAttribute("aria-label", "הודעה על שימוש בעוגיות");
     cb.innerHTML = `<div class="cookie-text"><strong>עוגיות באתר</strong> אנחנו משתמשים בעוגיות הכרחיות לתפעול האתר, ובהסכמתכם גם בעוגיות של YouTube ושל פרסומות מותאמות. אפשר לשנות את הבחירה בכל זמן בתחתית העמוד. <a href="privacy.html">למדיניות הפרטיות</a></div>

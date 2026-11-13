@@ -21,7 +21,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/img/logo-small.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=202611131910">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611131913">
   <style>
     body { padding-bottom: 0 !important; }
     .play-bar { display: flex; align-items: center; gap: 12px; padding: 10px 0; }
@@ -51,8 +51,8 @@
   <div class="stage" id="stage"></div>
   <div class="tips" id="tips"></div>
 </main>
-<script src="assets/js/config.js?v=202611131910"></script>
-<script src="assets/js/site.js?v=202611131910"></script>
+<script src="assets/js/config.js?v=202611131913"></script>
+<script src="assets/js/site.js?v=202611131913"></script>
 <script>
 (() => {
   const S = window.SAPIR, id = new URLSearchParams(location.search).get("game");
@@ -62,7 +62,12 @@
   const stage = document.getElementById("stage");
   if (g.orientation === "portrait") stage.classList.add("portrait");
   if (g.play) { const st = document.getElementById("store"); st.href = g.play; st.hidden = false; }
-  if (g.playReady && g.playUrl) {
+  const external = /^https?:/i.test(g.playUrl || "");
+  if (g.playReady && g.playUrl && window.SAPIR_IOS && external) {
+    // באפליקציית iOS משחק מאתר אחר נפתח בחלון דפדפן נפרד של המערכת (Safari), לא בתוך האפליקציה
+    stage.innerHTML = `<div class="soon"><div><div class="big">🎮</div><h2>${g.name}</h2><p class="muted" style="max-width:40ch;margin-inline:auto">${g.blurb}</p><a class="btn btn-ink" href="${g.playUrl}" rel="noopener">לשחק עכשיו</a></div></div>`;
+    document.getElementById("fs").hidden = true;
+  } else if (g.playReady && g.playUrl) {
     stage.innerHTML = `<iframe src="${g.playUrl}" title="${g.name}" allow="fullscreen; autoplay; gamepad" allowfullscreen></iframe>`;
     document.getElementById("tips").innerHTML = ["הכי כיף במסך מלא", "במובייל: סובבו את המכשיר לפי המשחק", "ההתקדמות נשמרת בדפדפן הזה"].map(t => `<span>${t}</span>`).join("");
   } else {
