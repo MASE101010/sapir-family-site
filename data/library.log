@@ -3,27 +3,11 @@ playlist tuli-series: 11 items (תולי האריה וחבריו הנהדרים)
 playlist songs: 12 items (שירים של משפחת ספיר)
 wrote /home/runner/work/sapir-family-site/sapir-family-site/data/playlists.json
 family:
-  videos: 345
-  shorts: 17
-michael:
-  videos: 289
-  shorts: 55
-alin:
-  videos: 168
-  shorts: 25
-shiran:
-  videos: 82
-  shorts: 75
-elroei:
-  videos: 92
-  shorts: 25
-sapirtv:
-  videos: 79
-  shorts: 495
-tuli:
-  videos: 33
-  shorts: 24
-titles without Hebrew: 0
-rss dates added: 0
-shorts playlist dates added: 0
-wrote 1804 videos -> /home/runner/work/sapir-family-site/sapir-family-site/data/library.json
+  videos: 31
+Traceback (most recent call last):
+  File "/home/runner/work/sapir-family-site/sapir-family-site/scripts/build_library.py", line 192, in <module>
+    main()
+  File "/home/runner/work/sapir-family-site/sapir-family-site/scripts/build_library.py", line 158, in main
+    vid = e.get("id")
+          ^^^^^
+AttributeError: 'NoneType' object has no attribute 'get'
