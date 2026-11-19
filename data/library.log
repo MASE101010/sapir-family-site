@@ -3,7 +3,7 @@ playlist tuli-series: 11 items (תולי האריה וחבריו הנהדרים)
 playlist songs: 12 items (שירים של משפחת ספיר)
 wrote /home/runner/work/sapir-family-site/sapir-family-site/data/playlists.json
 family:
-  videos: 345
+  videos: 346
   shorts: 17
 michael:
   videos: 289
@@ -13,7 +13,7 @@ alin:
   shorts: 25
 shiran:
   videos: 82
-  shorts: 75
+  shorts: 76
 elroei:
   videos: 92
   shorts: 25
@@ -24,6 +24,6 @@ tuli:
   videos: 33
   shorts: 24
 titles without Hebrew: 0
-rss dates added: 0
+rss dates added: 2
 shorts playlist dates added: 0
-wrote 1805 videos -> /home/runner/work/sapir-family-site/sapir-family-site/data/library.json
+wrote 1807 videos -> /home/runner/work/sapir-family-site/sapir-family-site/data/library.json
