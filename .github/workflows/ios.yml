@@ -113,7 +113,7 @@ jobs:
           xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/SapirFamily.xcarchive" -exportOptionsPlist ExportOptions.plist -exportPath "$RUNNER_TEMP/out" -quiet
           mkdir -p ../out && cp "$RUNNER_TEMP"/out/*.ipa ../out/sapir-family-ios.ipa && ls -la ../out
       - uses: actions/upload-artifact@v4
-        with: { name: sapir-family-ios, path: out/* }
+        with: { name: sapir-family-ios, path: out/*, retention-days: 3 }
       - name: העלאה ל-App Store Connect
         if: ${{ env.ASC_APP_ID != '' && (github.event_name != 'workflow_dispatch' || github.event.inputs.upload == 'true') }}
         run: |

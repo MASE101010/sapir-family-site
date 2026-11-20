@@ -38,7 +38,7 @@ jobs:
           cp android/app/build/outputs/apk/release/app-release*.apk out/sapir-family-tv.apk
           ls -la out
       - uses: actions/upload-artifact@v4
-        with: { name: sapir-family-android, path: out/* }
+        with: { name: sapir-family-android, path: out/*, retention-days: 3 }
       - name: פרסום ב-Release קבוע (android-latest)
         env: { GH_TOKEN: "${{ github.token }}" }
         run: |
