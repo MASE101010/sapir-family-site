@@ -68,7 +68,12 @@ def main():
     # --- הגרסה
     vers = call("GET", f"/apps/{app_id}/appStoreVersions?filter[platform]=IOS&limit=5")["data"]
     ver = next((v for v in vers if v["attributes"].get("appVersionState", v["attributes"].get("appStoreState")) in
-                ("PREPARE_FOR_SUBMISSION", "DEVELOPER_REJECTED", "REJECTED", "METADATA_REJECTED", "INVALID_BINARY")), vers[0])
+                ("PREPARE_FOR_SUBMISSION", "DEVELOPER_REJECTED", "REJECTED", "METADATA_REJECTED", "INVALID_BINARY")), None)
+    if ver is None:
+        # הגרסה הקודמת כבר בחנות: פותחים גרסה חדשה לעדכון
+        ver = call("POST", "/appStoreVersions", {"data": {"type": "appStoreVersions", "attributes": {"platform": "IOS", "versionString": L["version"]},
+                   "relationships": {"app": {"data": {"type": "apps", "id": app_id}}}}})["data"]
+        print("new version", L["version"])
     vid = ver["id"]; print("version", ver["attributes"]["versionString"], ver["attributes"].get("appVersionState"))
     patch_attrs(f"/appStoreVersions/{vid}", "appStoreVersions", vid, {"versionString": L["version"], "releaseType": L["releaseType"], "copyright": L.get("copyright", "")})
     vlocs = {x["attributes"]["locale"]: x for x in call("GET", f"/appStoreVersions/{vid}/appStoreVersionLocalizations")["data"]}

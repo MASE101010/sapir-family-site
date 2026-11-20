@@ -1,6 +1,6 @@
 {
   "bundleId": "il.co.sapirfamily.app",
-  "version": "1.0",
+  "version": "1.0.1",
   "primaryCategory": "ENTERTAINMENT",
   "releaseType": "AFTER_APPROVAL",
   "copyright": "2026 Michael Sapir",
@@ -15,7 +15,7 @@
       "promotionalText": "חדש: כל סרטון, שורט ומשחק של משפחת ספיר באפליקציה אחת, עם בלוג יומי להורים ולילדים.",
       "supportUrl": "https://sapirfamily.co.il/contact.html",
       "marketingUrl": "https://sapirfamily.co.il",
-      "whatsNew": "הגרסה הראשונה של האפליקציה של משפחת ספיר: VOD, שורטס, משחקים, תולי האריה והבלוג היומי."
+      "whatsNew": "באנר הפרסומת עבר לתחתית המסך, מתחת לסרגל, וקטן יותר, כך שהוא לא מסתיר את התוכן."
     },
     "en-US": {
       "name": "Sapir Family",
@@ -26,7 +26,7 @@
       "promotionalText": "Every Sapir Family video, short and game in one app, plus a daily blog.",
       "supportUrl": "https://sapirfamily.co.il/contact.html",
       "marketingUrl": "https://sapirfamily.co.il",
-      "whatsNew": "First release: VOD, Shorts, Games, Tuli the Lion and the daily blog."
+      "whatsNew": "The ad banner is now smaller and sits at the very bottom, below the tab bar, so it never covers content."
     }
   },
   "screenshots": {

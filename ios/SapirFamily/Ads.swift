@@ -97,15 +97,14 @@ extension AdsManager: FullScreenContentDelegate {
     func ad(_ ad: FullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) { loadInterstitial() }
 }
 
-/// באנר אדפטיבי צמוד לתחתית, מעל סרגל הטאבים. נטען רק כשהטאב מוצג.
+/// באנר רגיל וקטן (320x50) בתחתית המסך, מתחת לסרגל הטאבים
 struct AdBanner: UIViewRepresentable {
     @ObservedObject var ads = AdsManager.shared
-    let width: CGFloat
 
     func makeCoordinator() -> Coordinator { Coordinator() }
 
     func makeUIView(context: Context) -> BannerView {
-        let v = BannerView(adSize: currentOrientationAnchoredAdaptiveBanner(width: max(320, width)))
+        let v = BannerView(adSize: AdSizeBanner)
         v.adUnitID = AdConfig.banner
         v.rootViewController = AdsManager.topController()
         v.delegate = context.coordinator
@@ -116,16 +115,14 @@ struct AdBanner: UIViewRepresentable {
 
     func updateUIView(_ v: BannerView, context: Context) {
         guard ads.ready else { return }
-        let w = max(320, floor(width))
-        if context.coordinator.loadedWidth != w {
-            context.coordinator.loadedWidth = w
-            v.adSize = currentOrientationAnchoredAdaptiveBanner(width: w)
+        if !context.coordinator.loaded {
+            context.coordinator.loaded = true
             v.load(Request())
         }
     }
 
     final class Coordinator: NSObject, BannerViewDelegate {
-        var loadedWidth: CGFloat = 0
+        var loaded = false
         weak var view: BannerView?
         func bannerViewDidReceiveAd(_ bannerView: BannerView) { AdsManager.shared.bannerHeight = bannerView.adSize.size.height }
         func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) { AdsManager.shared.bannerHeight = 0 }

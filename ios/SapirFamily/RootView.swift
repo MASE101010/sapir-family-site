@@ -21,6 +21,7 @@ struct RootView: View {
     @StateObject private var ads = AdsManager.shared
 
     var body: some View {
+        VStack(spacing: 0) {
         TabView(selection: Binding(
             get: { selected },
             set: { new in
@@ -30,11 +31,21 @@ struct RootView: View {
             }
         )) {
             ForEach(TABS) { tab in
-                WebScreen(model: models.model(for: tab.id), showAd: selected == tab.id)
+                WebScreen(model: models.model(for: tab.id))
                     .tabItem { Label(tab.title, systemImage: tab.icon) }
                     .tag(tab.id)
             }
         }
+            // באנר קטן (320x50) מתחת לכל האפליקציה, מתחת לסרגל הטאבים, אף פעם לא על התוכן
+            if ads.ready {
+                AdBanner()
+                    .frame(width: 320, height: ads.bannerHeight)
+                    .clipped()
+                    .frame(maxWidth: .infinity)
+                    .background(Color(red: 0.03, green: 0.04, blue: 0.13))
+            }
+        }
+        .background(Color(red: 0.03, green: 0.04, blue: 0.13).ignoresSafeArea())
         .ignoresSafeArea(.keyboard)
         .onAppear { ads.start() }
         .onOpenURL { url in
