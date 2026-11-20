@@ -52,9 +52,17 @@ def main():
     print("app", app_id, app["attributes"]["name"])
     patch_attrs(f"/apps/{app_id}", "apps", app_id, {"contentRightsDeclaration": L["contentRightsDeclaration"]})
 
+    # --- אם הגרסה הקודמת כבר בחנות, פותחים קודם גרסה חדשה (זה פותח גם פרטי אפליקציה לעריכה)
+    vers0 = call("GET", f"/apps/{app_id}/appStoreVersions?filter[platform]=IOS&limit=5")["data"]
+    if not any(v["attributes"].get("appVersionState", v["attributes"].get("appStoreState")) in
+               ("PREPARE_FOR_SUBMISSION", "DEVELOPER_REJECTED", "REJECTED", "METADATA_REJECTED", "INVALID_BINARY", "WAITING_FOR_REVIEW", "IN_REVIEW") for v in vers0):
+        call("POST", "/appStoreVersions", {"data": {"type": "appStoreVersions", "attributes": {"platform": "IOS", "versionString": L["version"]},
+             "relationships": {"app": {"data": {"type": "apps", "id": app_id}}}}})
+        print("new version", L["version"])
+
     # --- פרטי האפליקציה (שם, כותרת משנה, פרטיות, קטגוריה)
     infos = call("GET", f"/apps/{app_id}/appInfos")["data"]
-    info = next((i for i in infos if i["attributes"].get("appStoreState") in ("PREPARE_FOR_SUBMISSION", "DEVELOPER_REJECTED", "REJECTED", "METADATA_REJECTED")), infos[0])
+    info = next((i for i in infos if i["attributes"].get("appStoreState", i["attributes"].get("state")) not in ("READY_FOR_DISTRIBUTION", "READY_FOR_SALE", "REPLACED_WITH_NEW_INFO")), infos[0])
     call("PATCH", f"/appInfos/{info['id']}", {"data": {"type": "appInfos", "id": info["id"], "relationships": {
         "primaryCategory": {"data": {"type": "appCategories", "id": L["primaryCategory"]}}}}})
     existing = {x["attributes"]["locale"]: x for x in call("GET", f"/appInfos/{info['id']}/appInfoLocalizations")["data"]}
