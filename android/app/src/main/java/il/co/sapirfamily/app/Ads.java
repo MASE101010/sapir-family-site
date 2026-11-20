@@ -3,7 +3,6 @@ package il.co.sapirfamily.app;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.DisplayMetrics;
 import android.view.ViewGroup;
 
 import com.google.android.gms.ads.AdRequest;
@@ -60,14 +59,20 @@ final class Ads {
         });
     }
 
+    /** באנר קטן וקבוע (320x50) מתחת לכל האפליקציה, מחוץ לדף: אף פעם לא מעל התוכן ולא גדל */
     private void loadBanner() {
         banner = new AdView(activity);
         banner.setAdUnitId(BANNER);
-        DisplayMetrics dm = activity.getResources().getDisplayMetrics();
-        int widthDp = (int) (bannerHost.getWidth() > 0 ? bannerHost.getWidth() / dm.density : dm.widthPixels / dm.density);
-        banner.setAdSize(AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(activity, Math.max(320, widthDp)));
+        banner.setAdSize(AdSize.BANNER);
+        banner.setAdListener(new com.google.android.gms.ads.AdListener() {
+            @Override public void onAdLoaded() { bannerHost.setVisibility(android.view.View.VISIBLE); }
+            @Override public void onAdFailedToLoad(LoadAdError e) { bannerHost.setVisibility(android.view.View.GONE); }
+        });
         bannerHost.removeAllViews();
-        bannerHost.addView(banner, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        float d = activity.getResources().getDisplayMetrics().density;
+        android.widget.FrameLayout.LayoutParams lp = new android.widget.FrameLayout.LayoutParams((int) (320 * d), (int) (50 * d));
+        lp.gravity = android.view.Gravity.CENTER_HORIZONTAL;
+        bannerHost.addView(banner, lp);
         banner.loadAd(new AdRequest.Builder().build());
     }
 
