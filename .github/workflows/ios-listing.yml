@@ -10,6 +10,10 @@ on:
         description: "להעלות צילומי מסך מחדש"
         type: boolean
         default: true
+      cancel_review:
+        description: "לבטל קודם הגשה שממתינה לביקורת (להחלפת בילד)"
+        type: boolean
+        default: false
       require_build:
         description: "לעצור אם הבילד הזה עוד לא מוכן (מספר בילד, רשות)"
         default: ""
@@ -28,6 +32,7 @@ jobs:
           ASC_KEY_P8: ${{ secrets.APPSTORE_KEY_P8 }}
           ASC_REVIEW_PHONE: ${{ secrets.ASC_REVIEW_PHONE }}
           REQUIRE_BUILD: ${{ github.event.inputs.require_build }}
+          CANCEL_REVIEW: ${{ github.event.inputs.cancel_review }}
         run: |
           ARGS=""
           [ "${{ github.event.inputs.submit }}" = "true" ] && ARGS="$ARGS --submit"

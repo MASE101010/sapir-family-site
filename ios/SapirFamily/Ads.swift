@@ -123,12 +123,23 @@ struct AdBanner: UIViewRepresentable {
 
     final class Coordinator: NSObject, BannerViewDelegate {
         var loaded = false
+        var hasAd = false
         weak var view: BannerView?
-        func bannerViewDidReceiveAd(_ bannerView: BannerView) { AdsManager.shared.bannerHeight = bannerView.adSize.size.height }
+        func bannerViewDidReceiveAd(_ bannerView: BannerView) {
+            hasAd = true
+            // הבאנר נכנס פעם אחת, ברכות; מכאן והלאה הגובה קבוע ולא קופץ
+            if AdsManager.shared.bannerHeight == 0 {
+                withAnimation(.easeOut(duration: 0.25)) { AdsManager.shared.bannerHeight = 50 }
+            }
+        }
         func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) {
-            AdsManager.shared.bannerHeight = 0
-            // אין מודעה כרגע (למשל אפליקציה חדשה עם מעט מפרסמים): מנסים שוב אחרי 45 שניות
-            DispatchQueue.main.asyncAfter(deadline: .now() + 45) { [weak bannerView] in bannerView?.load(Request()) }
+            // אם כבר מוצגת מודעה (רענון שלא הצליח), המודעה הקודמת נשארת והמסך לא זז.
+            // רק אם עוד לא הייתה מודעה בכלל: מבקשים שוב בשקט ברקע אחרי דקה. זה לא נוגע בדף ולא מאט אותו.
+            guard !hasAd else { return }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 60) { [weak bannerView, weak self] in
+                guard let self, !self.hasAd, let b = bannerView, b.window != nil else { return }
+                b.load(Request())
+            }
         }
     }
 }

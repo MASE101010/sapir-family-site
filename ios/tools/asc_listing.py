@@ -52,6 +52,19 @@ def main():
     print("app", app_id, app["attributes"]["name"])
     patch_attrs(f"/apps/{app_id}", "apps", app_id, {"contentRightsDeclaration": L["contentRightsDeclaration"]})
 
+    # --- ביטול הגשה שממתינה לביקורת (כדי להחליף בילד), לפי בקשה
+    if os.environ.get("CANCEL_REVIEW") == "true":
+        import time
+        for x in call("GET", f"/reviewSubmissions?filter[app]={app_id}&filter[platform]=IOS&limit=20")["data"]:
+            if x["attributes"]["state"] in ("WAITING_FOR_REVIEW", "READY_FOR_REVIEW"):
+                call("PATCH", f"/reviewSubmissions/{x['id']}", {"data": {"type": "reviewSubmissions", "id": x["id"], "attributes": {"canceled": True}}})
+                print("canceled submission", x["id"])
+        for _ in range(30):
+            st = [v["attributes"].get("appVersionState") for v in call("GET", f"/apps/{app_id}/appStoreVersions?filter[platform]=IOS&limit=3")["data"]]
+            print("states", st)
+            if not any(s in ("WAITING_FOR_REVIEW",) for s in st): break
+            time.sleep(10)
+
     # --- אם הגרסה הקודמת כבר בחנות, פותחים קודם גרסה חדשה (זה פותח גם פרטי אפליקציה לעריכה)
     vers0 = call("GET", f"/apps/{app_id}/appStoreVersions?filter[platform]=IOS&limit=5")["data"]
     if not any(v["attributes"].get("appVersionState", v["attributes"].get("appStoreState")) in
