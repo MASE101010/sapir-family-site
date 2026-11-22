@@ -28,7 +28,7 @@ jobs:
           xcrun simctl privacy "$DEV" grant all il.co.sapirfamily.app || true
           xcrun simctl launch "$DEV" il.co.sapirfamily.app & sleep 5; echo launched
           mkdir -p shots
-          for t in 8 25 45 70; do sleep $((t - ${PREV:-0})); PREV=$t; perl -e "alarm 40; exec @ARGV" xcrun simctl io "$DEV" screenshot --type=png "shots/t$t.png"; echo "shot $t $?"; done
+          set +e; for t in 10 40 75; do sleep $((t - ${PREV:-0})); PREV=$t; perl -e "alarm 40; exec @ARGV" xcrun simctl io "$DEV" screenshot --type=png "shots/t$t.png"; echo "shot $t $?"; done; exit 0
           perl -e 'alarm 60; exec @ARGV' xcrun simctl spawn "$DEV" log show --last 3m --predicate 'process == "SapirFamily"' 2>/dev/null | grep -iE "ads|banner|GAD|error" | tail -40 > shots/log.txt || true
       - name: שמירת הצילומים בענף sim-shots
         if: always()

@@ -37,13 +37,16 @@ struct RootView: View {
         }
         // באנר קטן (320x50) בתחתית: נכנס לאזור הבטוח, כך שסרגל הטאבים והתוכן יושבים מעליו ושום דבר לא נחתך
         .safeAreaInset(edge: .bottom, spacing: 0) {
+            // שימו לב: רקע של SwiftUI נמתח אוטומטית לאזור הבטוח. כשאין מודעה (גובה 0) הוא היה מכסה את תחתית סרגל הטאבים,
+            // ולכן כשאין מודעה לא מציירים כלום, וכשיש, הרקע נמתח רק מתחת לבאנר
             if ads.ready {
                 AdBanner()
                     .frame(width: 320, height: 50)
                     .frame(maxWidth: .infinity)
                     .frame(height: ads.bannerHeight, alignment: .top)
                     .clipped()
-                    .background(Color(red: 0.03, green: 0.04, blue: 0.13))
+                    .background(ads.bannerHeight > 0 ? Color(red: 0.03, green: 0.04, blue: 0.13) : Color.clear, ignoresSafeAreaEdges: .bottom)
+                    .allowsHitTesting(ads.bannerHeight > 0)
             }
         }
         .background(Color(red: 0.03, green: 0.04, blue: 0.13).ignoresSafeArea())
