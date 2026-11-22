@@ -21,6 +21,7 @@ struct RootView: View {
     @StateObject private var ads = AdsManager.shared
 
     var body: some View {
+        VStack(spacing: 0) {
         TabView(selection: Binding(
             get: { selected },
             set: { new in
@@ -31,21 +32,20 @@ struct RootView: View {
         )) {
             ForEach(TABS) { tab in
                 WebScreen(model: models.model(for: tab.id))
-                    // באנר קטן וקבוע (320x50) בתחתית התוכן, צמוד מעל סרגל הטאבים: לא על התוכן ולא מכסה את הסרגל.
-                    // (מתחת לסרגל אי אפשר: באייפון החדש הסרגל צף בתחתית המסך ומה שמתחתיו מסתיר אותו.)
-                    .safeAreaInset(edge: .bottom, spacing: 0) {
-                        if ads.ready && selected == tab.id {
-                            AdBanner()
-                                .frame(width: 320, height: 50)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: ads.bannerHeight, alignment: .top)
-                                .clipped()
-                                .background(Color(red: 0.03, green: 0.04, blue: 0.13), ignoresSafeAreaEdges: [])
-                                .allowsHitTesting(ads.bannerHeight > 0)
-                        }
-                    }
                     .tabItem { Label(tab.title, systemImage: tab.icon) }
                     .tag(tab.id)
+            }
+        }
+            // באנר קטן וקבוע (320x50) מתחת לכל האפליקציה, מתחת לסרגל הטאבים.
+            // עד שיש מודעה הגובה 0 ואין שום רקע (רקע היה נמתח לאזור הבטוח ומכסה את הסרגל)
+            if ads.ready {
+                AdBanner()
+                    .frame(width: 320, height: 50)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: ads.bannerHeight, alignment: .top)
+                    .clipped()
+                    .background(ads.bannerHeight > 0 ? Color(red: 0.03, green: 0.04, blue: 0.13) : Color.clear, ignoresSafeAreaEdges: .bottom)
+                    .allowsHitTesting(ads.bannerHeight > 0)
             }
         }
         .background(Color(red: 0.03, green: 0.04, blue: 0.13).ignoresSafeArea())
