@@ -1,6 +1,8 @@
 name: אפליקציית אייפון, צילום בסימולטור
 on:
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   sim:
     runs-on: macos-26
@@ -26,8 +28,11 @@ jobs:
           xcrun simctl privacy "$DEV" grant all il.co.sapirfamily.app || true
           xcrun simctl launch "$DEV" il.co.sapirfamily.app & sleep 5; echo launched
           mkdir -p shots
-          for t in 8 25 45 70; do sleep $((t - ${PREV:-0})); PREV=$t; xcrun simctl io "$DEV" screenshot "shots/t$t.png"; echo "shot $t"; done
-          xcrun simctl spawn "$DEV" log show --last 3m --predicate 'process == "SapirFamily"' 2>/dev/null | grep -iE "ads|banner|GAD|error" | tail -40 > shots/log.txt || true
-      - uses: actions/upload-artifact@v4
+          for t in 8 25 45 70; do sleep $((t - ${PREV:-0})); PREV=$t; perl -e "alarm 40; exec @ARGV" xcrun simctl io "$DEV" screenshot --type=png "shots/t$t.png"; echo "shot $t $?"; done
+          perl -e 'alarm 60; exec @ARGV' xcrun simctl spawn "$DEV" log show --last 3m --predicate 'process == "SapirFamily"' 2>/dev/null | grep -iE "ads|banner|GAD|error" | tail -40 > shots/log.txt || true
+      - name: שמירת הצילומים בענף sim-shots
         if: always()
-        with: { name: sim-shots, path: shots/*, retention-days: 3 }
+        run: |
+          ls -la shots || exit 0
+          git config user.name sapir-ci; git config user.email ci@sapirfamily.co.il
+          git checkout --orphan sim-shots-tmp && git rm -rq --cached . && git add -f shots && git commit -qm "sim shots" && git push -fq origin HEAD:sim-shots
