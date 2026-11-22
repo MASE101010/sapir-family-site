@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>האפליקציות שלנו | משפחת ספיר</title>
+<meta name="description" content="כל האפליקציות והמשחקים של משפחת ספיר, להורדה בחינם לאייפון ולאנדרואיד.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#070a22">
+<meta property="og:type" content="website">
+<meta property="og:title" content="האפליקציות של משפחת ספיר">
+<meta property="og:description" content="מיני פייטר, האפליקציה של משפחת ספיר והשם שלי, להורדה בחינם.">
+<meta property="og:image" content="https://sapirfamily.co.il/assets/img/apps/sapir-banner.webp">
+<link rel="icon" href="/assets/img/logo-small.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="preload" href="/assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
+<style>
+@font-face { font-family: "SapirPop"; src: url("/assets/fonts/SapirPop.ttf") format("truetype"); font-display: swap; }
+:root {
+  --bg: #070a22; --bg-2: #0e1140; --ink: #f4f3ff; --ink-soft: #a7a5d6;
+  --line: rgba(255,255,255,.12); --glass: rgba(255,255,255,.06);
+  --cyan: #28d7ff; --violet: #7b5cff; --magenta: #ff4fd1; --lemon: #ffe14d;
+  --holo: linear-gradient(115deg, #28d7ff 0%, #7b5cff 28%, #ff4fd1 52%, #ffe14d 76%, #28d7ff 100%);
+  --ease: cubic-bezier(.22,1,.36,1);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: "Heebo", system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); background: var(--bg);
+  min-height: 100vh; overflow-x: hidden;
+  background-image:
+    radial-gradient(900px 520px at 85% -10%, rgba(123,92,255,.45), transparent 60%),
+    radial-gradient(700px 480px at 0% 30%, rgba(255,79,209,.22), transparent 60%),
+    radial-gradient(800px 600px at 100% 100%, rgba(40,215,255,.18), transparent 60%);
+  background-attachment: fixed;
+}
+.wrap { max-width: 640px; margin: 0 auto; padding: max(28px, env(safe-area-inset-top)) 16px 48px; }
+header { text-align: center; }
+.logo { width: min(260px, 64vw); height: auto; filter: drop-shadow(0 12px 30px rgba(123,92,255,.55)); animation: float 5s ease-in-out infinite; }
+@keyframes float { 50% { transform: translateY(-6px) rotate(-1deg); } }
+h1 {
+  font-family: "SapirPop", "Heebo", sans-serif; font-weight: 400; font-size: clamp(34px, 9vw, 52px); line-height: 1.05;
+  margin: 10px 0 6px; background: var(--holo); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text;
+  color: transparent; animation: holo 6s linear infinite;
+}
+@keyframes holo { to { background-position: -200% 0; } }
+.sub { margin: 0 auto; color: var(--ink-soft); font-size: 17px; max-width: 30em; }
+.device { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; padding: 6px 14px; border-radius: 999px;
+  background: var(--glass); border: 1px solid var(--line); font-size: 14px; color: var(--ink-soft); }
+.device[hidden] { display: none; }
+.device b { color: var(--ink); font-weight: 600; }
+
+.apps { list-style: none; margin: 28px 0 0; padding: 0; display: grid; gap: 22px; }
+.app {
+  position: relative; border-radius: 26px; overflow: hidden; background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+  border: 1px solid var(--line); box-shadow: 0 24px 60px -24px rgba(0,0,0,.8), 0 20px 60px -30px rgba(123,92,255,.55);
+  opacity: 0; transform: translateY(18px); animation: rise .7s var(--ease) forwards;
+}
+.app:nth-child(2) { animation-delay: .12s; } .app:nth-child(3) { animation-delay: .24s; }
+@keyframes rise { to { opacity: 1; transform: none; } }
+.app::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; background: var(--holo);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+  opacity: 0; transition: opacity .3s; pointer-events: none; }
+.app:hover::before { opacity: 1; }
+.banner { display: block; aspect-ratio: 1024 / 500; overflow: hidden; }
+.banner img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s var(--ease); }
+.app:hover .banner img { transform: scale(1.04); }
+.rank { position: absolute; top: 12px; right: 12px; z-index: 2; padding: 4px 12px; border-radius: 999px; font-size: 13px; font-weight: 800;
+  background: var(--lemon); color: #14123a; box-shadow: 0 6px 16px rgba(0,0,0,.35); }
+.body { display: flex; align-items: center; gap: 14px; padding: 16px 16px 18px; }
+.icon { width: 64px; height: 64px; border-radius: 16px; flex: none; box-shadow: 0 8px 20px rgba(0,0,0,.4); }
+.info { flex: 1; min-width: 0; }
+.info h2 { font-family: "SapirPop", "Heebo", sans-serif; font-weight: 400; font-size: 26px; margin: 0; line-height: 1.1; }
+.info p { margin: 4px 0 0; color: var(--ink-soft); font-size: 15px; line-height: 1.35; }
+.get {
+  flex: none; display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 999px; text-decoration: none;
+  font-weight: 800; font-size: 17px; color: #14123a; background: var(--holo); background-size: 200% 100%;
+  box-shadow: 0 10px 24px -8px rgba(255,79,209,.7); transition: transform .2s var(--ease), background-position .6s;
+}
+.get:hover { background-position: 100% 0; transform: translateY(-2px); }
+.get:active { transform: scale(.96); }
+.get svg { width: 20px; height: 20px; fill: currentColor; }
+.stores { display: none; gap: 10px; padding: 0 16px 18px; }
+.stores a { flex: 1; display: inline-flex; justify-content: center; align-items: center; gap: 8px; padding: 11px 12px; border-radius: 14px;
+  text-decoration: none; color: var(--ink); background: rgba(0,0,0,.35); border: 1px solid var(--line-2, rgba(255,255,255,.22));
+  font-weight: 600; font-size: 15px; transition: background .2s; }
+.stores a:hover { background: rgba(255,255,255,.1); }
+.stores svg { width: 20px; height: 20px; fill: currentColor; flex: none; }
+body.desktop .stores { display: flex; }
+body.desktop .get { display: none; }
+footer { margin-top: 34px; text-align: center; color: var(--ink-soft); font-size: 14px; }
+footer a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line); }
+@media (max-width: 420px) {
+  .body { flex-wrap: wrap; }
+  .get { width: 100%; justify-content: center; padding: 14px; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before { animation: none !important; transition: none !important; } .app { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a href="/"><img class="logo" src="/assets/img/logo.webp" alt="משפחת ספיר" width="1600" height="853"></a>
+    <h1>האפליקציות שלנו</h1>
+    <p class="sub">כל מה שבנינו בשבילכם, בחינם, לאייפון ולאנדרואיד.</p>
+    <div class="device" id="device" hidden></div>
+  </header>
+
+  <ul class="apps">
+    <li class="app" data-ios="https://apps.apple.com/app/id6832263179" data-android="https://play.google.com/store/apps/details?id=com.sapirproductions.minifighter">
+      <span class="rank">המשחק שלנו</span>
+      <a class="banner dl" href="#"><img src="/assets/img/games/mini-fighter-banner.jpg" alt="מיני פייטר" width="1024" height="500"></a>
+      <div class="body">
+        <img class="icon" src="/assets/img/games/mini-fighter.jpg" alt="" width="64" height="64">
+        <div class="info"><h2>מיני פייטר</h2><p>משחק מכות עם יותר מ-20 לוחמים, קרבות אונליין עם חברים</p></div>
+        <a class="get dl" href="#"></a>
+      </div>
+      <div class="stores"></div>
+    </li>
+    <li class="app" data-ios="https://apps.apple.com/app/id6832267419" data-android="https://play.google.com/store/apps/details?id=il.co.sapirfamily.app">
+      <a class="banner dl" href="#"><img src="/assets/img/apps/sapir-banner.webp" alt="האפליקציה של משפחת ספיר" width="1024" height="500" loading="lazy"></a>
+      <div class="body">
+        <img class="icon" src="/assets/img/apps/sapir-icon.png" alt="" width="64" height="64">
+        <div class="info"><h2>משפחת ספיר</h2><p>כל הסרטונים, השורטס, תולי האריה, המשחקים והבלוג היומי</p></div>
+        <a class="get dl" href="#"></a>
+      </div>
+      <div class="stores"></div>
+    </li>
+    <li class="app" data-ios="https://apps.apple.com/app/id6832262786" data-android="https://play.google.com/store/apps/details?id=com.hashemsheli.app">
+      <a class="banner dl" href="#"><img src="/assets/img/apps/myname-banner.webp" alt="השם שלי" width="1024" height="500" loading="lazy"></a>
+      <div class="body">
+        <img class="icon" src="/assets/img/apps/myname-icon.png" alt="" width="64" height="64">
+        <div class="info"><h2>השם שלי</h2><p>מה מסתתר בשם שלכם? ניתוח שם, שמות לתינוק והמסר היומי</p></div>
+        <a class="get dl" href="#"></a>
+      </div>
+      <div class="stores"></div>
+    </li>
+  </ul>
+
+  <footer>מעל 3 מיליון עוקבים כבר איתנו · <a href="/">לאתר משפחת ספיר</a></footer>
+</div>
+
+<script>
+(function () {
+  var ua = navigator.userAgent || "";
+  var ios = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  var android = /Android/i.test(ua);
+  var src = (new URLSearchParams(location.search).get("s") || "apps-page").slice(0, 40);
+  var APPLE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.5-1-2.5-3.9zM14 5.5c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4z"/></svg>';
+  var PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 2.6c-.3.3-.5.8-.5 1.4v16c0 .6.2 1.1.5 1.4l9-9.4-9-9.4zm10.4 8 2.6-2.7-10.7-6.1c-.5-.3-1-.3-1.4-.1l9.5 8.9zm0 2.8-9.5 8.9c.4.2.9.2 1.4-.1l10.7-6.1-2.6-2.7zm5.5-3.4-2.4-1.4-2.8 2.9 2.8 2.9 2.4-1.4c.9-.5.9-1.9 0-3z"/></svg>';
+  function iosUrl(u) { return u + "?ct=" + encodeURIComponent(src) + "&mt=8"; }
+  function playUrl(u) { return u + "&referrer=" + encodeURIComponent("utm_source=" + src); }
+
+  var dev = document.getElementById("device");
+  if (ios || android) { dev.hidden = false; dev.innerHTML = (ios ? APPLE : PLAY).replace("<svg", '<svg width="16" height="16" style="fill:currentColor"') + "<span>ההורדה תיפתח ב<b>" + (ios ? "App Store" : "Google Play") + "</b></span>"; }
+  else document.body.classList.add("desktop");
+
+  document.querySelectorAll(".app").forEach(function (li) {
+    var i = iosUrl(li.dataset.ios), a = playUrl(li.dataset.android);
+    var main = ios ? i : android ? a : null;
+    li.querySelectorAll(".dl").forEach(function (el) {
+      el.href = main || a;
+      if (!main) el.target = "_blank";
+      el.rel = "noopener";
+    });
+    li.querySelector(".get").innerHTML = (ios ? APPLE : PLAY) + "<span>להורדה</span>";
+    li.querySelector(".stores").innerHTML =
+      '<a href="' + i + '" target="_blank" rel="noopener">' + APPLE + "App Store</a>" +
+      '<a href="' + a + '" target="_blank" rel="noopener">' + PLAY + "Google Play</a>";
+  });
+})();
+</script>
+</body>
+</html>
