@@ -31,22 +31,21 @@ struct RootView: View {
         )) {
             ForEach(TABS) { tab in
                 WebScreen(model: models.model(for: tab.id))
+                    // באנר קטן וקבוע (320x50) בתחתית התוכן, צמוד מעל סרגל הטאבים: לא על התוכן ולא מכסה את הסרגל.
+                    // (מתחת לסרגל אי אפשר: באייפון החדש הסרגל צף בתחתית המסך ומה שמתחתיו מסתיר אותו.)
+                    .safeAreaInset(edge: .bottom, spacing: 0) {
+                        if ads.ready && selected == tab.id {
+                            AdBanner()
+                                .frame(width: 320, height: 50)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: ads.bannerHeight, alignment: .top)
+                                .clipped()
+                                .background(Color(red: 0.03, green: 0.04, blue: 0.13), ignoresSafeAreaEdges: [])
+                                .allowsHitTesting(ads.bannerHeight > 0)
+                        }
+                    }
                     .tabItem { Label(tab.title, systemImage: tab.icon) }
                     .tag(tab.id)
-            }
-        }
-        // באנר קטן (320x50) בתחתית: נכנס לאזור הבטוח, כך שסרגל הטאבים והתוכן יושבים מעליו ושום דבר לא נחתך
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            // שימו לב: רקע של SwiftUI נמתח אוטומטית לאזור הבטוח. כשאין מודעה (גובה 0) הוא היה מכסה את תחתית סרגל הטאבים,
-            // ולכן כשאין מודעה לא מציירים כלום, וכשיש, הרקע נמתח רק מתחת לבאנר
-            if ads.ready {
-                AdBanner()
-                    .frame(width: 320, height: 50)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: ads.bannerHeight, alignment: .top)
-                    .clipped()
-                    .background(ads.bannerHeight > 0 ? Color(red: 0.03, green: 0.04, blue: 0.13) : Color.clear, ignoresSafeAreaEdges: .bottom)
-                    .allowsHitTesting(ads.bannerHeight > 0)
             }
         }
         .background(Color(red: 0.03, green: 0.04, blue: 0.13).ignoresSafeArea())
