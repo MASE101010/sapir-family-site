@@ -125,6 +125,10 @@ struct AdBanner: UIViewRepresentable {
         var loaded = false
         weak var view: BannerView?
         func bannerViewDidReceiveAd(_ bannerView: BannerView) { AdsManager.shared.bannerHeight = bannerView.adSize.size.height }
-        func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) { AdsManager.shared.bannerHeight = 0 }
+        func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) {
+            AdsManager.shared.bannerHeight = 0
+            // אין מודעה כרגע (למשל אפליקציה חדשה עם מעט מפרסמים): מנסים שוב אחרי 45 שניות
+            DispatchQueue.main.asyncAfter(deadline: .now() + 45) { [weak bannerView] in bannerView?.load(Request()) }
+        }
     }
 }

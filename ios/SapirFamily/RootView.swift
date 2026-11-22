@@ -21,7 +21,6 @@ struct RootView: View {
     @StateObject private var ads = AdsManager.shared
 
     var body: some View {
-        VStack(spacing: 0) {
         TabView(selection: Binding(
             get: { selected },
             set: { new in
@@ -36,12 +35,14 @@ struct RootView: View {
                     .tag(tab.id)
             }
         }
-            // באנר קטן (320x50) מתחת לכל האפליקציה, מתחת לסרגל הטאבים, אף פעם לא על התוכן
+        // באנר קטן (320x50) בתחתית: נכנס לאזור הבטוח, כך שסרגל הטאבים והתוכן יושבים מעליו ושום דבר לא נחתך
+        .safeAreaInset(edge: .bottom, spacing: 0) {
             if ads.ready {
                 AdBanner()
-                    .frame(width: 320, height: ads.bannerHeight)
-                    .clipped()
+                    .frame(width: 320, height: 50)
                     .frame(maxWidth: .infinity)
+                    .frame(height: ads.bannerHeight, alignment: .top)
+                    .clipped()
                     .background(Color(red: 0.03, green: 0.04, blue: 0.13))
             }
         }
