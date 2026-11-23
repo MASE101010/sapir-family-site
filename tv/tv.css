@@ -1,0 +1,125 @@
+/* משפחת ספיר לטלוויזיה: ממשק 10 רגל, שליטה בשלט בלבד.
+   יחידת הבסיס: 1rem = רוחב המסך חלקי 96 (20px ב-1920, 10px ב-960), כך שהכל זהה בכל טלוויזיה. */
+@font-face { font-family: "SapirPop"; src: url("/assets/fonts/SapirPop.ttf") format("truetype"); font-display: swap; }
+:root {
+  --bg: #070a22; --bg2: #0e1140; --ink: #f6f5ff; --soft: #b4b2e0; --dim: #7d7bb0;
+  --cyan: #28d7ff; --violet: #7b5cff; --magenta: #ff4fd1; --lemon: #ffe14d;
+  --focus: #ffffff; --ease: cubic-bezier(.2,.8,.2,1);
+  --cardW: 19.2rem; --cardH: 10.8rem; --gap: 1.2rem; --padX: 4rem;
+}
+html { font-size: calc(100vw / 96); }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--ink); }
+body { font-family: "Heebo", "Noto Sans Hebrew", "Arial Hebrew", Arial, sans-serif; -webkit-font-smoothing: antialiased; cursor: none; user-select: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; outline: none; cursor: none; }
+img { display: block; }
+[hidden] { display: none !important; }
+.key { display: inline-flex; align-items: center; justify-content: center; min-width: 2rem; height: 2rem; padding: 0 .6rem; margin-inline-end: .4rem;
+  border-radius: .5rem; background: rgba(255,255,255,.14); border: .08rem solid rgba(255,255,255,.25); font-size: 1rem; font-weight: 700; direction: ltr; }
+.chan { color: var(--cyan); font-weight: 700; font-size: 1.3rem; }
+.meta { color: var(--soft); font-size: 1.3rem; display: flex; gap: 1.4rem; align-items: center; }
+.meta b { color: var(--ink); font-weight: 700; }
+
+/* ---------- סרגל עליון ---------- */
+#top { position: absolute; z-index: 5; top: 0; left: 0; right: 0; height: 7rem; padding: 1.6rem var(--padX) 0; display: flex; align-items: center; gap: 3rem;
+  background: linear-gradient(to bottom, rgba(7,10,34,.9), rgba(7,10,34,0)); transition: opacity .3s; }
+#top .logo { height: 4.2rem; width: auto; filter: drop-shadow(0 .4rem 1.2rem rgba(123,92,255,.5)); }
+#tabs { display: flex; gap: 1rem; }
+.tab { font-size: 1.7rem; font-weight: 700; color: var(--soft); padding: .7rem 2rem; border-radius: 3rem; border: .2rem solid transparent; transition: background .2s, color .2s, transform .2s var(--ease); }
+.tab.on { color: var(--ink); background: rgba(255,255,255,.1); }
+.tab.focus { color: #14123a; background: var(--focus); transform: scale(1.08); box-shadow: 0 .6rem 2rem rgba(0,0,0,.5); }
+#clock { margin-inline-start: auto; font-size: 1.6rem; font-weight: 700; color: var(--soft); direction: ltr; }
+
+/* ---------- VOD ---------- */
+.screen { position: absolute; inset: 0; }
+#hero { position: absolute; top: 0; left: 0; right: 0; height: 32rem; overflow: hidden; }
+.hero-img { position: absolute; top: 0; left: 0; width: 68%; height: 100%; }
+.hero-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .6s ease; }
+.hero-img img.on { opacity: 1; }
+.hero-shade { position: absolute; inset: 0;
+  background: linear-gradient(to left, var(--bg) 32%, rgba(7,10,34,.85) 44%, rgba(7,10,34,.2) 70%, rgba(7,10,34,.35) 100%),
+              linear-gradient(to top, var(--bg) 0%, rgba(7,10,34,0) 40%); }
+.hero-text { position: absolute; right: var(--padX); top: 8.6rem; width: 40%; }
+.tag { display: inline-block; font-size: 1.15rem; font-weight: 800; color: #fff; background: var(--magenta); padding: .35rem 1rem; border-radius: .5rem; margin-bottom: 1rem; }
+.tag:empty { display: none; }
+#heroTitle { font-family: "SapirPop", "Heebo", sans-serif; font-weight: 400; font-size: 3.4rem; line-height: 1.12; margin: 0 0 1.2rem;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-shadow: 0 .2rem 1rem rgba(0,0,0,.5); }
+.hero-text .meta { margin-bottom: 1.6rem; }
+.hint { font-size: 1.3rem; color: var(--soft); }
+
+#rowsView { position: absolute; top: 31rem; bottom: 0; left: 0; right: 0; overflow: hidden; }
+#rows { transition: transform .35s var(--ease); will-change: transform; }
+.row { height: 16rem; padding-top: .6rem; }
+.row h3 { margin: 0 var(--padX) .9rem; font-size: 1.7rem; font-weight: 800; color: var(--ink); display: flex; gap: 1rem; align-items: baseline; }
+.row h3 small { font-size: 1.1rem; color: var(--dim); font-weight: 600; }
+.row.dim h3 { color: var(--soft); }
+.strip { display: flex; gap: var(--gap); padding: 0 var(--padX); transition: transform .3s var(--ease); will-change: transform; }
+.card { position: relative; flex: 0 0 var(--cardW); height: var(--cardH); border-radius: 1rem; overflow: hidden; background: var(--bg2);
+  transition: transform .22s var(--ease), box-shadow .22s; transform-origin: center; }
+.card img { width: 100%; height: 100%; object-fit: cover; }
+.card .dur { position: absolute; left: .6rem; top: .6rem; background: rgba(0,0,0,.78); padding: .1rem .6rem; border-radius: .4rem; font-size: 1rem; font-weight: 700; direction: ltr; }
+.card .ep { position: absolute; right: .6rem; top: .6rem; background: var(--violet); padding: .1rem .7rem; border-radius: .4rem; font-size: 1rem; font-weight: 800; }
+.card .prog { position: absolute; left: 0; right: 0; bottom: 0; height: .35rem; background: rgba(255,255,255,.25); }
+.card .prog i { display: block; height: 100%; background: var(--magenta); }
+.card .rank { position: absolute; right: -.2rem; bottom: -1.4rem; font-family: "SapirPop", sans-serif; font-size: 7rem; line-height: 1; color: #fff;
+  -webkit-text-stroke: .15rem var(--bg); text-shadow: 0 .3rem 1rem rgba(0,0,0,.7); }
+.card::after { content: ""; position: absolute; inset: 0; border-radius: inherit; border: .3rem solid transparent; transition: border-color .2s; pointer-events: none; }
+.card.focus { transform: scale(1.1); z-index: 2; box-shadow: 0 1.2rem 3rem rgba(0,0,0,.6), 0 0 0 .2rem rgba(255,255,255,.15); }
+.card.focus::after { border-color: var(--focus); }
+.row:not(.cur) .card { opacity: .78; }
+.cardTitle { position: absolute; left: 0; right: 0; bottom: 0; padding: 2.4rem .9rem .7rem; font-size: 1.1rem; font-weight: 700; line-height: 1.25;
+  background: linear-gradient(to top, rgba(0,0,0,.9), transparent); opacity: 0; transition: opacity .2s; }
+.card.focus .cardTitle { opacity: 1; }
+
+/* ---------- שורטס ---------- */
+#shorts { background: #000; }
+.sh-bg { position: absolute; inset: 0; overflow: hidden; }
+.sh-bg img { width: 100%; height: 100%; object-fit: cover; opacity: .28; transform: scale(1.15); filter: blur(1.6rem); }
+.sh-stage { position: absolute; top: 4rem; left: 14rem; }
+.sh-frame { height: 46rem; width: 25.9rem; border-radius: 1.6rem; overflow: hidden; background: #000; box-shadow: 0 2rem 6rem rgba(0,0,0,.7); position: relative; }
+.sh-frame img { width: 100%; height: 100%; object-fit: cover; }
+.sh-side { position: absolute; right: var(--padX); top: 12rem; width: 38rem; }
+.sh-side h2 { font-size: 2.2rem; line-height: 1.25; margin: .8rem 0 1.2rem; font-weight: 800; }
+.sh-keys { margin-top: 3rem; display: grid; gap: 1rem; font-size: 1.25rem; color: var(--soft); }
+body.mode-shorts #top { background: none; }
+
+/* ---------- נגן ---------- */
+#player { position: fixed; inset: 0; z-index: 20; background: #000; }
+#ytWrap { position: fixed; inset: 0; z-index: 21; background: #000; }
+#ytWrap iframe, #yt { width: 100%; height: 100%; border: 0; display: block; }
+#pShield { position: fixed; inset: 0; z-index: 22; } /* חוסם מגע/פוקוס של היוטיוב: הכל עובר דרך השלט */
+body.mode-shorts #player { background: transparent; pointer-events: none; }
+body.mode-shorts #ytWrap { inset: auto; top: 4rem; left: 14rem; width: 25.9rem; height: 46rem; border-radius: 1.6rem; overflow: hidden; }
+body.mode-shorts #pOsd, body.mode-shorts #pNext { display: none; }
+body.mode-shorts #pLoading { top: 27rem; left: 26.95rem; }
+.spinner { position: fixed; z-index: 23; top: 50%; left: 50%; width: 5rem; height: 5rem; margin: -2.5rem 0 0 -2.5rem; border-radius: 50%;
+  border: .5rem solid rgba(255,255,255,.2); border-top-color: var(--cyan); animation: spin .9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+#pLoading[hidden] { display: none; }
+#pOsd { position: fixed; inset: 0; z-index: 24; opacity: 0; transition: opacity .3s; pointer-events: none;
+  background: linear-gradient(to bottom, rgba(0,0,0,.75), transparent 22%, transparent 62%, rgba(0,0,0,.85)); }
+#pOsd.show { opacity: 1; }
+.p-top { position: absolute; top: 3rem; right: var(--padX); left: var(--padX); }
+.p-top h2 { margin: .4rem 0 0; font-size: 2.4rem; font-weight: 800; max-width: 70%; }
+.p-bottom { position: absolute; bottom: 3rem; right: var(--padX); left: var(--padX); }
+.p-state { font-size: 1.6rem; font-weight: 800; margin-bottom: 1rem; min-height: 2rem; }
+.p-bar { position: relative; height: .7rem; border-radius: 1rem; background: rgba(255,255,255,.25); }
+.p-buf { position: absolute; left: 0; top: 0; bottom: 0; background: rgba(255,255,255,.35); border-radius: inherit; }
+.p-fill { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, var(--cyan), var(--violet), var(--magenta)); border-radius: inherit; }
+.p-knob { position: absolute; top: 50%; width: 1.8rem; height: 1.8rem; margin: -.9rem 0 0 -.9rem; border-radius: 50%; background: #fff; box-shadow: 0 0 1rem rgba(0,0,0,.6); }
+.p-times { display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: 700; margin-top: .8rem; color: var(--soft); }
+.p-keys { display: flex; gap: 3rem; margin-top: 1.4rem; font-size: 1.15rem; color: var(--soft); }
+.p-seek { position: fixed; z-index: 25; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 1.4rem 2.6rem; border-radius: 1.4rem;
+  background: rgba(0,0,0,.7); font-size: 3rem; font-weight: 800; direction: ltr; }
+.p-next { position: fixed; z-index: 25; bottom: 12rem; left: var(--padX); display: flex; gap: 1.4rem; align-items: center; padding: 1rem; border-radius: 1.2rem;
+  background: rgba(14,17,64,.95); border: .25rem solid var(--focus); width: 40rem; box-shadow: 0 1rem 3rem rgba(0,0,0,.6); }
+.p-next img { width: 14rem; height: 7.9rem; object-fit: cover; border-radius: .7rem; }
+.p-next .small { font-size: 1.1rem; color: var(--soft); }
+.p-next .t { font-size: 1.4rem; font-weight: 800; margin: .3rem 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+#toast { position: fixed; z-index: 40; bottom: 4rem; left: 50%; transform: translateX(-50%); background: rgba(14,17,64,.95); border: .15rem solid rgba(255,255,255,.2);
+  padding: 1rem 2.4rem; border-radius: 3rem; font-size: 1.4rem; font-weight: 700; }
+#boot { position: fixed; inset: 0; z-index: 50; background: var(--bg); display: grid; place-items: center; align-content: center; gap: 3rem; transition: opacity .4s; }
+#boot img { width: 30rem; }
+#boot .spinner { position: static; margin: 0; }
+#boot.gone { opacity: 0; pointer-events: none; }

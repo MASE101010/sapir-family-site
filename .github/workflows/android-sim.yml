@@ -1,4 +1,4 @@
-name: אפליקציית אנדרואיד, בדיקה באמולטור
+name: אפליקציית אנדרואיד TV, בדיקה באמולטור טלוויזיה
 on:
   workflow_dispatch:
 permissions:
@@ -6,6 +6,7 @@ permissions:
 jobs:
   emu:
     runs-on: ubuntu-latest
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
       - name: KVM
@@ -17,22 +18,15 @@ jobs:
         run: gh release download android-latest -p sapir-family-tv.apk -D apk
       - uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 34
-          target: google_apis
-          arch: x86_64
-          profile: pixel_6
+          api-level: 33
+          target: android-tv
+          arch: x86
+          profile: tv_1080p
           disable-animations: true
-          script: |
-            mkdir -p shots
-            adb install -r apk/sapir-family-tv.apk
-            adb logcat -c
-            adb shell monkey -p il.co.sapirfamily.app -c android.intent.category.LAUNCHER 1
-            sleep 20; adb exec-out screencap -p > shots/a20.png
-            sleep 50; adb exec-out screencap -p > shots/a70.png
-            adb logcat -d | grep -E "AndroidRuntime|FATAL|il.co.sapirfamily|Ads" | tail -60 > shots/log.txt || true
-            adb shell pidof il.co.sapirfamily.app > shots/pid.txt || echo dead > shots/pid.txt
+          emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          script: bash .github/tv-test.sh
       - name: שמירת הצילומים
         if: always()
         run: |
           git config user.name sapir-ci; git config user.email ci@sapirfamily.co.il
-          git checkout --orphan android-shots-tmp && git rm -rq --cached . && git add -f shots && git commit -qm "android shots" && git push -fq origin HEAD:android-shots
+          git checkout --orphan android-shots-tmp && git rm -rq --cached . && git add -f shots && git commit -qm "tv shots" && git push -fq origin HEAD:android-shots

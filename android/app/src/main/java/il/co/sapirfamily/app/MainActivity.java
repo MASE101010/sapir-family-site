@@ -122,10 +122,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // בטלוויזיה נפתחים ישר על ה-VOD (הנוח ביותר בשלט); בטלפון על דף הבית
-        String url = HOME + (isTv ? "vod.html?app=tv" : "?app=phone");
+        // בטלוויזיה: ממשק ייעודי לשלט (סרטונים ושורטס בלבד); בטלפון: דף הבית
+        String url = HOME + (isTv ? "tv/" : "?app=phone");
         Uri data = getIntent() == null ? null : getIntent().getData();
-        if (data != null && "https".equals(data.getScheme())) url = data.toString() + (data.getQuery() == null ? "?" : "&") + "app=" + (isTv ? "tv" : "phone");
+        if (data != null && "https".equals(data.getScheme()) && !isTv) url = data.toString() + (data.getQuery() == null ? "?" : "&") + "app=" + (isTv ? "tv" : "phone");
         if (savedInstanceState != null) web.restoreState(savedInstanceState); else web.loadUrl(url);
         web.requestFocus();
     }

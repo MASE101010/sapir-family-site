@@ -40,6 +40,7 @@ final class Ads {
     }
 
     void start() {
+        if (isTv) return; // בטלוויזיה אין פרסומות בכלל: צפייה נקייה ורציפה
         ConsentInformation info = UserMessagingPlatform.getConsentInformation(activity);
         ConsentRequestParameters params = new ConsentRequestParameters.Builder().setTagForUnderAgeOfConsent(false).build();
         info.requestConsentInfoUpdate(activity, params,

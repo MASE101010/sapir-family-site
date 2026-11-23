@@ -12,6 +12,8 @@
     if (q === "ios") mode = "phone";
     try { if (q) sessionStorage.setItem("sapir-app", q); else if (!mode) mode = sessionStorage.getItem("sapir-app") || ""; } catch (e) {}
     if (!mode) return;
+    // בטלוויזיה יש ממשק נפרד, מותאם לשלט: /tv/
+    if (mode === "tv" && !/^\/tv\//.test(location.pathname)) { location.replace("/tv/"); return; }
     window.SAPIR_APP = mode;
     document.body.classList.add("in-app", mode === "tv" ? "tv-app" : "phone-app");
     if (mode === "tv") document.body.classList.add("tv-nav");

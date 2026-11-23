@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>משפחת ספיר לטלוויזיה</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#070a22">
+<link rel="icon" href="/assets/img/logo-small.png" type="image/png">
+<link rel="preconnect" href="https://i.ytimg.com">
+<link rel="preconnect" href="https://www.youtube-nocookie.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" href="/assets/fonts/SapirPop.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="/data/library.json" as="fetch" crossorigin>
+<link rel="stylesheet" href="/tv/tv.css?v=2">
+</head>
+<body>
+<div id="app">
+  <!-- סרגל עליון: לוגו ושני מסכים בלבד -->
+  <header id="top">
+    <img class="logo" src="/assets/img/logo.webp" alt="משפחת ספיר">
+    <nav id="tabs" role="tablist">
+      <button class="tab f" data-tab="vod" role="tab">סרטונים</button>
+      <button class="tab f" data-tab="shorts" role="tab">שורטס</button>
+    </nav>
+    <div id="clock" aria-hidden="true"></div>
+  </header>
+
+  <!-- VOD -->
+  <section id="vod" class="screen">
+    <div id="hero" aria-live="polite">
+      <div class="hero-img"><img id="heroA" alt=""><img id="heroB" alt=""></div>
+      <div class="hero-shade"></div>
+      <div class="hero-text">
+        <div id="heroTag" class="tag"></div>
+        <h1 id="heroTitle"></h1>
+        <div id="heroMeta" class="meta"></div>
+        <div class="hint"><span class="key">OK</span> לצפייה</div>
+      </div>
+    </div>
+    <div id="rowsView"><div id="rows"></div></div>
+  </section>
+
+  <!-- שורטס -->
+  <section id="shorts" class="screen" hidden>
+    <div class="sh-bg"><img id="shBg" alt=""></div>
+    <div class="sh-stage">
+      <div id="shFrame" class="sh-frame"><img id="shPoster" alt=""></div>
+    </div>
+    <aside class="sh-side">
+      <div id="shChan" class="chan"></div>
+      <h2 id="shTitle"></h2>
+      <div id="shCount" class="meta"></div>
+      <div class="sh-keys">
+        <div><span class="key">▲</span><span class="key">▼</span> שורט הבא או הקודם</div>
+        <div><span class="key">OK</span> עצירה והמשך</div>
+        <div><span class="key">חזרה</span> לסרטונים</div>
+      </div>
+    </aside>
+  </section>
+
+  <!-- נגן מסך מלא -->
+  <section id="player" hidden>
+    <div id="ytWrap"><div id="yt"></div></div>
+    <div id="pShield"></div>
+    <div id="pLoading" class="spinner"></div>
+    <div id="pOsd">
+      <div class="p-top">
+        <div id="pChan" class="chan"></div>
+        <h2 id="pTitle"></h2>
+      </div>
+      <div class="p-bottom">
+        <div id="pState" class="p-state"></div>
+        <div class="p-bar" dir="ltr"><div id="pBuf" class="p-buf"></div><div id="pFill" class="p-fill"></div><div id="pKnob" class="p-knob"></div></div>
+        <div class="p-times" dir="ltr"><span id="pCur">0:00</span><span id="pDur">0:00</span></div>
+        <div class="p-keys">
+          <span><span class="key">◀</span><span class="key">▶</span> אחורה וקדימה 10 שניות (החזיקו לדילוג מהיר)</span>
+          <span><span class="key">OK</span> עצירה והמשך</span>
+          <span><span class="key">▲</span> הבא</span>
+        </div>
+      </div>
+    </div>
+    <div id="pSeek" class="p-seek" hidden></div>
+    <div id="pNext" class="p-next" hidden>
+      <img id="pNextImg" alt="">
+      <div><div class="small">הבא בתור</div><div id="pNextTitle" class="t"></div><div id="pNextCount" class="small"></div></div>
+    </div>
+  </section>
+
+  <div id="toast" hidden></div>
+  <div id="boot"><img src="/assets/img/logo.webp" alt=""><div class="spinner"></div></div>
+</div>
+<script src="/tv/tv.js?v=2"></script>
+</body>
+</html>
