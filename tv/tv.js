@@ -206,14 +206,24 @@
       events: {
         onReady: () => { ytReady = true; try { yt.getIframe().setAttribute("tabindex", "-1"); } catch (e) {} if (ytQueued) { yt.loadVideoById({ videoId: ytQueued.id, startSeconds: ytQueued.start || 0 }); ytQueued = null; } else yt.playVideo(); },
         onStateChange: onState,
-        onError: (e) => { toast("הסרטון הזה לא זמין כרגע, עוברים לבא"); setTimeout(() => go(1, true), 1200); }
+        onError: onYtError
       }
     });
+  }
+  /* סרטון שלא ניתן לנגן: מדלגים פעם אחת לבא; אם גם הוא נכשל, עוצרים ומציגים הודעה (לא רצים בלולאה על כל הרשימה) */
+  let errStreak = 0, errT = null;
+  function onYtError() {
+    $("pLoading").hidden = true;
+    if (!S.player) return;
+    errStreak++;
+    if (errStreak > 2) { toast("יש בעיה בניגון כרגע. נסו שוב בעוד רגע", 4000); errStreak = 0; if (mode === "vod") closePlayer(); return; }
+    toast("הסרטון הזה לא זמין כרגע, עוברים לבא");
+    clearTimeout(errT); errT = setTimeout(() => { if (S.player) go(1, true); }, 1500);
   }
   function onState(e) {
     const st = e.data;
     $("pLoading").hidden = !(st === 3 || st === -1);
-    if (st === 1) { ended = false; $("pState").textContent = ""; if (mode === "shorts") $("shPoster").style.opacity = 0; }
+    if (st === 1) { ended = false; errStreak = 0; $("pState").textContent = ""; if (mode === "shorts") $("shPoster").style.opacity = 0; }
     if (st === 2) { $("pState").textContent = "❚❚ בהשהיה"; showOsd(true); }
     if (st === 0) { ended = true; save(true); if (mode === "shorts") go(1); else autoNext(); }
   }
@@ -241,7 +251,7 @@
     if (!S.player && !yt) return;
     save(true);
     try { yt && yt.stopVideo(); } catch (e) {}
-    clearInterval(tick); hideNext();
+    clearInterval(tick); hideNext(); clearTimeout(errT);
     S.player = false;
     $("player").hidden = true;
     $("pOsd").classList.remove("show");
@@ -314,7 +324,7 @@
     $("pNext").hidden = false; clearInterval(nextT);
     if (countdown) {
       nextLeft = 8; $("pNextCount").textContent = `מתחיל בעוד ${nextLeft} שניות, OK להתחיל עכשיו`;
-      nextT = setInterval(() => { nextLeft--; $("pNextCount").textContent = `מתחיל בעוד ${nextLeft} שניות, OK להתחיל עכשיו`; if (nextLeft <= 0) { clearInterval(nextT); go(1, true); } }, 1000);
+      nextT = setInterval(() => { nextLeft--; $("pNextCount").textContent = `מתחיל בעוד ${nextLeft} שניות, OK להתחיל עכשיו`; if (nextLeft <= 0) { clearInterval(nextT); if (S.player) go(1, true); } }, 1000);
     } else $("pNextCount").textContent = "OK לצפייה, ▼ לביטול";
   }
   function hideNext() { clearInterval(nextT); $("pNext").hidden = true; }
