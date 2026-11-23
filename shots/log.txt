@@ -1,0 +1,80 @@
+11-23 10:35:28.799  1180  4415 W chromium: [FTL:1180:4415:WARNING:publisher.cc(34)] No subscribers for event
+11-23 10:35:28.799  1180  4415 W chromium: "assistant.api.events.MetricEvent" from publisher "RecordCastEventImpl"
+11-23 10:35:28.799  1180  4415 W chromium: [FTL:1180:4415:WARNING:publisher.cc(34)] No subscribers for event
+11-23 10:35:28.799  1180  4415 W chromium: "assistant.api.events.MetricEvent" from publisher "RecordCastEventImpl"
+11-23 10:35:28.799  1180  4408 W chromium: [FTL:1180:4408:WARNING:publisher.cc(34)] No subscribers for event
+11-23 10:35:28.799  1180  4408 W chromium: "assistant.api.events.DeviceStateEvent" from publisher "ProcessSettingsAction"
+11-23 10:35:28.799  1180  4408 W chromium: [FTL:1180:4408:WARNING:publisher.cc(34)] No subscribers for event
+11-23 10:35:28.799  1180  4408 W chromium: "assistant.api.events.DeviceStateEvent" from publisher "ProcessSettingsAction"
+11-23 10:35:28.799  1180  4408 W chromium: [FTL:1180:4408:WARNING:publisher.cc(34)] No subscribers for event
+11-23 10:35:28.799  1180  4408 W chromium: "assistant.api.events.ConversationEvent" from publisher "S3Session"
+11-23 10:35:28.808  1180  4403 W chromium: [FTL:1180:4403:WARNING:publisher.cc(34)] No subscribers for event
+11-23 10:35:28.808  1180  4403 W chromium: "assistant.api.events.DeviceStateEvent" from publisher "InitializeInternal"
+11-23 10:35:28.809  1180  4403 W chromium: [FTL:1180:4403:WARNING:publisher.cc(34)] No subscribers for event
+11-23 10:35:28.809  1180  4403 W chromium: "assistant.api.events.MetricEvent" from publisher "UmaMetricsForwarder"
+11-23 10:35:28.967  1180  4408 W chromium: [FTL:1180:4408:WARNING:publisher.cc(34)] No subscribers for event
+11-23 10:35:28.967  1180  4408 W chromium: "assistant.api.events.ConversationEvent" from publisher "S3Session"
+11-23 10:35:28.981  1180  4403 W chromium: [FTL:1180:4403:WARNING:publisher.cc(34)] No subscribers for event
+11-23 10:35:28.981  1180  4403 W chromium: "assistant.api.events.DeviceStateEvent" from publisher "InitializeInternal"
+11-23 10:35:28.984  1180  4403 W chromium: [FTL:1180:4403:WARNING:publisher.cc(34)] No subscribers for event
+11-23 10:35:28.984  1180  4403 W chromium: "assistant.api.events.DeviceStateEvent" from publisher "InitializeInternal"
+11-23 10:35:29.484  1180  4408 E chromium: [FTL:1180:4408:ERROR:action_processor.cc(537)] Module "feedback" tried to
+11-23 10:35:29.484  1180  4408 E chromium: shadow action_path "feedback.UPLOAD_CRASH_REPORT", but it is already registered
+11-23 10:35:29.484  1180  4408 E chromium: by "android_feedback"
+11-23 10:35:29.484  1180  4408 W chromium: [FTL:1180:4408:WARNING:publisher.cc(34)] No subscribers for event
+11-23 10:35:29.484  1180  4408 W chromium: "assistant.api.events.ConversationEvent" from publisher "S3Session"
+11-23 10:35:30.832  2419  2419 W chromium: [2419:2419:WARNING:ccs_manager_impl.cc(1752)] Device does not have a weave device id
+11-23 10:35:30.833  2419  2419 I chromium: [2419:2419:INFO:ccs_transport_https.cc(1427)] No cloud settings for register request
+11-23 10:35:30.833  2419  2419 W chromium: [2419:2419:WARNING:client_auth_signer.cc(166)] No private key, hence empty signature.
+11-23 10:35:30.834  2419  2419 I chromium: [2419:2419:INFO:ccs_manager_impl.cc(1686)] Registering device with CCS: message_id = 93768bc1-7dce-4de0-a2c5-b1a9b262794e
+11-23 10:35:30.834  2419  2419 I chromium: [2419:2419:INFO:application_identification_settings.cc(1079)] CreateJwt completed; running all done signing callbacks.
+11-23 10:35:30.834  2419  2419 I chromium: [2419:2419:INFO:application_identification_settings.cc(1084)] Missing signature, return empty JWT
+11-23 10:35:30.834  2419  2419 E chromium: [2419:2419:ERROR:ccs_transport_https.cc(1383)] CreateAndSignJwtAsync() returned invalid JWT. Not attaching to headers.
+11-23 10:35:30.834  2419  2419 E chromium: [2419:2419:ERROR:cast_auth_headers.cc(168)] Unable to update signature header
+11-23 10:35:30.834  2419  2419 I chromium: [2419:2419:INFO:metrics_recorder.cc(188)] cast event: Cloud.Transport.Https.Register.Out
+11-23 10:35:30.859  2419  2419 E chromium: [2419:2419:ERROR:ccs_transport_https.cc(2106)] Received response code 403 for message_id = 93768bc1-7dce-4de0-a2c5-b1a9b262794e - 
+11-23 10:35:30.859  2419  2419 I chromium: [2419:2419:INFO:metrics_recorder.cc(188)] cast event: Cloud.Transport.Https.Register.Out.Error
+11-23 10:35:30.859  2419  2419 I chromium: [2419:2419:INFO:ccs_manager_impl.cc(2862)] Scheduling next register for device in time: 113.383 s
+11-23 10:36:22.981  2419  2419 I chromium: [2419:2419:INFO:service_base.h(78)] Size of the map for type AuthTokenResponse is 0
+11-23 10:36:23.014  2419  2419 I chromium: [2419:2419:INFO:service_base.h(246)] Container sizes for type CloudSetting are (session_info_map: 0), (topic_info_map: 21), (pending_events: 0).
+11-23 10:36:23.061  2419  2419 I chromium: [2419:2419:INFO:service_base.h(78)] Size of the map for type LocalDeviceInfo is 0
+11-23 10:36:23.061  2419  2419 I chromium: [2419:2419:INFO:service_base.h(78)] Size of the map for type NetworkInfo is 0
+11-23 10:36:23.207  2419  2419 I chromium: [2419:2419:INFO:metrics_stat_logger.cc(55)] Metrics stat for the past 60 secs : total=5
+11-23 10:36:23.207  2419  2419 I chromium: [metrics_stat_logger] Cloud.Transport.Https.Register.Out=1
+11-23 10:36:23.207  2419  2419 I chromium: [metrics_stat_logger] Cloud.Transport.Https.Register.Out.Error=1
+11-23 10:36:23.207  2419  2419 I chromium: [metrics_stat_logger] Setup.eureka_info.Local=1
+11-23 10:36:23.207  2419  2419 I chromium: [metrics_stat_logger] Setup.eureka_info.Local.200=1
+11-23 10:36:23.207  2419  2419 I chromium: [metrics_stat_logger] Usonia.DirectoryService.SendHeartbeat=2
+11-23 10:36:32.443  2419  2501 I chromium: [2419:2501:INFO:grpc_auth_manager_with_grpc_ipc.cc(64)] Connecting IPC for Auth.AuthReadyStreaming.
+11-23 10:36:32.443  2419  2501 I chromium: [2419:2501:INFO:distributed_service_discovery_with_grpc_ipc.cc(153)] Connecting IPC for DistributedServiceDiscovery.AddService.
+11-23 10:36:32.443  2419  2501 I chromium: [2419:2501:INFO:distributed_service_discovery_with_grpc_ipc.cc(67)] Connecting IPC for DistributedServiceDiscovery.UpdateObservers.
+11-23 10:36:32.443  2419  2501 I chromium: [2419:2501:INFO:metrics_recorder_with_grpc_ipc.cc(157)] Connecting IPC for MetricsRecorder.RecordMetrics: num_attempts=10
+11-23 10:36:32.443  2419  2501 I chromium: [2419:2501:INFO:synchronous_sound_player_with_grpc_ipc.cc(178)] Connecting IPC for SynchronousSoundPlayer.UpdateSound.
+11-23 10:36:32.443  2419  2501 I chromium: [2419:2501:INFO:directory_service_with_grpc_ipc.cc(67)] Connecting IPC for DirectoryService.LocalDeviceInfo.
+11-23 10:36:32.443  2419  2501 I chromium: [2419:2501:INFO:directory_service_with_grpc_ipc.cc(126)] Connecting IPC for DirectoryService.ObserveCommonTime.
+11-23 10:36:32.443  2419  2501 I chromium: [2419:2501:INFO:directory_service_with_grpc_ipc.cc(267)] Connecting IPC for DirectoryService.UpdateStateObservers.
+11-23 10:36:32.443  2419  2501 I chromium: [2419:2501:INFO:directory_service_with_grpc_ipc.cc(369)] Connecting IPC for DirectoryService.UpdateMessageObservers.
+11-23 10:36:32.443  2419  2501 I chromium: [2419:2501:INFO:state_manager_with_grpc_ipc.cc(80)] Connecting IPC for StateManager.ReceiveStateUpdates.
+11-23 10:36:32.444  2419  2501 E chromium: [2419:2501:ERROR:grpc_ipc_socket_client.cc(76)] Error for usonia-ipc-socket
+11-23 10:36:32.444  2419  2501 E chromium: [2419:2501:ERROR:android_grpc_builder.cc(150)] Could not get a socket for binder:com.google.android.apps.mediashell:usonia-ipc-socket
+11-23 10:36:32.444  2419  2501 E chromium: [2419:2501:ERROR:grpc_manager_impl.cc(624)] GRPC[uri=]: Grpc cannot connect to host {UNDEFINED}
+11-23 10:36:32.444  2419  2501 E chromium: [2419:2501:ERROR:grpc_manager_impl.cc(773)] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+11-23 10:36:32.444  2419  2501 W chromium: [2419:2501:WARNING:grpc_auth_manager_with_grpc_ipc.cc(60)] IPC for Auth.AuthReadyStreaming closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+11-23 10:36:32.444  2419  2501 E chromium: [2419:2501:ERROR:grpc_manager_impl.cc(773)] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+11-23 10:36:32.444  2419  2501 W chromium: [2419:2501:WARNING:distributed_service_discovery_with_grpc_ipc.cc(148)] IPC for DistributedServiceDiscovery.AddService closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+11-23 10:36:32.444  2419  2501 E chromium: [2419:2501:ERROR:grpc_manager_impl.cc(773)] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+11-23 10:36:32.444  2419  2501 W chromium: [2419:2501:WARNING:distributed_service_discovery_with_grpc_ipc.cc(61)] IPC for DistributedServiceDiscovery.UpdateObservers closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+11-23 10:36:32.444  2419  2501 E chromium: [2419:2501:ERROR:grpc_manager_impl.cc(773)] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+11-23 10:36:32.444  2419  2501 W chromium: [2419:2501:WARNING:metrics_recorder_with_grpc_ipc.cc(143)] IPC for MetricsRecorder.RecordMetrics closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+11-23 10:36:32.444  2419  2501 E chromium: [2419:2501:ERROR:grpc_manager_impl.cc(773)] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+11-23 10:36:32.444  2419  2501 W chromium: [2419:2501:WARNING:synchronous_sound_player_with_grpc_ipc.cc(173)] IPC for SynchronousSoundPlayer.UpdateSound closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+11-23 10:36:32.444  2419  2501 E chromium: [2419:2501:ERROR:grpc_manager_impl.cc(773)] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+11-23 10:36:32.444  2419  2501 E chromium: [2419:2501:ERROR:ipc_common.h(494)] Error in fetching local device info: [error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+11-23 10:36:32.444  2419  2501 E chromium: [2419:2501:ERROR:grpc_manager_impl.cc(773)] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+11-23 10:36:32.444  2419  2501 W chromium: [2419:2501:WARNING:directory_service_with_grpc_ipc.cc(121)] IPC for DirectoryService.ObserveCommonTime closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+11-23 10:36:32.444  2419  2501 E chromium: [2419:2501:ERROR:grpc_manager_impl.cc(773)] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+11-23 10:36:32.444  2419  2501 E chromium: [2419:2501:ERROR:directory_service_with_grpc_ipc.cc(262)] IPC for DirectoryService.UpdateStateObservers closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+11-23 10:36:32.444  2419  2501 E chromium: [2419:2501:ERROR:grpc_manager_impl.cc(773)] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+11-23 10:36:32.444  2419  2501 E chromium: [2419:2501:ERROR:directory_service_with_grpc_ipc.cc(364)] IPC for DirectoryService.UpdateMessageObservers closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+11-23 10:36:32.444  2419  2501 E chromium: [2419:2501:ERROR:grpc_manager_impl.cc(773)] GRPC[uri=]: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
+11-23 10:36:32.444  2419  2501 W chromium: [2419:2501:WARNING:state_manager_with_grpc_ipc.cc(75)] IPC for StateManager.ReceiveStateUpdates closed: status=[error_code=RESOURCE_EXHAUSTED, error_message=Cannot create a channel. Call to binder:com.google.android.apps.mediashell:usonia-ipc-socket ignored.]
