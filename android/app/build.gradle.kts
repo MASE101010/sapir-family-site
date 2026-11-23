@@ -22,7 +22,10 @@ android {
     }
     buildTypes {
         release {
-            isMinifyEnabled = false
+            // R8: מקטין ומערפל את הקוד (Play דורש ציון אופטימיזציה סביר)
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             if (ksPath != null) signingConfig = signingConfigs.getByName("release")
         }
     }
