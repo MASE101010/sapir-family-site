@@ -4,7 +4,7 @@ on:
     inputs:
       version_name:
         description: "מספר גרסה (למשל 1.0)"
-        default: "1.0"
+        default: "1.2"
   push:
     paths: ["android/**", ".github/workflows/android.yml"]
 permissions:
@@ -45,3 +45,8 @@ jobs:
         run: |
           gh release view android-latest >/dev/null 2>&1 || gh release create android-latest --title "אפליקציית משפחת ספיר (Android TV)" --notes "הקובץ האחרון שנבנה. AAB לחנות, APK להתקנה ידנית בטלוויזיה."
           gh release upload android-latest out/sapir-family-tv.aab out/sapir-family-tv.apk out/mapping.txt --clobber
+      - name: שמירת ה-AAB באתר (store/) להעלאה ל-Play מהדפדפן
+        run: |
+          git config user.name sapir-ci; git config user.email ci@sapirfamily.co.il
+          cp out/sapir-family-tv.aab store/sapir-family-tv.aab
+          git add store/sapir-family-tv.aab && git commit -qm "store: Android ${{ github.event.inputs.version_name || '1.2' }} bundle (build ${{ github.run_number }})" && git pull -q --rebase && git push -q || echo "nothing to commit"
