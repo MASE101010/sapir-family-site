@@ -875,6 +875,12 @@ a.card.tilting::after, .game-row.tilting::after { opacity: 1; }
 .ios-app .tabbar, .ios-app .install-bar, .ios-app .to-top { display: none !important; }
 .ios-app body, body.ios-app { padding-bottom: 12px; }
 .ios-app .site-header { padding-top: max(6px, env(safe-area-inset-top)); }
+/* באפליקציות: כפתור הנגישות קטן יותר, בפינה השמאלית התחתונה, צמוד לסרגל התחתון, כדי שלא יסתיר תוכן */
+.in-app .a11y-btn { inset-inline-start: auto; inset-inline-end: 12px; width: 42px; height: 42px; opacity: 0.85; }
+.in-app .a11y-btn svg { width: 22px; height: 22px; }
+.in-app .a11y-panel { inset-inline-start: auto; inset-inline-end: 12px; }
+.ios-app .a11y-btn { bottom: 12px; }
+.ios-app .a11y-panel { bottom: 62px; }
 
 /* משחקים: משבצות, 2 בשורה בנייד, 3 במחשב */
 .games-grid { grid-template-columns: repeat(3, 1fr); }

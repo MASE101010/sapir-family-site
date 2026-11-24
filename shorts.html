@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://www.youtube.com">
   <link rel="preload" href="/data/library.json" as="fetch" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=202611131913">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611240930">
   <style>
     /* ---- עמוד השורטס: מסך מלא, גלילה אנכית בלבד, נגן יוטיוב בשליטה מלאה ---- */
     html, body { height: 100%; overflow: hidden !important; overscroll-behavior: none; background: #000; }
@@ -125,6 +125,11 @@
       .mini-top .t img { height: 30px; width: auto; }
       .tabbar { background: rgba(0,0,0,0.9); }
     }
+    /* באפליקציות: הסרגל התחתון של האתר מוסתר (באייפון הטאבים נייטיב), אז הנגן יורד עד למטה בלי פס שחור ריק;
+       וכפתור "הפעלת קול" לא מוצג: הקול נפתח מכפתור הרמקול שבצד */
+    body.ios-app { --bottom: 0px; --slide-h: calc(100dvh - var(--top)); }
+    body.ios-app .stage { bottom: 0; }
+    body.in-app .sound-tip { display: none !important; }
     .toast { position: fixed; bottom: calc(var(--bottom) + 24px); left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 10px 18px; border-radius: 999px; font-weight: 700; z-index: 9; box-shadow: 0 8px 30px rgba(0,0,0,0.5); }
     .sgrid { position: fixed; inset: 0; z-index: 70; background: #000; display: flex; flex-direction: column; }
     .sgrid[hidden] { display: none; }
