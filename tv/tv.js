@@ -202,7 +202,7 @@
     if (yt) { ytReady ? yt.loadVideoById({ videoId: id, startSeconds: start || 0 }) : (ytQueued = { id, start }); return; }
     yt = new YT.Player("yt", {
       host: "https://www.youtube-nocookie.com", videoId: id,
-      playerVars: { autoplay: 1, controls: 0, disablekb: 1, fs: 0, rel: 0, modestbranding: 1, playsinline: 1, iv_load_policy: 3, cc_load_policy: 0, start: Math.floor(start || 0), origin: location.origin, hl: "he" },
+      playerVars: { autoplay: 1, controls: 0, disablekb: 1, fs: 0, rel: 0, modestbranding: 1, playsinline: 1, iv_load_policy: 3, cc_load_policy: 0, cc_lang_pref: "iw", start: Math.floor(start || 0), origin: location.origin },
       events: {
         onReady: () => { ytReady = true; try { yt.getIframe().setAttribute("tabindex", "-1"); } catch (e) {} if (ytQueued) { yt.loadVideoById({ videoId: ytQueued.id, startSeconds: ytQueued.start || 0 }); ytQueued = null; } else yt.playVideo(); },
         onStateChange: onState,
@@ -220,9 +220,22 @@
     toast("הסרטון הזה לא זמין כרגע, עוברים לבא");
     clearTimeout(errT); errT = setTimeout(() => { if (S.player) go(1, true); }, 1500);
   }
+  /* כתוביות: כבויות כברירת מחדל (יוטיוב מדליק אותן לבד לפי הגדרות הטלוויזיה). ▼ בזמן צפייה מדליק ומכבה, והבחירה נשמרת */
+  let captionsOn = false; try { captionsOn = localStorage.getItem("sapir-tv-cc") === "1"; } catch (e) {}
+  function applyCaptions() {
+    if (!yt || !ytReady) return;
+    const run = () => { try { if (captionsOn) { yt.loadModule("captions"); } else { yt.unloadModule("captions"); yt.unloadModule("cc"); } } catch (e) {} };
+    run(); setTimeout(run, 700); setTimeout(run, 2000); // יוטיוב טוען את הכתוביות קצת אחרי שהסרטון מתחיל
+  }
+  function toggleCaptions() {
+    captionsOn = !captionsOn;
+    try { localStorage.setItem("sapir-tv-cc", captionsOn ? "1" : "0"); } catch (e) {}
+    applyCaptions(); toast(captionsOn ? "כתוביות הופעלו" : "כתוביות כבויות");
+  }
   function onState(e) {
     const st = e.data;
     $("pLoading").hidden = !(st === 3 || st === -1);
+    if (st === 1 || st === 3) applyCaptions();
     if (st === 1) { ended = false; errStreak = 0; $("pState").textContent = ""; if (mode === "shorts") $("shPoster").style.opacity = 0; }
     if (st === 2) { $("pState").textContent = "❚❚ בהשהיה"; showOsd(true); }
     if (st === 0) { ended = true; save(true); if (mode === "shorts") go(1); else autoNext(); }
@@ -348,7 +361,7 @@
     if (k === "left" || k === "rw") { seekBy(-1, repeat); return true; }
     if (k === "up" || k === "next") { if (k === "next") go(1); else { showOsd(); showNext(false); } return true; }
     if (k === "prev") { go(-1); return true; }
-    if (k === "down") { if (nextOpen) hideNext(); else $("pOsd").classList.remove("show"); return true; }
+    if (k === "down") { if (nextOpen) hideNext(); else { toggleCaptions(); showOsd(); } return true; }
     return true;
   }
 
